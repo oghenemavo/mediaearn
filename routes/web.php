@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name('homepage');
+
+Route::name('user.')->group(function () {
+
+    Route::middleware(['guest'])->group(function () {
+        Route::get('signup/{referral_id?}', [AuthController::class, 'index']);
+        Route::post('signup/create', [AuthController::class, 'create'])->name('create');
+    });
+    
 });
