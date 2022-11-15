@@ -23,6 +23,9 @@ Route::name('user.')->group(function () {
     Route::middleware(['guest'])->group(function () {
         Route::get('signup/{referral_id?}', [AuthController::class, 'index']);
         Route::post('signup/create', [AuthController::class, 'create'])->name('create');
+
+        Route::get('login', [AuthController::class, 'login']);
+        Route::post('login/create', [AuthController::class, 'authenticate'])->name('login');
     });
     
 });
