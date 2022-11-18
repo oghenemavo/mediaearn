@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ResetPasswordController;
@@ -39,6 +40,8 @@ Route::get('/', function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('password', [ProfileController::class, 'password']);
         Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
+        
+        Route::get('video', [ActivityController::class, 'video']);
     });
     
 // });
