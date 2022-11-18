@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\AuthController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,11 @@ Route::get('/', function () {
 
         Route::get('reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
         Route::post('reset-password', [ResetPasswordController::class, 'changePwd'])->name('password.update');
+    });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('password', [ProfileController::class, 'password']);
+        Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
     });
     
 // });
