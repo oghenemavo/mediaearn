@@ -9,6 +9,8 @@
 <body>
     <form action="{{ route('user.create') }}" method="post">
         @csrf
+        
+        <input type="hidden" name="referral_id" value="{{ $referral_id ?? '' }}">
 
         <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" autofocus>
         <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}">

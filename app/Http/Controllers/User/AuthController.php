@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User;
+use App\Contracts\IUser;
 use Illuminate\Http\Request;
-use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 
 class AuthController extends Controller
 {
-    public function index()
+    public function __construct(protected IUser $user)
+    {
+        $this->user = $user;
+    }
+
+    public function index($referral_id = null)
     {
         $data['page_title'] = 'Sign up';
+        $data['referral_id'] = $referral_id;
         return view('auth.signup', $data);
     }
 
     public function create(UserCreateRequest $request)
     {
         $data = $request->validated();
-        $data['status'] = UserStatusEnum::INACTIVE;
 
-        $user = User::create($data);
+        $user = $this->user->createUser($data);
 
         if ($user) {
             return redirect()->route('homepage');

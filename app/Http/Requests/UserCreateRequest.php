@@ -28,6 +28,7 @@ class UserCreateRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:5',
+            'referral_id' => 'nullable|string|min:5',
             // 'phone_number' => 'required|string|min:6|max:20',
             // 'address' => 'nullable|string|min:5|max:255',
         ];
