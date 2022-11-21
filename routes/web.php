@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
@@ -43,3 +44,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('video', [ActivityController::class, 'video']);
 });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['guest:admin', ])->group(function () {
+        Route::get('/', function() {
+            return redirect()->action([AdminAuthController::class, 'index']);
+        });
+
+        Route::get('/login', [AdminAuthController::class, 'index'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('authenticate');
+
+        Route::post('/forgot-password', [AdminAuthController::class, 'index'])->name('forgot.password');
+    });
+
+});
