@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
@@ -69,6 +70,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::controller(VideoController::class)->name('media.')->group(function () {
+            Route::get('categories', 'categories')->name('categories');
+            Route::post('categories', 'createCategory')->name('create.category');
+            Route::put('categories/{category?}', 'editCategory')->name('edit.category');
+        });
+
     });
 
 });

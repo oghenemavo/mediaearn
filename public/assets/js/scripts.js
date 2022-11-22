@@ -203,13 +203,11 @@
     $doc.on('mouseup', function (e) {
       if (toggleCurrent) {
         var $toggleCurrent = $(toggleCurrent),
-            currentTarget = $(toggleCurrent).data('target'),
-            $contentCurrent = $("[data-content=\"".concat(currentTarget, "\"]")),
             $s2c = $('.select2-container'),
             $dpd = $('.datepicker-dropdown'),
             $tpc = $('.ui-timepicker-container');
 
-        if (!$toggleCurrent.is(e.target) && $toggleCurrent.has(e.target).length === 0 && !$contentCurrent.is(e.target) && $contentCurrent.has(e.target).length === 0 && !$s2c.is(e.target) && $s2c.has(e.target).length === 0 && !$dpd.is(e.target) && $dpd.has(e.target).length === 0 && !$tpc.is(e.target) && $tpc.has(e.target).length === 0) {
+        if (!$toggleCurrent.is(e.target) && $toggleCurrent.has(e.target).length === 0 && !$contentD.is(e.target) && $contentD.has(e.target).length === 0 && !$s2c.is(e.target) && $s2c.has(e.target).length === 0 && !$dpd.is(e.target) && $dpd.has(e.target).length === 0 && !$tpc.is(e.target) && $tpc.has(e.target).length === 0) {
           NioApp.Toggle.removed($toggleCurrent.data('target'), attr);
           toggleCurrent = false;
         }
@@ -378,17 +376,7 @@
             attr = opt ? extend(def, opt) : def;
         $(this).validate(attr);
       });
-      NioApp.Validate.OnChange('.js-select2');
-      NioApp.Validate.OnChange('.date-picker');
-      NioApp.Validate.OnChange('.js-tagify');
     }
-  }; //On change validation for third party plugins
-
-
-  NioApp.Validate.OnChange = function (elm) {
-    $(elm).on('change', function () {
-      $(this).valid();
-    });
   };
 
   NioApp.Validate.init = function () {
@@ -497,8 +485,8 @@
         var export_title = $(this).data('export-title') ? $(this).data('export-title') : 'Export';
         var btn = has_export ? '<"dt-export-buttons d-flex align-center"<"dt-export-title d-none d-md-inline-block">B>' : '',
             btn_cls = has_export ? ' with-export' : '';
-        var dom_normal = '<"row justify-between g-2' + btn_cls + '"<"col-7 col-sm-4 text-start"f><"col-5 col-sm-8 text-end"<"datatable-filter"<"d-flex justify-content-end g-2"' + btn + 'l>>>><"datatable-wrap my-3"t><"row align-items-center"<"col-7 col-sm-12 col-md-9"p><"col-5 col-sm-12 col-md-3 text-start text-md-end"i>>';
-        var dom_separate = '<"row justify-between g-2' + btn_cls + '"<"col-7 col-sm-4 text-start"f><"col-5 col-sm-8 text-end"<"datatable-filter"<"d-flex justify-content-end g-2"' + btn + 'l>>>><"my-3"t><"row align-items-center"<"col-7 col-sm-12 col-md-9"p><"col-5 col-sm-12 col-md-3 text-start text-md-end"i>>';
+        var dom_normal = '<"row justify-between g-2' + btn_cls + '"<"col-7 col-sm-4 text-left"f><"col-5 col-sm-8 text-right"<"datatable-filter"<"d-flex justify-content-end g-2"' + btn + 'l>>>><"datatable-wrap my-3"t><"row align-items-center"<"col-7 col-sm-12 col-md-9"p><"col-5 col-sm-12 col-md-3 text-left text-md-right"i>>';
+        var dom_separate = '<"row justify-between g-2' + btn_cls + '"<"col-7 col-sm-4 text-left"f><"col-5 col-sm-8 text-right"<"datatable-filter"<"d-flex justify-content-end g-2"' + btn + 'l>>>><"my-3"t><"row align-items-center"<"col-7 col-sm-12 col-md-9"p><"col-5 col-sm-12 col-md-3 text-left text-md-right"i>>';
         var dom = $(this).hasClass('is-separate') ? dom_separate : dom_normal;
         var def = {
           responsive: true,
@@ -509,7 +497,7 @@
             searchPlaceholder: "Type in to Search",
             lengthMenu: "<span class='d-none d-sm-inline-block'>Show</span><div class='form-control-select'> _MENU_ </div>",
             info: "_START_ -_END_ of _TOTAL_",
-            infoEmpty: "0",
+            infoEmpty: "No records found",
             infoFiltered: "( Total _MAX_  )",
             paginate: {
               "first": "First",
@@ -561,14 +549,14 @@
       $dMenu.each(function () {
         var $self = $(this);
 
-        if ($self.hasClass('dropdown-menu-end') && !$self.hasClass('dropdown-menu-center')) {
-          $self.prev('[data-bs-toggle="dropdown"]').dropdown({
+        if ($self.hasClass('dropdown-menu-right') && !$self.hasClass('dropdown-menu-center')) {
+          $self.prev('[data-toggle="dropdown"]').dropdown({
             popperConfig: {
               placement: 'bottom-start'
             }
           });
-        } else if (!$self.hasClass('dropdown-menu-end') && !$self.hasClass('dropdown-menu-center')) {
-          $self.prev('[data-bs-toggle="dropdown"]').dropdown({
+        } else if (!$self.hasClass('dropdown-menu-right') && !$self.hasClass('dropdown-menu-center')) {
+          $self.prev('[data-toggle="dropdown"]').dropdown({
             popperConfig: {
               placement: 'bottom-end'
             }
@@ -580,7 +568,7 @@
 
 
   NioApp.BS.tabfix = function (elm) {
-    var tab = elm ? elm : '[data-bs-toggle="modal"]';
+    var tab = elm ? elm : '[data-toggle="modal"]';
     $(tab).on('click', function () {
       var _this = $(this),
           target = _this.data('target'),
@@ -593,7 +581,7 @@
         modal.find('[href="' + tg_tab + '"]').tab('show');
       } else if (modal) {
         var tabdef = modal.find('.nk-nav.nav-tabs');
-        var link = $(tabdef[0]).find('[data-bs-toggle="tab"]');
+        var link = $(tabdef[0]).find('[data-toggle="tab"]');
         $(link[0]).tab('show');
       }
     });
@@ -704,7 +692,8 @@
   };
 
   NioApp.Select2.init = function () {
-    NioApp.Select2('.js-select2');
+    // NioApp.Select2('.select');
+    NioApp.Select2('.form-select');
   }; // Slick Slider @v1.0.1
 
 
@@ -828,58 +817,6 @@
         });
       });
     });
-  }; // Stepper @v1.0
-
-
-  NioApp.Stepper = function (elm, opt) {
-    var element = document.querySelectorAll(elm);
-
-    if (element.length > 0) {
-      element.forEach(function (item, index) {
-        var def = {
-          selectors: {
-            nav: 'stepper-nav',
-            progress: 'stepper-progress',
-            content: 'stepper-steps',
-            prev: 'step-prev',
-            next: 'step-next',
-            submit: 'step-submit'
-          },
-          classes: {
-            nav_current: 'current',
-            nav_done: 'done',
-            step_active: 'active',
-            step_done: 'done',
-            active_step: 'active'
-          },
-          current_step: 1
-        },
-            attr = opt ? extend(def, opt) : def;
-        NioApp.Custom.Stepper(item, attr);
-        NioApp.Validate.OnChange('.js-select2');
-        NioApp.Validate.OnChange('.date-picker');
-        NioApp.Validate.OnChange('.js-tagify');
-      });
-    }
-  }; // Stepper Init @v1.0
-
-
-  NioApp.Stepper.init = function () {
-    NioApp.Stepper('.stepper-init');
-  }; // Tagify @v1.0.1
-
-
-  NioApp.Tagify = function (elm, opt) {
-    if ($(elm).exists() && typeof $.fn.tagify === 'function') {
-      var def,
-          attr = opt ? extend(def, opt) : def;
-      $(elm).tagify(attr);
-    }
-  }; // Tagify Init @v1.0
-
-
-  NioApp.Tagify.init = function () {
-    NioApp.Tagify('.js-tagify');
   }; // Extra @v1.1
 
 
@@ -913,14 +850,12 @@
       placement: 'top'
     });
     NioApp.BS.tooltip('[data-toggle="tooltip"]');
-    NioApp.BS.tooltip('[data-bs-toggle="tooltip"]');
     NioApp.BS.tooltip('.tipinfo,.nk-menu-tooltip', {
       placement: 'right'
     });
     NioApp.BS.popover('[data-toggle="popover"]');
-    NioApp.BS.popover('[data-bs-toggle="popover"]');
     NioApp.BS.progress('[data-progress]');
-    NioApp.BS.fileinput('.form-file-input');
+    NioApp.BS.fileinput('.custom-file-input');
     NioApp.BS.modalfix();
     NioApp.BS.ddfix();
     NioApp.BS.tabfix();
@@ -945,7 +880,6 @@
     NioApp.Dropzone.init();
     NioApp.Slider.init();
     NioApp.DataTable.init();
-    NioApp.Tagify.init();
   }; // Toggler @v1
 
 
@@ -984,7 +918,6 @@
     NioApp.coms.docReady.push(NioApp.Picker.init);
     NioApp.coms.docReady.push(NioApp.Addons.Init);
     NioApp.coms.docReady.push(NioApp.Wizard);
-    NioApp.coms.docReady.push(NioApp.Stepper.init);
     NioApp.coms.winLoad.push(NioApp.ModeSwitch);
   };
 

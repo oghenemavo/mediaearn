@@ -3,8 +3,8 @@
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
             <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                <img class="logo-light logo-img" src="{{ asset('images/earners-logo.png') }}" srcset="{{ asset('images/earners-logo.png 2x') }}" alt="logo">
-                <img class="logo-dark logo-img" src="{{ asset('images/earners-logo.png') }}" srcset="{{ asset('images/earners-logo.png 2x') }}" alt="logo-dark">
+                <img class="logo-light logo-img" src="{{ asset('assets/images/earners-logo.png') }}" srcset="{{ asset('assets/images/earners-logo.png 2x') }}" alt="logo">
+                <img class="logo-dark logo-img" src="{{ asset('assets/images/earners-logo.png') }}" srcset="{{ asset('assets/images/earners-logo.png 2x') }}" alt="logo-dark">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">
@@ -35,15 +35,15 @@
                                     <a href="{{ route('admin.media.categories') }}" class="nk-menu-link"><span class="nk-menu-text">Categories</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.media.videos') }}" class="nk-menu-link"><span class="nk-menu-text">Videos</span></a>
+                                    <a href="{{-- route('admin.media.videos') --}}" class="nk-menu-link"><span class="nk-menu-text">Videos</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.media.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
+                                    <a href="{{-- route('admin.media.promotions') --}}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
                         <li class="nk-menu-item">
-                            <a href="{{ route('admin.users') }}" class="nk-menu-link">
+                            <a href="{{-- route('admin.users') --}}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-user-alt"></em></span>
                                 <span class="nk-menu-text">Users</span>
                             </a>
@@ -55,21 +55,21 @@
                             </a>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.transactions') }}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
+                                    <a href="{{-- route('admin.report.transactions') --}}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.payouts') }}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
+                                    <a href="{{-- route('admin.report.payouts') --}}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.referrals') }}" class="nk-menu-link"><span class="nk-menu-text">Referrals</span></a>
+                                    <a href="{{-- route('admin.report.referrals') --}}" class="nk-menu-link"><span class="nk-menu-text">Referrals</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.video-logs') }}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
+                                    <a href="{{-- route('admin.report.video-logs') --}}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
                         <li class="nk-menu-item">
-                            <a href="{{ route('admin.settings') }}" class="nk-menu-link">
+                            <a href="{{-- route('admin.settings') --}}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-lock-alt"></em></span>
                                 <span class="nk-menu-text">Settings</span>
                             </a>
