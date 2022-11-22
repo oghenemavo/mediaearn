@@ -37,7 +37,7 @@ class Admin extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $url = route('admin.password.reset', $token);
+        $url = route('admin.password.reset', [$token, 'via' => urlencode($this->get('email'))]);
         $this->notify(new ResetPassword($url));
     }
     

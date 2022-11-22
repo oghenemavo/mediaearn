@@ -12,6 +12,7 @@ class ResetPasswordController extends Controller
 {
     public function index()
     {
+        $data['page_title'] = 'Forgot Password';
         return view('admin.auth.forgot');
     }
 
@@ -29,9 +30,12 @@ class ResetPasswordController extends Controller
         : back()->withErrors(['email' => __($status)]);
     }
     
-    public function showReset($token)
+    public function showReset(Request $request, $token)
     {
-        return view('admin.auth.reset-password', ['token' => $token]);
+        $data['page_title'] = 'Reset Password';
+        $data['token'] = $token;
+        $data['email'] = json_decode(urldecode($request->get('via')))[0]->email;
+        return view('admin.auth.reset', $data);
     }
 
     public function reset(Request $request)

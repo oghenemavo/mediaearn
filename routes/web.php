@@ -61,7 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('forgot-password', 'index')->name('forgot.password');
             Route::post('forgot-password', 'forgot')->name('request.reset');
             Route::get('reset-password/{token}', 'showReset')->name('password.reset');
-            Route::post('reset-password', 'reset')->name('reset.create');
+            Route::post('reset-password', 'reset')->name('reset.password');
         });
 
     });
