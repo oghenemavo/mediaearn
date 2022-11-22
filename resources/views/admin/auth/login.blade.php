@@ -47,7 +47,7 @@
             <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
         </div>
     </form>
-    <div class="form-note-s2 text-center pt-4">Forgot Password? <a href="{{ route('admin.forgot.password') }}">Reset Pasword Here</a>
+    <div class="form-note-s2 text-center pt-4">Forgot Password? <a href="{{ route('admin.forgot') }}">Reset Pasword Here</a>
     </div>
 </div>
 @endSection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
@@ -23,7 +24,7 @@ Route::get('/', function () {
 })->name('homepage');
 
 
-Route::middleware(['guest'])->group(function () {
+Route::middleware(['guest:web'])->group(function () {
     Route::get('signup/{referral_id?}', [AuthController::class, 'index']);
     Route::post('signup/create', [AuthController::class, 'create'])->name('user.create');
 
@@ -37,7 +38,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('reset-password', [ResetPasswordController::class, 'changePwd'])->name('password.update');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
     Route::get('password', [ProfileController::class, 'password']);
     Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
     
@@ -45,15 +46,24 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware(['guest:admin', ])->group(function () {
+    Route::middleware(['guest:admin'])->group(function () {
         Route::get('/', function() {
             return redirect()->action([AdminAuthController::class, 'index']);
         });
+        
+        Route::controller(AdminResetPasswordController::class)->group(function () {
+            Route::get('/login', [AdminAuthController::class, 'index'])->name('login');
+            Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('authenticate');
+            
+        });
+    
+        Route::controller(AdminResetPasswordController::class)->group(function () {
+            Route::get('forgot-password', 'index')->name('forgot.password');
+            Route::post('forgot-password', 'forgot')->name('request.reset');
+            Route::get('reset-password/{token}', 'showReset')->name('password.reset');
+            Route::post('reset-password', 'reset')->name('reset.create');
+        });
 
-        Route::get('/login', [AdminAuthController::class, 'index'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('authenticate');
-
-        Route::post('/forgot-password', [AdminAuthController::class, 'index'])->name('forgot.password');
     });
 
 });
