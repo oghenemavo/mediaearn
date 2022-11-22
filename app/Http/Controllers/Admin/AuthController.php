@@ -9,7 +9,8 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('admin.auth.login');
+        $data['page_title'] = 'Admin Login Area';
+        return view('admin.auth.login', $data);
     }
 
     public function authenticate(Request $request)

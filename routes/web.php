@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
@@ -63,7 +64,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('reset-password/{token}', 'showReset')->name('password.reset');
             Route::post('reset-password', 'reset')->name('reset.password');
         });
+    });
 
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 
 });
