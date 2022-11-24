@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::name('get.')->group(function () {
-    Route::get('categories', [CommonController::class, 'getCategories'])->name('categories');
+Route::controller(CommonController::class)->group(function () {
+    Route::name('get.')->group(function () {
+        Route::get('categories', 'getCategories')->name('categories');
+    });
+    
+    Route::get('validate/category', 'validateUniqueCategory')->name('validate.unique.category');
 });
-
-Route::get('validate/category', [CommonController::class, 'validateUniqueCategory'])->name('validate.unique.category');

@@ -251,7 +251,7 @@
                             required: true,
                             minlength: 3,
                             remote: {
-                                url: `{{-- route('ajax.validate.media.category') --}}`,
+                                url: `{{ route('validate.unique.category') }}`,
                                 data: {
                                     ignore_id: function() {
                                         return data.id;
@@ -294,7 +294,7 @@
                     category: {
                         required: true,
                         minlength: 3,
-                        remote: `{{ route('ajax.validate.media.category') }}`
+                        remote: `{{ route('validate.unique.category') }}`
                     },
                 },
                 messages: {
