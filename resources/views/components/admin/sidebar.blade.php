@@ -38,7 +38,7 @@
                                     <a href="{{ route('admin.media.videos') }}" class="nk-menu-link"><span class="nk-menu-text">Videos</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{-- route('admin.media.promotions') --}}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
+                                    <a href="{{ route('admin.media.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->

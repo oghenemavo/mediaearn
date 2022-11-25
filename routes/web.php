@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\User\ActivityController;
@@ -28,10 +29,10 @@ Route::get('/', function () {
 
 Route::middleware(['guest:web'])->group(function () {
     Route::get('signup/{referral_id?}', [AuthController::class, 'index']);
-    Route::post('signup/create', [AuthController::class, 'create'])->name('user.create');
+    Route::post('signup', [AuthController::class, 'create'])->name('user.create');
 
     Route::get('login', [AuthController::class, 'login'])->name('login.page');
-    Route::post('login/create', [AuthController::class, 'authenticate'])->name('login');
+    Route::post('login', [AuthController::class, 'authenticate'])->name('login');
 
     Route::get('forgot-password', [ResetPasswordController::class, 'index'])->name('password.request');
     Route::post('forgot-password', [ResetPasswordController::class, 'forgot'])->name('password.email');
@@ -83,9 +84,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('videos/{video}', 'editVideo')->name('edit.video');
             Route::put('videos/{video}/block', 'blockVideo')->name('block.video');
             Route::put('videos/{video}/unblock', 'unblockVideo')->name('unblock.video');
-
         });
-
+        
+        // advertisements
+        Route::controller(PromotionController::class)->prefix('promotions')->name('media.')->group(function () {
+            Route::get('/', 'index')->name('promotions');
+            Route::post('/', 'store')->name('create.promotions');
+            // Route::get('/{promotion?}', 'show')->name('show.promotion');
+            // Route::put('/', 'edit')->name('edit.promotion');
+            // Route::put('/{promotion?}/block', 'block')->name('block.promotion');
+            // Route::put('/{promotion?}/unblock', 'unblock')->name('unblock.promotion');
+            // Route::delete('/{promotion?}', 'delete')->name('delete.promotion');
+        });
     });
 
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Promotion;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
@@ -48,5 +49,22 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['videos' => $mapped_videos]);
+    }
+
+    public function getPromotions()
+    {
+        $promotion_collection = Promotion::query()->get();
+        $mapped_promotions = $promotion_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['title'] = $item->title;
+            $data['material'] = asset("promotions/$item->material");
+            $data['filename'] = $item->material;
+            $data['status'] = $item->status;
+            $data['expires_at'] = $item->expires_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['promotions' => $mapped_promotions]);
     }
 }

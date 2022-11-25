@@ -23,6 +23,7 @@ Route::controller(CommonController::class)->group(function () {
     Route::name('get.')->group(function () {
         Route::get('categories', 'getCategories')->name('categories');
         Route::get('videos', 'getVideos')->name('videos');
+        Route::get('promotions', 'getPromotions')->name('promotions');
     });
     
     Route::get('validate/category', 'validateUniqueCategory')->name('validate.unique.category');
