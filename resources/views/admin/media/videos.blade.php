@@ -500,6 +500,9 @@
                 const dt = $.fn.DataTable.Api( $('#video_table') );
                 let dtr = dt.row( $(this).parents('tr') ); // table row
                 let data = dtr.data(); // row data
+                
+                let unblockUrl = `{{ route('admin.media.unblock.video', ':id') }}`;
+                unblockUrl = unblockUrl.replace(':id', data.id);
     
                 Swal.fire({
                     title: 'Are you sure?',
@@ -511,7 +514,7 @@
                     if (result.value) {
                         $.ajax({
                             type: 'PUT',
-                            url: "{{-- route('admin.media.unblock.video') --}}",
+                            url: unblockUrl,
                             data: {
                                 "_token": `{{ csrf_token() }}`, 
                                 video_id: data.id,
@@ -547,21 +550,24 @@
                 const dt = $.fn.DataTable.Api( $('#video_table') );
                 let dtr = dt.row( $(this).parents('tr') ); // table row
                 let data = dtr.data(); // row data
+
+                let blockUrl = `{{ route('admin.media.block.video', ':id') }}`;
+                blockUrl = blockUrl.replace(':id', data.id);
     
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "User won't have access to this content!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, suspend user!'
+                    confirmButtonText: 'Yes, Block Video!'
                 }).then(function (result) {
                     if (result.value) {
                         $.ajax({
                             type: 'PUT',
-                            url: "{{-- route('admin.media.block.video') --}}",
+                            url: blockUrl,
                             data: {
                                 "_token": `{{ csrf_token() }}`, 
-                                video_id: data.id,
+                                // video_id: data.id,
                             },
                             success: function(response) {
                                 if (response.hasOwnProperty('success')) {

@@ -6,7 +6,7 @@ use App\Models\Video;
 
 interface IVideo
 {
-    public function createVideo(array $value);
+    public function create(array $value);
     
-    public function editVideoPost(array $value, Video $video);
+    public function edit(array $value, Video $video);
 }

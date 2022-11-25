@@ -14,7 +14,7 @@ class VideoRepository implements IVideo
         $this->video = $video;
     }
 
-    public function createVideo(array $attributes)
+    public function create(array $attributes)
     {
         $url = $this->setVideoUrl($attributes);
         return $this->video->create([
@@ -33,7 +33,7 @@ class VideoRepository implements IVideo
         ]);
     }
 
-    public function editVideoPost(array $attributes, $video)
+    public function edit(array $attributes, $video)
     {
         $data = [];
         $title = data_get($attributes, 'title', $video->title);

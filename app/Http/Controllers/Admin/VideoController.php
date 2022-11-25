@@ -76,7 +76,7 @@ class VideoController extends Controller
     {
         $data = $request->validated();
 
-        if ($this->videoRepository->createVideo($data)) {
+        if ($this->videoRepository->create($data)) {
             return redirect()->route('admin.media.videos')->with('primary', 'Video Created Successfully!');
         }
         return back()->with('danger', 'Unable to Create Video!');
@@ -94,7 +94,7 @@ class VideoController extends Controller
     public function editVideo(VideoEditRequest $request, Video $video)
     {
         $data = $request->validated();
-        if ($this->videoRepository->editVideoPost($data, $video)) {
+        if ($this->videoRepository->edit($data, $video)) {
             if ($request->hasfile('cover')) {
                 $initial_path = public_path('/covers') . $video->cover;
                 if (FacadesFile::exists($initial_path)) {
@@ -112,6 +112,28 @@ class VideoController extends Controller
             return redirect()->route('admin.media.videos')->with('primary', 'Video Edited Successfully!');
         }
         return back()->with('danger', 'Unable to Edit Video!');
+    }
+
+    public function unblockVideo(Video $video)
+    {
+        $video->status = '1';
+
+        $result = $video->save();
+        if ($result) {
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['fail' => true]);
+    }
+
+    public function blockVideo(Video $video)
+    {
+        $video->status = '0';
+
+        $result = $video->save();
+        if ($result) {
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['fail' => true]);
     }
 
 }
