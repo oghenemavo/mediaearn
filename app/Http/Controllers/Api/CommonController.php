@@ -35,7 +35,8 @@ class CommonController extends Controller
             $data['category'] = $item->category->category;
             $data['description'] = htmlspecialchars_decode($item->description);
             $data['url'] = $item->url;
-            $data['cover'] = asset("cover/$item->cover");
+            $data['video_url'] = $item->video_url;
+            $data['cover'] = $item->cover;
             $data['length'] = $item->length;
             $data['charges'] = $item->charges;
             $data['earnable'] = $item->earnable;

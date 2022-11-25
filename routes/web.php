@@ -79,7 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // videos
             Route::get('videos', 'videos')->name('videos');
             Route::post('videos', 'createVideo')->name('create.video');
-            Route::get('videos/{video?}', 'viewVideo')->name('view.video');
+            Route::get('videos/{video?}', 'showVideo')->name('view.video');
             Route::put('videos/{video}', 'editVideo')->name('edit.video');
             // Route::put('block/video', 'blockVideo')->name('block.video');
             // Route::put('unblock/video', 'unblockVideo')->name('unblock.video');

@@ -55,10 +55,6 @@
 </div>
 
 
-<?php
-var_dump($errors->all());
-?>
-
 <!-- @Video Create Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="create_video_modal">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -85,6 +81,7 @@ var_dump($errors->all());
                             @enderror
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="form-label">Categories</label>
                         <div class="form-control-wrap">
@@ -482,7 +479,7 @@ var_dump($errors->all());
     
                                                     <dt class="col-sm-3">Status</dt>
                                                     <dd class="col-sm-9">
-                                                        ${data.is_active ? '<span class="badge badge-dot badge-success">Active</span>' : '<span class="badge badge-dot badge-danger">Inactive</span>'}
+                                                        ${data.status == '1' ? '<span class="badge badge-dot badge-success">Active</span>' : '<span class="badge badge-dot badge-danger">Inactive</span>'}
                                                     </dd>
                                                 </dl>
                                             
@@ -632,7 +629,6 @@ var_dump($errors->all());
                     $('div[data-note="length"]').text(hhmmss(myVideos[i].duration));
                 }
             }
-                
 
             $.validator.setDefaults({
                 errorElement: "div",

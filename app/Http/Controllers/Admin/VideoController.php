@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Contracts\IVideo;
 use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VideoEditRequest;
 use App\Http\Requests\VideoRequest;
 use App\Models\Category;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File as FacadesFile;
 
 class VideoController extends Controller
 {
@@ -65,7 +67,7 @@ class VideoController extends Controller
     public function videos()
     {
         $data['page_title'] = 'Create & Manage Videos';
-        $data['categories'] = Category::all();
+        $data['categories'] = Category::query()->get();
         $data['video_types'] = VideoTypeEnum::cases();
         return view('admin.media.videos', $data);
     }
@@ -78,6 +80,38 @@ class VideoController extends Controller
             return redirect()->route('admin.media.videos')->with('primary', 'Video Created Successfully!');
         }
         return back()->with('danger', 'Unable to Create Video!');
+    }
+
+    public function showVideo(Video $video)
+    {
+        $data['page_title'] = 'Edit Video | ' . $video->title;
+        $data['categories'] = Category::query()->get();
+        $data['video_types'] = VideoTypeEnum::cases();
+        $data['video'] = $video;
+        return view('admin.media.edit-video', $data);
+    }
+
+    public function editVideo(VideoEditRequest $request, Video $video)
+    {
+        $data = $request->validated();
+        if ($this->videoRepository->editVideoPost($data, $video)) {
+            if ($request->hasfile('cover')) {
+                $initial_path = public_path('/covers') . $video->cover;
+                if (FacadesFile::exists($initial_path)) {
+                    FacadesFile::delete($initial_path);
+                }
+            }
+    
+            if ($request->hasfile('video_file')) {
+                $initial_path = public_path('/videos') . $video->url;
+                if (FacadesFile::exists($initial_path)) {
+                    FacadesFile::delete($initial_path);
+                }
+            }
+
+            return redirect()->route('admin.media.videos')->with('primary', 'Video Edited Successfully!');
+        }
+        return back()->with('danger', 'Unable to Edit Video!');
     }
 
 }

@@ -17,7 +17,6 @@ class VideoRepository implements IVideo
     public function createVideo(array $attributes)
     {
         $url = $this->setVideoUrl($attributes);
-        // dd($url);
         return $this->video->create([
             'category_id' => data_get($attributes, 'category_id'),
             'title' => data_get($attributes, 'title'),
@@ -34,12 +33,42 @@ class VideoRepository implements IVideo
         ]);
     }
 
+    public function editVideoPost(array $attributes, $video)
+    {
+        $data = [];
+        $title = data_get($attributes, 'title', $video->title);
+        if ($video->title != $title) {
+            $data['slug'] = Str::of($data['title'])->slug('-') . '-' . uniqid();
+        }
+
+        if (data_get($attributes, 'video_file')) {
+            $data['url'] = $this->setVideoUrl($attributes);
+        }
+
+        if (data_get($attributes, 'cover')) {
+            $data['cover'] = $this->uploadFile('covers', 'cover');
+        }
+
+        return $video->update([
+            'category_id' => data_get($attributes, 'category_id', $video->category_id),
+            'title' => $title,
+            'description' => $this->clean(data_get($attributes, 'description', $video->description)),
+            'video_type' => data_get($attributes, 'video_type', $video->video_type),
+            'length' => data_get($attributes, 'length', $video->length),
+            'charges' => data_get($attributes, 'charges', $video->charges),
+            'earnable' => data_get($attributes, 'earnable', $video->earnable),
+            'earnable_ns' => data_get($attributes, 'earnable_ns', $video->earnable_ns),
+            'earned_after' => data_get($attributes, 'earned_after', $video->earned_after),
+            ...$data
+        ]);
+    }
+
     protected function setVideoUrl(array $attributes)
     {
         $videoUrl = '';
         $videoType = data_get($attributes, 'video_type');
         if ($videoType == VideoTypeEnum::YOUTUBE->value) {
-            $videoUrl .= 'https://youtube.com/watch?v=' . data_get($attributes, 'video_id');
+            $videoUrl .= data_get($attributes, 'video_id');
         } elseif ($videoType == VideoTypeEnum::UPLOAD->value) {
             $videoUrl .=  $this->uploadFile('videos', 'video_file');
         }
