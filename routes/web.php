@@ -74,7 +74,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::controller(VideoController::class)->name('media.')->group(function () {
             Route::get('categories', 'categories')->name('categories');
             Route::post('categories', 'createCategory')->name('create.category');
-            Route::put('categories/{category?}', 'editCategory')->name('edit.category');
+            Route::put('categories/{category}', 'editCategory')->name('edit.category');
+
+            // videos
+            Route::get('videos', 'videos')->name('videos');
+            Route::post('videos', 'createVideo')->name('create.video');
+            Route::get('videos/{video?}', 'viewVideo')->name('view.video');
+            Route::put('videos/{video}', 'editVideo')->name('edit.video');
+            // Route::put('block/video', 'blockVideo')->name('block.video');
+            // Route::put('unblock/video', 'unblockVideo')->name('unblock.video');
+
         });
 
     });

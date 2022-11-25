@@ -156,7 +156,7 @@
                                         <div class="modal-content">
                                             <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                                             <div class="modal-body modal-body-lg">
-                                            <form action="{{ route('admin.media.edit.category') }}/${data.id}" method="post">
+                                            <form action="#" method="post">
                                                 @csrf
                                                 <div class="form-group">
                                                     <div class="form-label-group">
@@ -205,12 +205,17 @@
                 let dtr = dt.row( $(this).parents('tr') ); // table row
                 let data = dtr.data(); // row data
 
+                console.log(data);
+
                 const edit_category_form = $(this).offsetParent().offsetParent().next().find('form');
+
+                let url = `{{ route('admin.media.edit.category', ':id') }}`;
+                url = url.replace(':id', data.id);
 
                 const options = {
                     type: 'PUT',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    url: $(this).prop('action'),
+                    url,
                     data: $(this).serialize(),
                     dataType: 'json',
                     success: function(response) {

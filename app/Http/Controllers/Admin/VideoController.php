@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\IVideo;
+use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VideoRequest;
 use App\Models\Category;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class VideoController extends Controller
 {
+    public function __construct(protected IVideo $videoRepository)
+    {
+        $this->videoRepository = $videoRepository;
+    }
+
     public function categories()
     {
         $data['page_title'] = 'Create & Manage Categories';
@@ -52,4 +61,23 @@ class VideoController extends Controller
         }
         return back()->with('danger', 'Unable to Update Category!');
     }
+
+    public function videos()
+    {
+        $data['page_title'] = 'Create & Manage Videos';
+        $data['categories'] = Category::all();
+        $data['video_types'] = VideoTypeEnum::cases();
+        return view('admin.media.videos', $data);
+    }
+
+    public function createVideo(VideoRequest $request)
+    {
+        $data = $request->validated();
+
+        if ($this->videoRepository->createVideo($data)) {
+            return redirect()->route('admin.media.videos')->with('primary', 'Video Created Successfully!');
+        }
+        return back()->with('danger', 'Unable to Create Video!');
+    }
+
 }
