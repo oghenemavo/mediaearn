@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PromotionController;
@@ -74,6 +75,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('manage/users', [DashboardController::class, 'showUsers'])->name('users');
         Route::put('users/{user}/suspend', [DashboardController::class, 'suspendUser'])->name('suspend.user');
         Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
+        Route::get('settings', [AppController::class, 'index'])->name('app.settings');
+        Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
 
         Route::controller(VideoController::class)->name('media.')->group(function () {
             Route::get('categories', 'categories')->name('categories');

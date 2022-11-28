@@ -567,7 +567,6 @@
                             url: blockUrl,
                             data: {
                                 "_token": `{{ csrf_token() }}`, 
-                                // video_id: data.id,
                             },
                             success: function(response) {
                                 if (response.hasOwnProperty('success')) {
