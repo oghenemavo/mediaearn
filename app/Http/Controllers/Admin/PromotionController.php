@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PromotionEditRequest;
 use App\Http\Requests\PromotionRequest;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File as FacadesFile;
 
 class PromotionController extends Controller
 {
@@ -35,5 +37,66 @@ class PromotionController extends Controller
         }
 
         return back()->with('danger', 'Unable to Create Promotion!');
+    }
+
+    public function show(Promotion $promotion)
+    {
+        $data['page_title'] = 'Edit Promotion';
+        $data['promotion'] = $promotion;
+
+        $imageExtensions = ['jpeg','png','jpg','gif','svg',];
+        $ext = explode('.', $promotion->material);
+        $materialExtension = strtolower(array_pop($ext));
+        $data['is_image'] = in_array($materialExtension, $imageExtensions);
+
+        return view('admin.media.edit-promotion', $data);
+    }
+
+    public function edit(PromotionEditRequest $request, Promotion $promotion)
+    {
+        $data = $request->validated();
+        
+        if ($request->hasfile('material')) {
+            $promotionFileObject = $request->file('material');
+            $promotionFile =  uniqid('promotion_') . '.' . $promotionFileObject->extension();
+
+            $promotionFileObject->move(public_path('/promotions'), $promotionFile);
+
+            $initial_path = public_path('/promotions') . $promotion->material;
+            if (FacadesFile::exists($initial_path)) {
+                FacadesFile::delete($initial_path);
+            }
+            $data['material'] = $promotionFile;
+        }
+        
+        $time = strtotime($data['expiry_date'] . ' ' . $data['expiry_time']);
+        $data['expires_at'] = date('Y-m-d h:i:s.u', $time);
+        
+        if ($promotion->update($data)) {
+            return redirect()->route('admin.media.promotions')->with('primary', 'Promotion edited Successfully!');
+        }
+        return back()->with('danger', 'Unable to Edit Promotion!');
+    }
+
+    public function unblock(Promotion $promotion)
+    {
+        $promotion->status = '1';
+
+        $result = $promotion->save();
+        if ($result) {
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['fail' => true]);
+    }
+
+    public function block(Promotion $promotion)
+    {
+        $promotion->status = '0';
+
+        $result = $promotion->save();
+        if ($result) {
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['fail' => true]);
     }
 }

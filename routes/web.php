@@ -90,10 +90,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::controller(PromotionController::class)->prefix('promotions')->name('media.')->group(function () {
             Route::get('/', 'index')->name('promotions');
             Route::post('/', 'store')->name('create.promotions');
-            // Route::get('/{promotion?}', 'show')->name('show.promotion');
-            // Route::put('/', 'edit')->name('edit.promotion');
-            // Route::put('/{promotion?}/block', 'block')->name('block.promotion');
-            // Route::put('/{promotion?}/unblock', 'unblock')->name('unblock.promotion');
+            Route::get('/{promotion}', 'show')->name('show.promotion');
+            Route::put('/{promotion}', 'edit')->name('edit.promotion');
+            Route::put('/{promotion}/block', 'block')->name('block.promotion');
+            Route::put('/{promotion}/unblock', 'unblock')->name('unblock.promotion');
             // Route::delete('/{promotion?}', 'delete')->name('delete.promotion');
         });
     });

@@ -221,8 +221,11 @@
                     if (imageExt.includes(material)) {
                         view = `<img class="cover-image" src="${data.material}" alt="${data.title}">`;
                     } else {
-                        view = `<iframe src="${data.material}" title="${data.title}" allowfullscreen></iframe>`;
+                        view = `<iframe src="${data.material}" title="${data.title}" allowfullscreen sandbox></iframe>`;
                     }
+
+                    let showPromotionUrl = `{{ route('admin.media.show.promotion', ':id') }}`;
+                    showPromotionUrl = showPromotionUrl.replace(':id', data.id);
 
                     return `
                         <ul class="nk-tb-actions gx-1">
@@ -232,7 +235,7 @@
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
                                             <li><a href="#" data-toggle="modal" data-target="#view_promotion_${data.id}"><em class="icon ni ni-eye"></em><span>View promotion</span></a></li>
-                                            <li><a href="{{-- route('admin.media.edit.promotion') --}}/${data.id}"><em class="icon ni ni-edit"></em><span>Edit promotion</span></a></li>
+                                            <li><a href="${showPromotionUrl}"><em class="icon ni ni-edit"></em><span>Edit promotion</span></a></li>
                                             <li class="divider"></li>
                                             ${promotion_status}
                                         </ul>
@@ -260,7 +263,7 @@
 
                                             <dt class="col-sm-3">Status</dt>
                                             <dd class="col-sm-9">
-                                                ${data.is_active ? '<span class="badge badge-dot badge-success">Active</span>' : '<span class="badge badge-dot badge-danger">Inactive</span>'}
+                                                ${data.status ? '<span class="badge badge-dot badge-success">Active</span>' : '<span class="badge badge-dot badge-danger">Inactive</span>'}
                                             </dd>
                                         </dl>
                                     
@@ -281,6 +284,9 @@
             let dtr = dt.row($(this).parents('tr')); // table row
             let data = dtr.data(); // row data
 
+            let unblockUrl = `{{ route('admin.media.unblock.promotion', ':id') }}`;
+            unblockUrl = unblockUrl.replace(':id', data.id);
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "Users would have access to this promotion!",
@@ -291,10 +297,9 @@
                 if (result.value) {
                     $.ajax({
                         type: 'PUT',
-                        url: "{{-- route('admin.media.unblock.promotion') --}}",
+                        url: unblockUrl,
                         data: {
                             "_token": `{{ csrf_token() }}`,
-                            promotion_id: data.id,
                         },
                         success: function(response) {
                             if (response.hasOwnProperty('success')) {
@@ -330,20 +335,22 @@
             let dtr = dt.row($(this).parents('tr')); // table row
             let data = dtr.data(); // row data
 
+            let blockUrl = `{{ route('admin.media.block.promotion', ':id') }}`;
+            blockUrl = blockUrl.replace(':id', data.id);
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "User won't have access to this content!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, suspend user!'
+                confirmButtonText: 'Yes, Deactivate Promotion!'
             }).then(function(result) {
                 if (result.value) {
                     $.ajax({
                         type: 'PUT',
-                        url: "{{-- route('admin.media.block.promotion') --}}",
+                        url: blockUrl,
                         data: {
                             "_token": `{{ csrf_token() }}`,
-                            promotion_id: data.id,
                         },
                         success: function(response) {
                             if (response.hasOwnProperty('success')) {
