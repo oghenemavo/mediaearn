@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Promotion;
+use App\Models\Referral;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
@@ -92,5 +94,26 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['users' => $mapped_users]);
+    }
+
+    public function getReferrals()
+    {
+        $referral_collection = Referral::query()->get()->where('referral_type', ReferralTypeEnum::SIGNUP);
+        $mapped_referrals = $referral_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['referrer'] = $item->referrer->name;
+            $data['referred'] = $item->referred->name;
+            $data['bonus'] = $item->bonus;
+            $data['referral_type'] = $item->referral_type;
+            // $data['tax'] = $item->tax;
+            $data['amount'] = $item->amount;
+            $data['status'] = $item->status;
+            $data['bonus_at'] = $item->bonus_at;
+            $data['credited_at'] = $item->credited_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['referrals' => $mapped_referrals]);
     }
 }

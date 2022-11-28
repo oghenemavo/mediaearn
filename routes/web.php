@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\User\ActivityController;
@@ -102,6 +103,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{promotion}', 'edit')->name('edit.promotion');
             Route::put('/{promotion}/block', 'block')->name('block.promotion');
             Route::put('/{promotion}/unblock', 'unblock')->name('unblock.promotion');
+        });
+
+        Route::controller(ReportController::class)->prefix('report')->name('report.')->group(function () {
+            Route::get('referrals', 'referrals')->name('referrals');
         });
     });
 
