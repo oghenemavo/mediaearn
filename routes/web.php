@@ -77,6 +77,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
         Route::get('settings', [AppController::class, 'index'])->name('app.settings');
         Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
+        Route::put('update/password', [AppController::class, 'updatePassword'])->name('update.password');
+        Route::put('update/email', [AppController::class, 'emailPassword'])->name('update.email');
 
         Route::controller(VideoController::class)->name('media.')->group(function () {
             Route::get('categories', 'categories')->name('categories');

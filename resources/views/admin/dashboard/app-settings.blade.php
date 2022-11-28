@@ -15,31 +15,31 @@
                 <div class="card-content">
                     <ul class="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#password"><em class="icon ni ni-lock-alt"></em><span>Password</span></a>
+                            <a class="nav-link active" data-toggle="tab" href="#password_tab"><em class="icon ni ni-lock-alt"></em><span>Password</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#email"><em class="icon ni ni-user"></em><span>Account</span></a>
+                            <a class="nav-link" data-toggle="tab" href="#email_tab"><em class="icon ni ni-user"></em><span>Account</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#settings"><em class="icon ni ni-setting"></em><span>Site Settings</span></a>
+                            <a class="nav-link" data-toggle="tab" href="#settings_tab"><em class="icon ni ni-setting"></em><span>Site Settings</span></a>
                         </li>
                     </ul><!-- .nav-tabs -->
 
                     <div class="card-inner">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="password">
-                                <form id="update_password" action="{{-- route('admin.update.password') --}}" method="post">
+                            <div class="tab-pane active" id="password_tab">
+                                <form id="update_password" action="{{ route('admin.update.password') }}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
                                         <div class="form-label-group">
-                                            <label class="form-label" for="current">Current Password</label>
+                                            <label class="form-label" for="current_password">Current Password</label>
                                         </div>
                                         <div class="form-control-wrap">
-                                            <input type="password" class="form-control form-control-lg  @error('current') is-invalid @enderror"
-                                            id="current" name="current" autofocus>
+                                            <input type="password" class="form-control form-control-lg  @error('current_password') is-invalid @enderror"
+                                            id="current_password" name="current_password" autofocus>
                                             
-                                            @error('current')
+                                            @error('current_password')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -65,13 +65,13 @@
 
                                     <div class="form-group">
                                         <div class="form-label-group">
-                                            <label class="form-label" for="repeat">Repeat Password</label>
+                                            <label class="form-label" for="password_confirmation">Confirm Password</label>
                                         </div>
                                         <div class="form-control-wrap">
-                                            <input type="password" class="form-control form-control-lg  @error('repeat') is-invalid @enderror"
-                                            id="repeat" name="repeat">
+                                            <input type="password" class="form-control form-control-lg  @error('password_confirmation') is-invalid @enderror"
+                                            id="password_confirmation" name="password_confirmation">
                                             
-                                            @error('repeat')
+                                            @error('password_confirmation')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -83,8 +83,8 @@
                                 </form>
                             </div>
 
-                            <div class="tab-pane" id="email">
-                                <form id="update_email" action="{{-- route('admin.update.email') --}}" method="post">
+                            <div class="tab-pane" id="email_tab">
+                                <form id="update_email" action="{{ route('admin.update.email') }}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
@@ -107,7 +107,7 @@
                                 </form>
                             </div>
 
-                            <div class="tab-pane" id="settings">
+                            <div class="tab-pane" id="settings_tab">
                                 <form id="app_settings">
                                     @foreach($app_settings as $settings)
                                         @if($settings->meta->get('type') == 'number') 
@@ -217,7 +217,7 @@
 
             $('#update_password').validate({
                 rules: {
-                    current: {
+                    current_password: {
                         required: true,
                         minlength: 5,
                     },
@@ -225,8 +225,8 @@
                         required: true,
                         minlength: 5
                     },
-                    repeat: {
-                        equalTo: '#password'
+                    password_confirmation: {
+                        equalTo: "#password"
                     }
                 },
             });
