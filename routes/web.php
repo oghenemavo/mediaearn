@@ -71,6 +71,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('manage/users', [DashboardController::class, 'showUsers'])->name('users');
+        Route::put('users/{user}/suspend', [DashboardController::class, 'suspendUser'])->name('suspend.user');
+        Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
 
         Route::controller(VideoController::class)->name('media.')->group(function () {
             Route::get('categories', 'categories')->name('categories');
@@ -94,7 +97,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{promotion}', 'edit')->name('edit.promotion');
             Route::put('/{promotion}/block', 'block')->name('block.promotion');
             Route::put('/{promotion}/unblock', 'unblock')->name('unblock.promotion');
-            // Route::delete('/{promotion?}', 'delete')->name('delete.promotion');
         });
     });
 

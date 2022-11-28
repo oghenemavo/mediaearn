@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Promotion;
+use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class CommonController extends Controller
 {
     public function getCategories()
     {
-        $category_collection = Category::get();
+        $category_collection = Category::query()->get();
         return response()->json(['categories' => $category_collection]);
     }
 
@@ -28,7 +29,7 @@ class CommonController extends Controller
 
     public function getVideos()
     {
-        $video_collection = Video::get();
+        $video_collection = Video::query()->get();
         $mapped_videos = $video_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['title'] = $item->title;
@@ -66,5 +67,30 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['promotions' => $mapped_promotions]);
+    }
+
+    public function getUsers()
+    {
+        $users = User::query()->get();
+        $mapped_users = $users->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->first_name . ' ' . $item->last_name;
+            $data['email'] = $item->email;
+            $data['bank_code'] = $item->bank_code;
+            $data['bank_account'] = $item->bank_account;
+            $data['balance'] = $item->wallet->balance ?? '0.00';
+            $data['email_verified_at'] = $item->email_verified_at ? true : false;
+            $data['referred_by'] = $item->referred_by;
+            $data['status'] = $item->status;
+            $data['created_at'] = $item->created_at;
+
+            $split = explode(' ', $data['name']);
+            $data['initials'] =  isset($split[1]) 
+            ? strtoupper($split[0][0]) . strtoupper($split[1][0])
+            : strtoupper($split[0][0]) . strtoupper($split[0][1]);
+
+            return $data;
+        });
+        return response()->json(['users' => $mapped_users]);
     }
 }
