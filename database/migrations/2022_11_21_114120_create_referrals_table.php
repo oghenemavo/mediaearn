@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('referrer_user_id')->constrained('users')->comment("Owner of referral link");
             $table->foreignId('referred_user_id')->constrained('users')->comment("User of referral link");
             $table->string('referral_type')->comment("signup, video");
+            $table->json('meta')->nullable();
             $table->decimal('amount', 11, 2)->default('0.00');
             $table->enum('status', ['0', '1', '2'])->default(0)->comment("0=n/a, 1=bonus in, 2=bonus out email");
             $table->timestamp('bonus_at')->nullable()->default(null)->comment("Time of bonus entry");

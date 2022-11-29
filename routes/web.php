@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\Admin\VideoController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
@@ -30,6 +31,7 @@ Route::get('/', function () {
     return view('welcome', $data);
 })->name('homepage');
 
+Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 
 Route::middleware(['guest:web'])->group(function () {
     Route::get('signup/{referral_id?}', [AuthController::class, 'index']);

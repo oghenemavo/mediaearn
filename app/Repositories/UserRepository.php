@@ -4,9 +4,13 @@ namespace App\Repositories;
 
 use App\Contracts\IUser;
 use App\Enums\UserStatusEnum;
+use App\Models\AppSetting;
+use App\Models\Membership;
+use App\Models\Referral;
 use App\Models\User;
 use App\Services\ReferralService;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository implements IUser
@@ -14,7 +18,8 @@ class UserRepository implements IUser
     public function __construct(
         protected User $user,
         protected ReferralService $referral,
-        protected WalletService $wallet
+        protected WalletService $wallet,
+        protected Membership $membership,
     )
     {
         $this->user = $user;
@@ -48,6 +53,45 @@ class UserRepository implements IUser
         });
 
         return false;
+    }
+
+    public function createMembership($user_id, $tx_ref, $amount)
+    {
+        // creates only once
+        $membership = $this->membership->firstOrCreate(
+            ['user_id' => $user_id],
+            ['reference' => $tx_ref, 'amount' => $amount]
+        );
+
+        if ($membership) {
+            // check if this user is referred
+            $referral_info = Referral::where('referred_user_id', $user_id)->first();
+            if ($referral_info) {
+                $bonus_value = 0;
+                $bonusType = AppSetting::query()->where('slug', 'referral_bonus_type')->first()->value;
+                $bonus = AppSetting::query()->where('slug', 'referral_bonus')->first()->value;
+
+                if ($bonusType == 'percentage') {
+                    $bonus_value = $amount * ($bonus / 100);
+                } else {
+                    $bonus_value = $bonus;
+                }
+
+                $referral_info->meta = [
+                    'bonus_type' => $bonusType,
+                    'bonus' => $bonus,
+                ];
+                
+                $referral_info->amount = $bonus_value;
+                $referral_info->status = '1';
+                $referral_info->bonus_at = Carbon::now();
+                $referral_info->save();
+            }
+
+            return back()->with('success', 'payment successful, you have subscribed');
+        }
+        
+        // send email
     }
 
 }

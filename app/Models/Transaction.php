@@ -2,21 +2,19 @@
 
 namespace App\Models;
 
-use App\Enums\ReferralTypeEnum;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
+use App\Enums\PaymentStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Referral extends Model
+class Transaction extends Model
 {
     use HasFactory;
-
+    
     protected $guarded = [
         'id',
     ];
 
     protected $casts = [
-        'meta' => AsCollection::class,
-        'referral_type' => ReferralTypeEnum::class,
+        'status' => PaymentStatusEnum::class,
     ];
 }

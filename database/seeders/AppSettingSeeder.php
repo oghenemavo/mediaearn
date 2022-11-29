@@ -43,6 +43,34 @@ class AppSettingSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Referral Bonus Type',
+                'slug' => 'referral_bonus_type',
+                'description' => 'Percentage or Fixed Value Bonus Type',
+                'meta' => json_encode([
+                    'type' => 'select',
+                    'options' => [
+                        'percentage' => 'Percentage %',
+                        'fixed' => 'Fixed Value'
+                    ]
+                ]),
+                'value' => 'percentage',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Referral Bonus',
+                'slug' => 'referral_bonus',
+                'description' => 'Referral Bonus',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '0.01',
+                    'step' => '0.01'
+                ]),
+                'value' => '10',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         AppSetting::upsert($data, 'slug');
     }

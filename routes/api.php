@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CommonController;
+use App\Http\Controllers\Api\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +31,9 @@ Route::controller(CommonController::class)->group(function () {
     });
     
     Route::get('validate/category', 'validateUniqueCategory')->name('validate.unique.category');
+});
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::post('plans/{plan}/payment', 'makeSubscriptionPayment')->name('plans.payment');
+    Route::get('payment-callback', 'paymentCallback')->name('payment.callback');
 });

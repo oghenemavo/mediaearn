@@ -214,4 +214,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'flw' => [
+        'base_url' => env('FLW_BASE_URL'),
+        'secret_key' => env('FLW_SECRET_KEY')
+    ],
 ];
