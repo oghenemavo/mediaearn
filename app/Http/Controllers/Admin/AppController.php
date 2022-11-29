@@ -74,5 +74,12 @@ class AppController extends Controller
         }
         return back()->with('info', 'No changes made!');
     }
+
+    public function plans()
+    {
+        $data['page_title'] = 'View & Setup Subscription Plans';
+        $data['app_settings'] = AppSetting::query()->get();
+        return view('admin.dashboard.app-settings', $data);
+    }
     
 }

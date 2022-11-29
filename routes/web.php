@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
@@ -25,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $data['videos'] = \App\Models\Video::query()->get();
+    return view('welcome', $data);
 })->name('homepage');
 
 
@@ -47,7 +49,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('password', [ProfileController::class, 'password']);
     Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
     
-    Route::get('video', [ActivityController::class, 'video']);
+    Route::get('videos/{video:slug}', [ActivityController::class, 'video'])->name('get.video');
+    Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -107,6 +110,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::controller(ReportController::class)->prefix('report')->name('report.')->group(function () {
             Route::get('referrals', 'referrals')->name('referrals');
+        });
+
+        Route::controller(PlanController::class)->prefix('plans')->group(function () {
+            Route::get('/', 'index')->name('plans');
+            Route::post('/', 'store')->name('create.plans');
+            Route::get('/{plan}', 'show')->name('show.plans');
+            Route::put('/{plan}', 'edit')->name('edit.plans');
+            Route::put('/{plan}/deactivate', 'deactivate')->name('deactivate.plans');
+            Route::put('/{plan}/activate', 'activate')->name('activate.plans');
         });
     });
 

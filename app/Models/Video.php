@@ -46,7 +46,8 @@ class Video extends Model
         return Attribute::make(
             get: fn ($value, $attributes) => 
                 $attributes['video_type'] == VideoTypeEnum::UPLOAD->value ? 
-                asset('videos/' . $value) : 'https://www.youtube.com/watch?v=' . $value,
+                // asset('videos/' . $value) : 'https://www.youtube.com/watch?v=' . $value,
+                asset('videos/' . $value) : 'https://www.youtube.com/embed/' . $attributes['url'],
         );
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Plan;
 use App\Models\Promotion;
 use App\Models\Referral;
 use App\Models\User;
@@ -115,5 +116,23 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['referrals' => $mapped_referrals]);
+    }
+
+    public function getPlans()
+    {
+        $plan_collection = Plan::query()->get();
+        $mapped_plans = $plan_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['title'] = $item->title;
+            $data['price'] = $item->price;
+            $data['description'] = $item->description;
+            $data['set_discount'] = (bool) $item->meta->get('set_discount');
+            $data['discount'] = (float) $item->meta->get('discount');
+            $data['status'] = $item->status;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['plans' => $mapped_plans]);
     }
 }

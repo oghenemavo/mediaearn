@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\IPlan;
 use App\Contracts\IUser;
 use App\Contracts\IVideo;
+use App\Repositories\PlanRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VideoRepository;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +21,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(IUser::class, UserRepository::class);
         $this->app->bind(IVideo::class, VideoRepository::class);
+        $this->app->bind(IPlan::class, PlanRepository::class);
     }
 
     /**
