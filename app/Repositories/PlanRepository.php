@@ -30,9 +30,6 @@ class PlanRepository implements IPlan
 
     public function edit(array $attributes, $plan)
     {
-        // var_dump($attributes);
-        // die();
-        // $isSet = 
         $meta = [
             'set_discount' => (bool) data_get($attributes, 'set_discount'),
             'discount' => (float) data_get($attributes, 'discount'),

@@ -9,4 +9,7 @@ interface IVideo
     public function create(array $value);
     
     public function edit(array $value, Video $video);
+
+    public function changeStatus(string $status, Video $video);
+    
 }

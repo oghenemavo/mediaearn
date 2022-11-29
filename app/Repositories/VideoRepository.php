@@ -62,6 +62,13 @@ class VideoRepository implements IVideo
             ...$data
         ]);
     }
+    
+    public function changeStatus(string $status, $video)
+    {
+        return $video->update([
+            'status' => $status
+        ]);
+    }
 
     protected function setVideoUrl(array $attributes)
     {

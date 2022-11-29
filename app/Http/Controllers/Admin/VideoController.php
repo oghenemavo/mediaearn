@@ -116,10 +116,8 @@ class VideoController extends Controller
 
     public function unblockVideo(Video $video)
     {
-        $video->status = '1';
-
-        $result = $video->save();
-        if ($result) {
+        $status = '1';
+        if ($this->videoRepository->changeStatus($status, $video)) {
             return response()->json(['success' => true]);
         }
         return response()->json(['fail' => true]);
@@ -127,10 +125,8 @@ class VideoController extends Controller
 
     public function blockVideo(Video $video)
     {
-        $video->status = '0';
-
-        $result = $video->save();
-        if ($result) {
+        $status = '0';
+        if ($this->videoRepository->changeStatus($status, $video)) {
             return response()->json(['success' => true]);
         }
         return response()->json(['fail' => true]);

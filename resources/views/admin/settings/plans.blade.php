@@ -289,7 +289,7 @@
                             success: function(response) {
                                 if (response.hasOwnProperty('success')) {
                                     dt.ajax.reload();
-                                    Swal.fire('Activated!', 'Plan has been activated.', 'success');
+                                    NioApp.Toast('Plan has been activated.', 'success', {position: 'top-right'});
                                 }
                             },
                             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -338,7 +338,7 @@
                             success: function(response) {
                                 if (response.hasOwnProperty('success')) {
                                     dt.ajax.reload();
-                                    Swal.fire('Blocked!', 'Plan has been deactivated.', 'success');
+                                    NioApp.Toast('Plan has been deactivated.', 'info', {position: 'top-right'});
                                 }
                             },
                             error: function(XMLHttpRequest, textStatus, errorThrown) {
