@@ -86,6 +86,7 @@
                         <label class="form-label">Categories</label>
                         <div class="form-control-wrap">
                             <select data-ui="lg" name="category_id" class="form-select @error('category_id') is-invalid @enderror">
+                                <option>Choose a Category</option>    
                                 @foreach($categories as $data)
                                     <option value="{{ $data->id }}">{{ ucfirst($data->category) }}</option>
                                 @endforeach
@@ -473,7 +474,7 @@
                                                     <dt class="col-sm-3">Video</dt>
                                                     <dd class="col-sm-9">
                                                         <div class="ratio ratio-16x9">
-                                                            <iframe src="${data.url}" title="${data.slug}" allowfullscreen></iframe>
+                                                            <iframe src="${data.video_url}" title="${data.slug}" allowfullscreen></iframe>
                                                         </div>
                                                     </dd>
     

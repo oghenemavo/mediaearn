@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->decimal('price', 11, 2)->default('0.00');
             $table->json('meta');
             $table->text('description');

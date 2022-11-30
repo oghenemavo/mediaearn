@@ -213,7 +213,7 @@
                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#" data-toggle="modal" data-target="#view_video_${data.id}"><em class="icon ni ni-eye"></em><span>View Video</span></a></li>
+                                                    <li><a href="#" data-toggle="modal" data-target="#view_video_${data.id}"><em class="icon ni ni-eye"></em><span>View Plan</span></a></li>
                                                     <li><a href="${showUrl}"><em class="icon ni ni-edit"></em><span>Edit Plan</span></a></li>
                                                     <li class="divider"></li>
                                                     ${video_status}

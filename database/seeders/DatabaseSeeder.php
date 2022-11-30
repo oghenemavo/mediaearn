@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            AppSettingSeeder::class
+            AppSettingSeeder::class,
+            PlanSeeder::class
         ]);
     }
 }

@@ -131,6 +131,20 @@
                                                 </div>
                                                 <div class="form-note">{{ $settings->description }}</div>
                                             </div>
+                                        @elseif($settings->meta->get('type') == 'select') 
+                                            <div class="form-group">
+                                                <label class="form-label">{{ ucwords($settings->name) }}</label>
+                                                <div class="form-control-wrap">
+                                                    <select data-ui="lg" name="settings_value" class="form-select" data-id="{{ $settings->id }}" require>
+                                                        @foreach($settings->meta->get('options') as $key => $data)
+                                                            <option value="{{ $key }}" @if($key == $settings->value) selected @endif>
+                                                                {{ $data }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-note">{{ $settings->description }}</div>
+                                            </div>
                                         @endif
 
                                     @endforeach
