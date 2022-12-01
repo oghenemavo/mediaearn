@@ -10,19 +10,16 @@
 </head>
 <body>
 
-    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY"></div>
-
-    <!-- <div class="plyr__video-embed" id="player">
-        <iframe
-            src="{{ $video->video_url }}"
-            allowfullscreen
-            allowtransparency
-        ></iframe>
-    </div> -->
+    
+    <video id="player" style="--plyr-color-main: #1ac266;"></video>
 
     <input type="hidden" id="title" value="{{ $video->title }}">
+    <input type="hidden" id="type" value="{{ $video->video_type }}">
+    <input type="hidden" id="cover" value="{{ $video->cover }}">
+    <input type="hidden" id="video_link" value="{{ $video_link }}">
     <input type="hidden" id="earn_after" value="{{ $video->earned_after }}">
     <input type="hidden" id="video_id" value="{{ $video->id }}">
+    <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
     
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     
@@ -35,25 +32,38 @@
         <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const player = new Plyr('#player', {
-                    title: $('#title').val(),
-                    // enabled: false, // disable video
-                    // debug: true,
-                    controls: [
-                        'play-large', 
-                        'play', 
-                        // 'progress', 
-                        'current-time', 
-                        'mute', 
-                        'volume', 
-                        'captions', 
-                        // 'settings', 
-                        'pip', 
-                        'airplay', 
-                        'fullscreen'
-                    ],
-                    previewThumbnails: { enabled: false, src: '' }
-                });
+                const player = new Plyr('#player');
+
+                const src = $('#video_link').val()
+                const cover = $('#cover').val()
+
+                console.log($('#type').val());
+                if ($('#type').val() == 'youtube') {
+                    console.log('sssss');
+                    player.source = {
+                        type: 'video',
+                        sources: [
+                            {
+                                src,
+                                provider: 'youtube',
+                            },
+                        ],
+                    };
+                } else {
+                    console.log('sssss');
+                    player.source = {
+                        type: 'video',
+                        title: 'Example title',
+                        sources: [
+                            {
+                                src,
+                                type: 'video/mp4',
+                                // size: 720,
+                            },
+                        ],
+                        poster: cover,
+                    };
+                }
                 
                 const rewardTime = $('#earn_after').val(); //secs
                 // console.log(rewardTime);
@@ -64,67 +74,70 @@
 
                 var currentTime = 0;
 
-                player.on('timeupdate', (event) => {
-                    const instance = event.detail.plyr;
+                if (!$('#is_viewed').val()) {
+                    player.on('timeupdate', (event) => {
+                        const instance = event.detail.plyr;
+                        
+                        if (instance.currentTime > rewardTime && !isDone) {
+                            currentTime = instance.currentTime;
+                            isDone = true;
+                            console.log("done...");
+                            console.log('reward user');
+    
+                            let url = `{{ route('get.user.reward', ':id') }}`;
+                            url = url.replace(':id', $('#video_id').val());
+    
+                            fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    '_token': `{{ csrf_token() }}`,
+                                    played_time: currentTime
+                                }),
+                            })
+                            .then(data => {
+                                if (!data.ok) {
+                                    throw Error(data.status);
+                                }
+                                return data.json();
+                            }).then(update => {
+                                console.log(update);
+                            }).catch(e => {
+                                console.log(e);
+                            });
+                        }
+                    });
+    
+                    player.on('seeking', (event) => {
+                        const instance = event.detail.plyr;
+                        console.log(currentTime);
+                        console.log(instance.currentTime);
+                        console.log("return player back to 0 secs");
+                        
+                        const seekedTime = instance.currentTime;
+                        
+                        if ((currentTime < rewardTime) && (seekedTime > currentTime)) {
+                            instance.stop();
+                            console.log("stopped");
+                        }
+                    });
+    
+                    player.on('ratechange', (event) => {
+                        const instance = event.detail.plyr;
+                        console.log("return player back to 0 secs");
+                        
+                        const rateTime = instance.currentTime;
+                        
+                        if ((currentTime < rewardTime) && (rateTime > currentTime)) {
+                            instance.stop();
+                            instance.speed = 1;
+                            console.log("stopped");
+                        }
+                    });
                     
-                    if (instance.currentTime > rewardTime && !isDone) {
-                        currentTime = instance.currentTime;
-                        isDone = true;
-                        console.log("done...");
-                        console.log('reward user');
-
-                        let url = `{{ route('get.user.reward', ':id') }}`;
-                        url = url.replace(':id', $('#video_id').val());
-
-                        fetch(url, {
-                            method: 'POST',
-                            headers: {
-                            'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                '_token': `{{ csrf_token() }}`,
-                                played_time: currentTime
-                            }),
-                        })
-                        .then(data => {
-                            if (!data.ok) {
-                                throw Error(data.status);
-                            }
-                            return data.json();
-                        }).then(update => {
-                            console.log(update);
-                        }).catch(e => {
-                            console.log(e);
-                        });
-                    }
-                });
-
-                player.on('seeking', (event) => {
-                    const instance = event.detail.plyr;
-                    console.log(currentTime);
-                    console.log(instance.currentTime);
-                    console.log("return player back to 0 secs");
-                    
-                    const seekedTime = instance.currentTime;
-                    
-                    if ((currentTime < rewardTime) && (seekedTime > currentTime)) {
-                        instance.stop();
-                        console.log("stopped");
-                    }
-                });
-
-                player.on('ratechange', (event) => {
-                    const instance = event.detail.plyr;
-                    console.log("return player back to 0 secs");
-                    
-                    const rateTime = instance.currentTime;
-                    
-                    if ((currentTime < rewardTime) && (rateTime > currentTime)) {
-                        instance.stop();
-                        instance.speed = 1;
-                        console.log("stopped");
-                    }
-                });
+                }
 
                 // player.on('controlsshown', (event) => {
                 //     const instance = event.detail.plyr;

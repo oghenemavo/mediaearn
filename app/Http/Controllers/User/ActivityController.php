@@ -24,11 +24,14 @@ class ActivityController extends Controller
     {
         $data['page_title'] = $video->title;
         $data['video'] = $video;
+        // $data['video_type'] = $video->video_type;
         $data['video_views'] = VideoViewLog::where('video_id', $video->id)->count() ?? 0;
 
         $user = auth()->guard('web')->user();
-
+        $data['is_viewed'] = (bool) VideoViewLog::where('video_id', $video->id)->where('user_id', $user->id)->count() ?? 0;
         $data['user'] = $user;
+        $data['video_link'] = $video->video_type == VideoTypeEnum::YOUTUBE ? $video->url : $video->video_url;
+
         // $data['tax'] = 0.01 * (Setting::where('slug', 'payout_tax_percentage')->first()->meta ?? '0.1');
         if ($user) {
             $data['is_subscribed'] = is_null($user->membership);
