@@ -71,6 +71,32 @@ class AppSettingSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Maximum Videos (SUB)',
+                'slug' => 'max_videos_sub',
+                'description' => 'Maximum Videos a subscribed user can view',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '1',
+                    'step' => '1'
+                ]),
+                'value' => '4',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Maximum Videos (NOT SUB)',
+                'slug' => 'max_videos_non_sub',
+                'description' => 'Maximum Videos a non subscribed user can view',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '1',
+                    'step' => '1'
+                ]),
+                'value' => '2',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         AppSetting::upsert($data, 'slug');
     }

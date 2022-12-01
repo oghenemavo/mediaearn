@@ -59,4 +59,14 @@ class User extends Authenticatable implements CanResetPassword
             set: fn ($value) => Hash::make($value),
         );
     }
+
+    public function membership()
+    {
+        return $this->hasOne(Membership::class);
+    }
+
+    public function referral()
+    {
+        return $this->hasOne(Referral::class, 'referred_user_id');
+    }
 }

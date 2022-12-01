@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('memberships', function (Blueprint $table) {
+        Schema::create('video_view_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('reference');
-            $table->decimal('amount', 11, 2, true);
-            $table->enum('status', ['0', '1'])->default('0');
-            $table->dateTime('expires_at')->nullable();
+            $table->foreignId('video_id')->constrained()->onDelete('cascade');
+            $table->string('watched');
+            $table->decimal('earned_amount', 11, 2)->default('0.00');
+            $table->enum('is_credited', ['0', '1'])->default('0');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('memberships');
+        Schema::dropIfExists('video_view_logs');
     }
 };

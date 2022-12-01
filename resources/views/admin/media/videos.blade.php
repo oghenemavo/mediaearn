@@ -474,7 +474,7 @@
                                                     <dt class="col-sm-3">Video</dt>
                                                     <dd class="col-sm-9">
                                                         <div class="ratio ratio-16x9">
-                                                            <iframe src="${data.video_url}" title="${data.slug}" allowfullscreen></iframe>
+                                                            <iframe src="${data.video_url}" title="${data.slug}" allowfullscreen sandbox></iframe>
                                                         </div>
                                                     </dd>
     

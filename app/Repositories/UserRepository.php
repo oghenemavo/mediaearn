@@ -60,7 +60,7 @@ class UserRepository implements IUser
         // creates only once
         $membership = $this->membership->firstOrCreate(
             ['user_id' => $user_id],
-            ['reference' => $tx_ref, 'amount' => $amount]
+            ['reference' => $tx_ref, 'amount' => $amount, 'status' => '1']
         );
 
         if ($membership) {
@@ -92,6 +92,15 @@ class UserRepository implements IUser
         }
         
         // send email
+    }
+
+    public function referralVideoReward($user, $videoId)
+    {
+        $referredBy = $user->referral?->referrer_user_id;
+        if ($referredBy) {
+            return $this->referral->setVideoReferralBonus($referredBy, $user->id, $videoId);
+        }
+        return false;
     }
 
 }
