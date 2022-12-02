@@ -1,21 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="{{ route('login') }}" method="post">
+@extends('layouts.auth')
+
+@section('content')
+    <!-- authorization form -->
+    <form class="sign__form" action="{{ route('login') }}" method="post">
         @csrf
+        <a href="index.html" class="sign__logo">
+            <img src="{{ asset('app/img/logo.svg') }}" alt="">
+        </a>
+
+        <div class="sign__group">
+            <input type="email" id="email" name="email" value="{{ old('email') }}" class="sign__input" placeholder="Email">
+        </div>
+
+        <div class="sign__group">
+            <input type="password" id="password" name="password" class="sign__input" placeholder="Password">
+        </div>
+
+        <div class="sign__group sign__group--checkbox">
+            <input id="remember" name="remember" type="checkbox" checked="checked">
+            <label for="remember">Remember Me</label>
+        </div>
         
-        <input type="email" id="email" name="email" value="{{ old('email') }}">
-        <input type="password" id="password" name="password" value="{{ old('password') }}">
+        <button class="sign__btn" type="submit">Sign in</button>
 
-        <input type="checkbox" name="remember" id="remember">
+        <span class="sign__text">Don't have an account? <a href="{{ route('signup.page') }}">Sign up!</a></span>
 
-        <button type="submit">Log in</button>
+        <span class="sign__text"><a href="{{ route('password.request') }}">Forgot password?</a></span>
     </form>
-</body>
-</html>
+    <!-- end authorization form -->
+@endsection

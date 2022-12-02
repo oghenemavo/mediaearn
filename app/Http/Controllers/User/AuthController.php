@@ -47,12 +47,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:5'
         ]);
 
-        $credentials = $request->except(['_token']);
+        $credentials = $request->except(['_token', 'remember']);
         // $credentials['status'] = UserStatusEnum::ACTIVE;
 
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('homepage');
         } else {
             return redirect()->back()->onlyInput('email')->with('error', 'Invalid credentials');
         }

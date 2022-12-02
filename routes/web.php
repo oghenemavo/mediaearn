@@ -34,7 +34,7 @@ Route::get('/', function () {
 Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 
 Route::middleware(['guest:web'])->group(function () {
-    Route::get('signup/{referral_id?}', [AuthController::class, 'index']);
+    Route::get('signup/{referral_id?}', [AuthController::class, 'index'])->name('signup.page');
     Route::post('signup', [AuthController::class, 'create'])->name('user.create');
 
     Route::get('login', [AuthController::class, 'login'])->name('login.page');

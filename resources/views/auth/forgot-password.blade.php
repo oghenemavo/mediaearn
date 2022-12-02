@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.auth')
 
-{{ session()->get('status') }}
-{{ session()->get('email') }}
-
-    <form action="{{ route('password.email') }}" method="post">
+@section('content')
+    <!-- authorization form -->
+    <form class="sign__form" action="{{ route('password.email') }}" method="post">
         @csrf
-        
-        <input type="email" id="email" name="email" value="{{ old('email') }}">
+        <a href="index.html" class="sign__logo">
+            <img src="{{ asset('app/img/logo.svg') }}" alt="">
+        </a>
 
-        <button type="submit">Forgot Password</button>
+        <div class="sign__group">
+            <input type="email" id="email" name="email" value="{{ old('email') }}" class="sign__input" placeholder="Email">
+        </div>
+        
+        <button class="sign__btn" type="submit">Forgot Password</button>
     </form>
-</body>
-</html>
+    <!-- end authorization form -->
+@endsection

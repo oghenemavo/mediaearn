@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.auth')
 
-{{ session()->get('status') }}
-{{ session()->get('errors') }}
-
-    <form action="{{ route('password.update') }}" method="post">
+@section('content')
+    <!-- authorization form -->
+    <form class="sign__form" action="{{ route('password.update') }}" method="post">
         @csrf
-        
+        <a href="index.html" class="sign__logo">
+            <img src="{{ asset('app/img/logo.svg') }}" alt="">
+        </a>
+
         <input type="hidden" id="token" name="token" value="{{ $token }}">
         <input type="hidden" id="email" name="email" value="{{ request()->query('email') }}">
-        <br>
-        <input type="password" id="password" name="password">
-        <br>
-        <input type="password" id="password_confirmation" name="password_confirmation">
 
-        <button type="submit">Reset Password</button>
+        <div class="sign__group">
+            <input type="password" id="password" name="password" class="sign__input" placeholder="Password">
+        </div>
+
+        <div class="sign__group">
+            <input type="password" id="password_confirmation" name="password_confirmation" class="sign__input" placeholder="password_confirmation">
+        </div>
+        
+        <button class="sign__btn" type="submit">Reset Password</button>
     </form>
-</body>
-</html>
+    <!-- end authorization form -->
+@endsection

@@ -1,28 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
 
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.3/plyr.css" />
-    <title>Video</title>
-</head>
-<body>
+@section('content')
 
-    
-    <video id="player" style="--plyr-color-main: #1ac266;"></video>
+    <!-- details -->
+	<section class="section details">
+		<!-- details background -->
+		<div class="details__bg" data-bg="img/home/home__bg.jpg"></div>
+		<!-- end details background -->
 
-    <input type="hidden" id="title" value="{{ $video->title }}">
-    <input type="hidden" id="type" value="{{ $video->video_type }}">
-    <input type="hidden" id="cover" value="{{ $video->cover }}">
-    <input type="hidden" id="video_link" value="{{ $video_link }}">
-    <input type="hidden" id="earn_after" value="{{ $video->earned_after }}">
-    <input type="hidden" id="video_id" value="{{ $video->id }}">
-    <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
-    
-    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
-    
+		<!-- details content -->
+		<div class="container">
+			<div class="row">
+				<!-- title -->
+				<div class="col-12">
+					<h1 class="details__title">{{ $video->title }}</h1>
+				</div>
+				<!-- end title -->
+
+				<!-- content -->
+				<div class="col-10">
+					<div class="card card--details card--series">
+						<div class="row">
+							<!-- card cover -->
+							<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+								<div class="card__cover">
+									<img src="{{ $video->cover }}" alt="{{ $video->title }}">
+								</div>
+							</div>
+							<!-- end card cover -->
+
+							<!-- card content -->
+							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9">
+								<div class="card__content">
+									<div class="card__wrap">
+										<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
+
+										<ul class="card__list">
+											<li>HD</li>
+											<li>16+</li>
+										</ul>
+									</div>
+
+									<ul class="card__meta">
+										<li><span>Genre:</span> <a href="#">Action</a>
+										<a href="#">Triler</a></li>
+										<li><span>Release year:</span> 2017</li>
+										<li><span>Running time:</span> 120 min</li>
+										<li><span>Country:</span> <a href="#">USA</a> </li>
+									</ul>
+
+									<div class="card__description card__description--details">
+                                        {{ $video->description }}
+									</div>
+								</div>
+							</div>
+							<!-- end card content -->
+						</div>
+					</div>
+				</div>
+				<!-- end content -->
+                
+                
+				<!-- start vars -->
+                <input type="hidden" id="title" value="{{ $video->title }}">
+                <input type="hidden" id="type" value="{{ $video->video_type }}">
+                <input type="hidden" id="cover" value="{{ $video->cover }}">
+                <input type="hidden" id="video_link" value="{{ $video_link }}">
+                <input type="hidden" id="earn_after" value="{{ $video->earned_after }}">
+                <input type="hidden" id="video_id" value="{{ $video->id }}">
+                <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
+                <!-- end vars -->
+
+				<!-- player -->
+				<div class="col-12 col-xl-6">
+                    @if($video->video_type->value == 'youtube')
+                    <p>yes</p>
+                        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
+                    @else
+                    <p>fff</p>
+                        <video src="{{ $video_link }}" id="player"></video>
+                    @endif
+				</div>
+				<!-- end player -->
+
+
+				<div class="col-12">
+					<div class="details__wrap">
+						<!-- availables -->
+						<div class="details__devices">
+							<span class="details__devices-title">Available on devices:</span>
+							<ul class="details__devices-list">
+								<li><i class="icon ion-logo-apple"></i><span>IOS</span></li>
+								<li><i class="icon ion-logo-android"></i><span>Android</span></li>
+								<li><i class="icon ion-logo-windows"></i><span>Windows</span></li>
+								<li><i class="icon ion-md-tv"></i><span>Smart TV</span></li>
+							</ul>
+						</div>
+						<!-- end availables -->
+
+						<!-- share -->
+						<div class="details__share">
+							<span class="details__share-title">Share with friends:</span>
+
+							<ul class="details__share-list">
+								<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
+								<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
+								<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
+								<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
+							</ul>
+						</div>
+						<!-- end share -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end details content -->
+	</section>
+	<!-- end details -->
+
+@endsection
+
+@push('scripts')
     @auth('web')
         @if(
             (!$is_subscribed && ($watched_count < $max_videos) ) || 
@@ -32,38 +130,29 @@
         <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const player = new Plyr('#player');
+                const player = new Plyr('#player', {
+                    title: 'Example Title',
+                    // enabled: false, // disable video
+                    // debug: true,
+                    controls: [
+                        'play-large', 
+                        'play', 
+                        // 'progress', 
+                        'current-time', 
+                        'mute', 
+                        'volume', 
+                        'captions', 
+                        // 'settings', 
+                        'pip', 
+                        'airplay', 
+                        'fullscreen'
+                    ],
+                    previewThumbnails: { enabled: false, src: '' }
+                });
 
                 const src = $('#video_link').val()
                 const cover = $('#cover').val()
-
-                console.log($('#type').val());
-                if ($('#type').val() == 'youtube') {
-                    console.log('sssss');
-                    player.source = {
-                        type: 'video',
-                        sources: [
-                            {
-                                src,
-                                provider: 'youtube',
-                            },
-                        ],
-                    };
-                } else {
-                    console.log('sssss');
-                    player.source = {
-                        type: 'video',
-                        title: 'Example title',
-                        sources: [
-                            {
-                                src,
-                                type: 'video/mp4',
-                                // size: 720,
-                            },
-                        ],
-                        poster: cover,
-                    };
-                }
+                
                 
                 const rewardTime = $('#earn_after').val(); //secs
                 // console.log(rewardTime);
@@ -159,10 +248,4 @@
 
         @endif
     @endauth
-
-
-
-
-    
-</body>
-</html>
+@endpush
