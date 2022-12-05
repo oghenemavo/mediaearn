@@ -26,11 +26,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $data['videos'] = \App\Models\Video::query()->get();
-    return view('welcome', $data);
-})->name('homepage');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('category/{category:slug}', [HomeController::class, 'category'])->name('category');
+Route::get('video/{video:slug}', [ActivityController::class, 'video'])->name('get.video');
 Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 
 Route::middleware(['guest:web'])->group(function () {
@@ -51,7 +49,6 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('password', [ProfileController::class, 'password']);
     Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
     
-    Route::get('videos/{video:slug}', [ActivityController::class, 'video'])->name('get.video');
     Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
 });
 

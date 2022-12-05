@@ -42,7 +42,7 @@ class CommonController extends Controller
             $data['url'] = $item->url;
             $data['video_url'] = $item->video_url;
             $data['cover'] = $item->cover;
-            $data['length'] = $item->length;
+            $data['length'] = ceil($item->length);
             $data['charges'] = $item->charges;
             $data['earnable'] = $item->earnable;
             $data['earnable_ns'] = $item->earnable_ns ?? '0.00';

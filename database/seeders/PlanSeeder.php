@@ -24,6 +24,7 @@ class PlanSeeder extends Seeder
                 'meta' => json_encode([
                     'set_discount' => false,
                     'discount' => '0',
+                    'label' => false,
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),
@@ -36,6 +37,7 @@ class PlanSeeder extends Seeder
                 'meta' => json_encode([
                     'set_discount' => false,
                     'discount' => '0',
+                    'label' => false,
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),
@@ -48,6 +50,7 @@ class PlanSeeder extends Seeder
                 'meta' => json_encode([
                     'set_discount' => true,
                     'discount' => '6800',
+                    'label' => true,
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),

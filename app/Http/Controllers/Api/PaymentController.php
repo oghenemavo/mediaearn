@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\Transaction;
 use App\Services\FlutterWaveService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -49,6 +50,7 @@ class PaymentController extends Controller
             ) {
                 // Success! Confirm the customer's payment
                 $transaction->status = PaymentStatusEnum::SUCCESS;
+                $transaction->confirmed_at = Carbon::now();
                 $transaction->save();
 
                 // set membership & referrals bonus on signup

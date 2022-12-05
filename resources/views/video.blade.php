@@ -74,10 +74,8 @@
 				<!-- player -->
 				<div class="col-12 col-xl-6">
                     @if($video->video_type->value == 'youtube')
-                    <p>yes</p>
                         <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
                     @else
-                    <p>fff</p>
                         <video src="{{ $video_link }}" id="player"></video>
                     @endif
 				</div>
@@ -155,12 +153,7 @@
                 
                 
                 const rewardTime = $('#earn_after').val(); //secs
-                // console.log(rewardTime);
                 var isDone = false;
-                // var startTime = 0;
-                // var startStatus = false;
-                // var isFirst = false;
-
                 var currentTime = 0;
 
                 if (!$('#is_viewed').val()) {
@@ -179,7 +172,7 @@
                             fetch(url, {
                                 method: 'POST',
                                 headers: {
-                                'Content-Type': 'application/json',
+                                    'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
                                     '_token': `{{ csrf_token() }}`,
