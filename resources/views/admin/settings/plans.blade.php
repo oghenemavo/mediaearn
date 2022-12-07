@@ -37,6 +37,7 @@
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Plan Name</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Price</span></th>
+                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Max Views</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></th>
                             <th class="nk-tb-col tb-col-lg"><span class="sub-text">Created at</span></th>
                             <th class="nk-tb-col nk-tb-col-tools text-right"></th>
@@ -165,6 +166,7 @@
                 columns: [
                     { data: 'title', className: 'nk-tb-col tb-col-md' },
                     { data : 'price', className : 'nk-tb-col tb-col-md' },
+                    { data : 'max_views', className : 'nk-tb-col tb-col-md' },
                     { 
                         data : 'status', className : 'nk-tb-col tb-col-md',
                         render: function(data) {
@@ -186,7 +188,7 @@
                 ],
                 columnDefs: [
                     {
-                        targets   : 4,
+                        targets   : 5,
                         className : 'nk-tb-col nk-tb-col-tools',
                         data      : null,
                         render    : function (data, type, full, meta) {
@@ -235,11 +237,14 @@
                                                     <dt class="col-sm-3">Title</dt>
                                                     <dd class="col-sm-9">${data.title}</dd>
 
-                                                    <dt class="col-sm-3 text-truncate">Video Description</dt>
+                                                    <dt class="col-sm-3 text-truncate">Plan Description</dt>
                                                     <dd class="col-sm-9">${data.description}</dd>
     
                                                     <dt class="col-sm-3">Price</dt>
                                                     <dd class="col-sm-9">&#8358;${data.price}</dd>
+    
+                                                    <dt class="col-sm-3">Max Views</dt>
+                                                    <dd class="col-sm-9">${data.max_views}</dd>
     
                                                     <dt class="col-sm-3">Discount</dt>
                                                     <dd class="col-sm-9">${data.set_discount ? '&#8358;' + data.set_discount : 'No Discount Set' }</dd>

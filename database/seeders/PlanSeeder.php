@@ -25,6 +25,7 @@ class PlanSeeder extends Seeder
                     'set_discount' => false,
                     'discount' => '0',
                     'label' => false,
+                    'max_views' => 3
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),
@@ -38,6 +39,7 @@ class PlanSeeder extends Seeder
                     'set_discount' => false,
                     'discount' => '0',
                     'label' => false,
+                    'max_views' => 4
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),
@@ -51,6 +53,7 @@ class PlanSeeder extends Seeder
                     'set_discount' => true,
                     'discount' => '6800',
                     'label' => true,
+                    'max_views' => 5
                 ]),
                 'status' => '1',
                 'created_at' => Carbon::now(),

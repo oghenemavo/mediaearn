@@ -17,7 +17,8 @@ class PlanRepository implements IPlan
     {
         $meta = [
             'set_discount' => false,
-            'discount' => '0.00'
+            'discount' => '0.00',
+            'max_views' => 3,
         ];
         return $this->plan->create([
             'title' => data_get($attributes, 'title'),
@@ -33,7 +34,9 @@ class PlanRepository implements IPlan
         $meta = [
             'set_discount' => (bool) data_get($attributes, 'set_discount'),
             'discount' => (float) data_get($attributes, 'discount'),
+            'max_views' => (int) data_get($attributes, 'max_views'),
         ];
+        
         return $plan->update([
             'title' => data_get($attributes, 'title', $plan->title),
             'price' => data_get($attributes, 'price', $plan->price),

@@ -79,4 +79,9 @@ class User extends Authenticatable implements CanResetPassword
     {
         return $this->hasMany(Transaction::class);
     }
+    
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
 }

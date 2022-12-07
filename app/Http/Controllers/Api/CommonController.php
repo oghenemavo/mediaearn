@@ -6,9 +6,11 @@ use App\Enums\PaymentStatusEnum;
 use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Payout;
 use App\Models\Plan;
 use App\Models\Promotion;
 use App\Models\Referral;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\VideoViewLog;
@@ -128,14 +130,15 @@ class CommonController extends Controller
 
     public function getPlans()
     {
-        $plan_collection = Plan::query()->get();
+        $plan_collection = Plan::query()->orderby('id', 'desc')->get();
         $mapped_plans = $plan_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['title'] = $item->title;
             $data['price'] = $item->price;
-            $data['description'] = $item->description;
+            $data['description'] = html_entity_decode($item->description);
             $data['set_discount'] = (bool) $item->meta->get('set_discount');
             $data['discount'] = (float) $item->meta->get('discount');
+            $data['max_views'] = $item->meta->get('max_views');
             $data['status'] = $item->status;
             $data['created_at'] = $item->created_at;
 
@@ -171,18 +174,18 @@ class CommonController extends Controller
     public function getUserTransactions(User $user)
     {
         $transaction_collection = $user->transactions()->where('status', PaymentStatusEnum::SUCCESS)->orWhere('status', PaymentStatusEnum::FAILED)->get();
-        // $payout_collection = $user->payouts()->get();
-        // $mapped_payouts = $payout_collection->map(function($item, $key) {
-        //     $data['id'] = $item->id;
-        //     $data['type'] = 'Payout';
-        //     $data['amount'] = $item->amount;
-        //     $data['reference'] = $item->reference;
-        //     $data['status'] = $item->status;
-        //     $data['confirmed_at'] = $item->updated_at;
-        //     $data['created_at'] = $item->created_at;
+        $payout_collection = $user->payouts()->get();
+        $mapped_payouts = $payout_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['type'] = 'Payout';
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->reference;
+            $data['status'] = $item->status;
+            $data['confirmed_at'] = $item->updated_at;
+            $data['created_at'] = $item->created_at;
 
-        //     return $data;
-        // });
+            return $data;
+        });
         $mapped_transactions = $transaction_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['type'] = 'Subscription';
@@ -194,8 +197,7 @@ class CommonController extends Controller
 
             return $data;
         });
-        return response()->json(['transactions' => [...$mapped_transactions]]);
-        // return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts]]);
+        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts]]);
     }
     
     public function getUserEarnings($userId)
@@ -206,6 +208,64 @@ class CommonController extends Controller
             $data['video'] = $item->video->title;
             $data['watched'] = number_format((float) $item->watched, 2);
             $data['amount'] = $item->earned_amount ?? 0;
+            $data['status'] = $item->is_credited;
+            $data['credited_at'] = $item->updated_at > $item->created_at ? $item->updated_at : "n/a";
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['video_logs' => $mapped_videoLog]);
+    }
+
+    public function getTransactions()
+    {
+        $transaction_collection = Transaction::query()->get();
+        $mapped_transactions = $transaction_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;
+            $data['email'] = $item->user->email;
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->tx_ref;
+            $data['status'] = $item->status;
+            $data['confirmed_at'] = $item->confirmed_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['transactions' => $mapped_transactions]);
+    }
+
+    public function getPayouts()
+    {
+        $payout_collection = Payout::query()->get();
+        $mapped_payouts = $payout_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;
+            $data['receipt'] = $item->receipt_no;
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->reference;
+            $data['status'] = $item->status;
+            $data['message'] = $item->message;
+            $data['is_notified'] = $item->is_notified;
+            $data['attempts'] = $item->attempts;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['payouts' => $mapped_payouts]);
+    }
+    
+    public function getVideoLogs()
+    {
+        $videoLog_collection = VideoViewLog::query()->get();
+        $mapped_videoLog = $videoLog_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;
+            $data['video'] = $item->video->title;
+            $data['watched'] = number_format((float) $item->watched, 2);
+            $data['amount'] = $item->earned_amount;
+            // $data['tax'] = $item->tax ?? '0.00';
+            // $data['credit'] = $item->credit;
             $data['status'] = $item->is_credited;
             $data['credited_at'] = $item->updated_at > $item->created_at ? $item->updated_at : "n/a";
             $data['created_at'] = $item->created_at;

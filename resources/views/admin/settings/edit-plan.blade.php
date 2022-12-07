@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/editors/tinymce.css?ver=2.8.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/editors/summernote.css') }}">
 @endpush
 
 @section('content')
@@ -47,7 +47,7 @@
                         <label class="form-label" for="description">Plan Description</label>
                     </div>
                     <div class="form-control-wrap">
-                        <textarea class="form-control form-control-lg  @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ $plan->description }}</textarea>
+                        <textarea class="form-control summernote-minimal form-control-lg  @error('description') is-invalid @enderror" id="description" name="description" rows="3">{!! $plan->description !!}</textarea>
                         
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -69,7 +69,7 @@
                             <input type="number" class="form-control form-control-lg  @error('price') is-invalid @enderror"
                             id="price" name="price" value="{{ $plan->price }}" min="1" step="0.01">
                         
-                            @error('charges')
+                            @error('price')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -96,12 +96,28 @@
                             <input type="number" class="form-control form-control-lg  @error('discount') is-invalid @enderror"
                             id="discount" name="discount" value="{{ $plan->meta->get('discount') }}" @if ($plan->meta->get('set_discount')) min="1" @endif step="0.01">
                         
-                            @error('charges')
+                            @error('discount')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <label class="form-label" for="max_views">Max Views</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="number" class="form-control form-control-lg  @error('max_views') is-invalid @enderror"
+                        id="max_views" name="max_views" value="{{ $plan->meta->get('max_views') }}" min="1" step="1">
+                    
+                        @error('max_views')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </div>
 
@@ -114,10 +130,10 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/libs/editors/tinymce.js?ver=2.8.0') }}"></script>
-    <script src="{{ asset('assets/js/editors.js?ver=2.8.0') }}"></script>
+    <script src="{{ asset('assets/js/libs/editors/summernote.js') }}"></script>
+    <script src="{{ asset('assets/js/editors.js') }}"></script>
     <script src="{{ asset('assets/js/additional-methods.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> -->
     <script src="{{ asset('assets/js/jquery.form.js') }}"></script>
 
     <script>
@@ -160,6 +176,10 @@
                         max: 1000000000,
                     },
                     discount: {
+                        required: false,
+                        number: true,
+                    },
+                    max_views: {
                         required: false,
                         number: true,
                     },

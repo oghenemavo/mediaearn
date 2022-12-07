@@ -118,6 +118,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::controller(ReportController::class)->prefix('report')->name('report.')->group(function () {
             Route::get('referrals', 'referrals')->name('referrals');
+            Route::get('transactions', 'transactions')->name('transactions');
+            // Route::post('transactions/{tx_ref}/requery', 'requery')->name('requery');
+            Route::get('payouts', 'payouts')->name('payouts');
+            Route::get('videos/logs', 'videosLogs')->name('videos.logs');
         });
 
         Route::controller(PlanController::class)->prefix('plans')->group(function () {

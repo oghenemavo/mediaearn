@@ -55,16 +55,16 @@
                             </a>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a href="{{-- route('admin.report.transactions') --}}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
+                                    <a href="{{ route('admin.report.transactions') }}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{-- route('admin.report.payouts') --}}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
+                                    <a href="{{ route('admin.report.payouts') }}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
                                 </li>
                                 <li class="nk-menu-item">
                                     <a href="{{ route('admin.report.referrals') }}" class="nk-menu-link"><span class="nk-menu-text">Referrals</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{-- route('admin.report.video-logs') --}}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
+                                    <a href="{{ route('admin.report.videos.logs') }}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->

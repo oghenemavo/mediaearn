@@ -26,6 +26,7 @@ class PlanEditRequest extends FormRequest
         return [
             'title' => 'required|string',
             'price' => 'required|numeric|min:0.1',
+            'max_views' => 'required|numeric|min:1',
             'description' => 'nullable|string|min:10',
             'discount' => 'nullable|numeric',
         ];

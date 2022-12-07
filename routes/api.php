@@ -27,6 +27,9 @@ Route::controller(CommonController::class)->group(function () {
         Route::get('promotions', 'getPromotions')->name('promotions');
         Route::get('users', 'getUsers')->name('users');
         Route::get('referrals', 'getReferrals')->name('referrals');
+        Route::get('transactions', 'getTransactions')->name('transactions');
+        Route::get('payouts', 'getPayouts')->name('payouts');
+        Route::get('videos/logs', 'getVideoLogs')->name('videos.logs');
         Route::get('plans', 'getPlans')->name('plans');
         Route::get('users/{user}/referrals/{referralType?}', 'getUserReferrals')->name('user.referrals');
         Route::get('users/{user}/transactions', 'getUserTransactions')->name('user.transactions');
