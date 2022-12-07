@@ -31,6 +31,7 @@ Route::controller(CommonController::class)->group(function () {
     });
     
     Route::get('validate/category', 'validateUniqueCategory')->name('validate.unique.category');
+    Route::post('validate/bank-account-number', 'validateAccountNumber')->name('validate.account.number');
 });
 
 Route::controller(PaymentController::class)->group(function () {

@@ -46,8 +46,11 @@ Route::middleware(['guest:web'])->group(function () {
 });
 
 Route::middleware(['auth:web'])->group(function () {
-    Route::get('password', [ProfileController::class, 'password']);
-    Route::post('change-password', [ProfileController::class, 'changePwd'])->name('change.password');
+    Route::get('profile', [ProfileController::class, 'index']);
+
+    Route::post('change-email', [ProfileController::class, 'email'])->name('change.email');
+    Route::post('change-password', [ProfileController::class, 'password'])->name('change.password');
+    Route::post('change-account-info', [ProfileController::class, 'accountInfo'])->name('change.account.info');
     
     Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
 });

@@ -13,7 +13,6 @@ class FlutterWaveService
     {
         $this->url = config('app.flw.base_url');
         $this->token = config('app.flw.secret_key');
-
     }
     
     public function setGateway(array $data)
@@ -40,7 +39,6 @@ class FlutterWaveService
         ];
 
         $response = Http::withToken($this->token)->post($url, $payload);
-        // var_dump();
         return $response->json();
     }
 
@@ -50,4 +48,23 @@ class FlutterWaveService
         $response = Http::withToken($this->token)->get($url);
         return $response->json();
     }
+
+    public function fetchBanks()
+    {
+        $url = $this->url . '/banks/NG';
+        $response = Http::withToken($this->token)->get($url);
+        return $response->json();
+    }
+
+    public function resolveAccount(string $bankCode, string $accountNumber)
+    {
+        $url = $this->url . '/accounts/resolve';
+        $payload = [
+            'account_number' => $accountNumber,
+            'account_bank' => $bankCode,
+        ];
+        $response = Http::withToken($this->token)->post($url, $payload);
+        return $response->json();
+    }
+
 }

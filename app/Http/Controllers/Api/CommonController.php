@@ -10,10 +10,16 @@ use App\Models\Promotion;
 use App\Models\Referral;
 use App\Models\User;
 use App\Models\Video;
+use App\Services\FlutterWaveService;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
 {
+    public function __construct(protected FlutterWaveService $flwService)
+    {
+        $this->flwService = $flwService;
+    }
+
     public function getCategories()
     {
         $category_collection = Category::query()->get();
@@ -135,4 +141,13 @@ class CommonController extends Controller
         });
         return response()->json(['plans' => $mapped_plans]);
     }
+
+    public function validateAccountNumber(Request $request)
+    {
+        $bankCode = $request->bank_code;
+        $accountNumber = $request->account_number;
+        return $this->flwService->resolveAccount($bankCode, $accountNumber);
+        // return response()->json($data);
+    }
+    
 }
