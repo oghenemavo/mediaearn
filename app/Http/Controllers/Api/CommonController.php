@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\PaymentStatusEnum;
 use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -10,6 +11,7 @@ use App\Models\Promotion;
 use App\Models\Referral;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\VideoViewLog;
 use App\Services\FlutterWaveService;
 use Illuminate\Http\Request;
 
@@ -147,7 +149,69 @@ class CommonController extends Controller
         $bankCode = $request->bank_code;
         $accountNumber = $request->account_number;
         return $this->flwService->resolveAccount($bankCode, $accountNumber);
-        // return response()->json($data);
+    }
+
+    public function getUserReferrals($userId, $referralType = 'signup')
+    {
+        $referral_collection = Referral::where('referrer_user_id', $userId)->where('referral_type', $referralType)->get();
+        $mapped_referrals = $referral_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['referred'] = $item->referred->last_name . ' ' . $item->referred->first_name;
+            $data['bonus'] = $item->amount;
+            $data['status'] = $item->status;
+            $data['bonus_at'] = $item->bonus_at;
+            $data['credited_at'] = $item->credited_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['referrals' => $mapped_referrals]);
+    }
+
+    public function getUserTransactions(User $user)
+    {
+        $transaction_collection = $user->transactions()->where('status', PaymentStatusEnum::SUCCESS)->orWhere('status', PaymentStatusEnum::FAILED)->get();
+        // $payout_collection = $user->payouts()->get();
+        // $mapped_payouts = $payout_collection->map(function($item, $key) {
+        //     $data['id'] = $item->id;
+        //     $data['type'] = 'Payout';
+        //     $data['amount'] = $item->amount;
+        //     $data['reference'] = $item->reference;
+        //     $data['status'] = $item->status;
+        //     $data['confirmed_at'] = $item->updated_at;
+        //     $data['created_at'] = $item->created_at;
+
+        //     return $data;
+        // });
+        $mapped_transactions = $transaction_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['type'] = 'Subscription';
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->tx_ref;
+            $data['status'] = $item->status;
+            $data['confirmed_at'] = $item->confirmed_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['transactions' => [...$mapped_transactions]]);
+        // return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts]]);
     }
     
+    public function getUserEarnings($userId)
+    {
+        $videoLog_collection = VideoViewLog::where('user_id', $userId)->get();
+        $mapped_videoLog = $videoLog_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['video'] = $item->video->title;
+            $data['watched'] = number_format((float) $item->watched, 2);
+            $data['amount'] = $item->earned_amount ?? 0;
+            $data['status'] = $item->is_credited;
+            $data['credited_at'] = $item->updated_at > $item->created_at ? $item->updated_at : "n/a";
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['video_logs' => $mapped_videoLog]);
+    }
 }

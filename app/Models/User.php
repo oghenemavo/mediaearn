@@ -60,6 +60,11 @@ class User extends Authenticatable implements CanResetPassword
         );
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function membership()
     {
         return $this->hasOne(Membership::class);
@@ -68,5 +73,10 @@ class User extends Authenticatable implements CanResetPassword
     public function referral()
     {
         return $this->hasOne(Referral::class, 'referred_user_id');
+    }
+    
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

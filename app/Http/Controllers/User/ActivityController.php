@@ -6,6 +6,7 @@ use App\Contracts\IUser;
 use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\AppSetting;
+use App\Models\Payout;
 use App\Models\Referral;
 use App\Models\Video;
 use App\Models\VideoViewLog;
@@ -116,6 +117,53 @@ class ActivityController extends Controller
             return response()->json(['success' => false]);
         }
         return response()->json(['error' => true]);
+    }
+
+    public function referrals()
+    {
+        $data['page_title'] = 'Referrals';
+        return view('user.referrals', $data);
+    }
+
+    public function rewards()
+    {
+        $data['page_title'] = 'Rewards';
+        return view('user.rewards', $data);
+    }
+
+    public function transactions()
+    {
+        $data['page_title'] = 'Transactions';
+        return view('user.transactions', $data);
+    }
+
+    public function earnings()
+    {
+        $data['page_title'] = 'Earnings';
+        $data['balance'] = auth()->guard('web')->user()->wallet->balance;
+        $data['min'] = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
+        return view('user.earnings', $data);
+    }
+
+    public function requestPayout(Request $request)
+    {
+        $user = auth()->guard('web')->user();
+        $balance = $request->balance;
+        $user->wallet->balance = '0.00';
+        $user->wallet->ledger_balance += $balance;
+        if ($user->wallet->save()) {
+            $payout = [
+                'user_id' => $user->id,
+                // 'reason' => 'Payout',
+                'amount' => $balance,
+                'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            Payout::create($payout);
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
     }
 
 }
