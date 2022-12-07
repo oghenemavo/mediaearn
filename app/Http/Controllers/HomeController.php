@@ -22,7 +22,14 @@ class HomeController extends Controller
     {
         $data['page_title'] = 'Pricing';
         $data['pricing'] = Plan::query()->where('status', '1')->get();
+        $data['subscription'] = false;
         $user = auth('web')->user();
+        $userSubscription = $user->membership;
+        if ($userSubscription) {
+            $data['subscription'] = $userSubscription;
+        }
+        // dd($userSubscription->plan_id);
+        // dd($data['subscription']);
         $data['preferences'] = base64_encode(json_encode([
             'user_id' => $user->id,
             'email' => $user->email,

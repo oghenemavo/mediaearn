@@ -27,7 +27,7 @@
 	<!-- pricing -->
 	<div class="section">
 		<div class="container">
-			<div class="row">
+			<div id="pricing_list" class="row">
 				<!-- plan features -->
 				<div class="col-12">
 					<ul class="row plan-features">
@@ -41,19 +41,21 @@
 				</div>
 				<!-- end plan features -->
 
-				<!-- price -->
-				<div class="col-12 col-md-6 col-lg-4">
-					<div class="price">
-						<div class="price__item price__item--first"><span>Basic</span> <span>Free</span></div>
-						<div class="price__item"><span>7 days</span></div>
-						<div class="price__item"><span>720p Resolution</span></div>
-						<div class="price__item"><span>Limited Availability</span></div>
-						<div class="price__item"><span>Desktop Only</span></div>
-						<div class="price__item"><span>Limited Support</span></div>
-						<button class="price__btn" disabled>Selected</button>
-					</div>
-				</div>
-				<!-- end price -->
+                @if(!$subscription)
+                    <!-- price -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="price">
+                            <div class="price__item price__item--first"><span>Basic</span> <span>Free</span></div>
+                            <div class="price__item"><span>7 days</span></div>
+                            <div class="price__item"><span>720p Resolution</span></div>
+                            <div class="price__item"><span>Limited Availability</span></div>
+                            <div class="price__item"><span>Desktop Only</span></div>
+                            <div class="price__item"><span>Limited Support</span></div>
+                            <button class="price__btn" disabled>Selected</button>
+                        </div>
+                    </div>
+                    <!-- end price -->
+                @endif
 
                 <!-- price -->
                 @foreach($pricing as $item)
@@ -71,12 +73,19 @@
                                     <span>&#8358;{{ $item->price }}</span>
                                 @endif
                             </div>
-                            <div class="price__item"><span>1 Month</span></div>
-                            <div class="price__item"><span>Full HD</span></div>
-                            <div class="price__item"><span>Lifetime Availability</span></div>
-                            <div class="price__item"><span>TV & Desktop</span></div>
-                            <div class="price__item"><span>24/7 Support</span></div>
-                            <button class="price__btn make-payment" type="button" data-id="{{ $item->id }}">Choose Plan</button>
+                            @foreach($item->decoded_description as $description)
+                                @if(!empty($description))
+                                    <div class="price__item"><span>{{ $description }}</span></div>
+                                @endif
+                            @endforeach
+                            
+                            @if($subscription->plan_id == $item->id)
+                                <button class="price__btn make-payment" disabled>Selected</button>
+                            @else
+                                <button class="price__btn make-payment" type="button" data-id="{{ $item->id }}">
+                                    Choose Plan
+                                </button>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -136,18 +145,5 @@
     </script>
 @endpush
 
-<ul id="pricing_list">
-    @foreach($pricing as $item)
-    <li>
-        @if($item->meta->get('set_discount'))
-            {{ $item->meta->get('discount') }}
-            <span><strike>{{ $item->price }}</strike></span>
-        @else
-            {{ $item->price }}
-        @endif
-        <button class="make-payment" type="button" data-id="{{ $item->id }}">pay</button>
-    </li>
-    @endforeach
-</ul>
 
 {{-- session()->get('payment_status') --}}
