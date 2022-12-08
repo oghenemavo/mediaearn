@@ -119,6 +119,7 @@
 @endsection
 
 @push('scripts')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
 
     @auth('web')
@@ -182,10 +183,29 @@
                             })
                             .then(data => {
                                 if (!data.ok) {
+                                    if (data.error) {
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            icon: 'danger',
+                                            title: `Unable to approve video activity`,
+                                            showConfirmButton: false,
+                                            timer: 3500,
+                                        })
+                                    }
                                     throw Error(data.status);
                                 }
                                 return data.json();
                             }).then(update => {
+                                if (update.success) {
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: `Your wallet has been credited with &#8358;{{ $earnable }}`,
+                                        showConfirmButton: false,
+                                        timer: 3500,
+                                    })
+                                }
+                                
                                 console.log(update);
                             }).catch(e => {
                                 console.log(e);

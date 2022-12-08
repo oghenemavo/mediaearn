@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\FlutterWaveService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,6 +17,18 @@ class ProfileController extends Controller
 
     public function index()
     {
+        // $user = $user = auth()->guard('web')->user();
+        // $leg1 = $user->referral->referrer;
+        // $leg2 = $leg1->referral->referrer;
+        // $leg3 = $leg2->referral->referrer;
+
+        // dd($leg3->referral);
+
+        // exit;
+
+
+
+
         $data['page_title'] = 'Profile';
         $data['user'] = $user = auth()->guard('web')->user();
         // $data['banks'] = $this->flwService->fetchBanks();

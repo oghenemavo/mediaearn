@@ -97,6 +97,32 @@ class AppSettingSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Downline Bonus (%)',
+                'slug' => 'downline_bonus',
+                'description' => 'Downline Base Bonus (%)',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '0.01',
+                    'step' => '0.01'
+                ]),
+                'value' => '10',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Downline Sharing Factor',
+                'slug' => 'downline_sharing_factor',
+                'description' => 'Downline Sharing Factor',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '0.01',
+                    'step' => '0.01'
+                ]),
+                'value' => '2',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         AppSetting::upsert($data, 'slug');
     }

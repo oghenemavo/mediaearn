@@ -48,5 +48,27 @@ class ReferralService
             return $this->referral->create($data);
         });
     }
+
+    public function setVideoDownlineBonus($referrerUserId, $userId, $videoId, $amount)
+    {
+        $data = [
+            'referrer_user_id' => $referrerUserId,
+            'referred_user_id' => $userId,
+            'referral_type' => ReferralTypeEnum::VIDEO,
+            'amount' => $amount,
+            'status' => '1',
+            'meta' => [
+                'video_id' => $videoId
+            ]
+        ];
+        // dd($data);
+
+        // return $this->referral->where('referred_user_id', $userId)
+        //     ->whereJsonContains('meta->video_id', $videoId)
+        //     ->firstOr(function () use($data) {
+
+            return $this->referral->create($data);
+        // });
+    }
     
 }

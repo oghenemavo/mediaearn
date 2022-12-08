@@ -94,13 +94,15 @@ class UserRepository implements IUser
         // send email
     }
 
-    public function referralVideoReward($user, $videoId)
+    public function referralVideoReward($user, $videoId, $amount)
     {
-        $referredBy = $user->referral?->referrer_user_id;
-        if ($referredBy) {
-            return $this->referral->setVideoReferralBonus($referredBy, $user->id, $videoId);
-        }
-        return false;
+        // $referredBy = $user->referral?->referrer_user_id;
+        // if ($referredBy) {
+        //     return $this->referral->setVideoReferralBonus($referredBy, $user->id, $videoId);
+        // }
+        // return false;
+        $bonusPercent = AppSetting::where('slug', 'downline_bonus')->first()->value;
+        return abc($user, $videoId, $amount, $bonusPercent, true);
     }
 
     public function getMembership($userId)

@@ -23,6 +23,9 @@ class ActivityController extends Controller
 
     public function video(Video $video)
     {
+        // var_dump($this->userRepository->referralVideoReward(auth()->guard('web')->user(), 2, 100));
+        // exit;
+
         $data['page_title'] = $video->title;
         $data['video'] = $video;
         // $data['video_type'] = $video->video_type;
@@ -36,11 +39,13 @@ class ActivityController extends Controller
         // $data['tax'] = 0.01 * (Setting::where('slug', 'payout_tax_percentage')->first()->meta ?? '0.1');
         if ($user) {
             $membership = $this->userRepository->getMembership($user->id);
-            $data['is_subscribed'] = $membership->count() ?? 0;
+            $data['is_subscribed'] = $membership?->count() ?? 0;
 
             if ($data['is_subscribed']) {
                 $data['max_videos'] = $membership->plan->meta->get('max_views');
+                $data['earnable'] = $video->earnable;
             } else {
+                $data['earnable'] = $video->earnable_ns;
                 $data['max_videos'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
             }
             
@@ -119,7 +124,7 @@ class ActivityController extends Controller
             ];
 
             $membership = $this->userRepository->getMembership($user->id);
-            $data['is_subscribed'] = $membership->count() ?? 0;
+            $data['is_subscribed'] = $membership?->count() ?? false;
 
             if ($data['is_subscribed']) {
                 $data['earned_amount'] = $video->earnable;
@@ -139,7 +144,7 @@ class ActivityController extends Controller
             );
 
             // referral bonus for video watched
-            $this->userRepository->referralVideoReward($user, $video->id);
+            $this->userRepository->referralVideoReward($user, $video->id, $data['earned_amount']);
             
             if ($reward->wasRecentlyCreated) {
 
