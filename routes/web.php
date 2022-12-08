@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\ReportController;
@@ -131,6 +132,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{plan}', 'edit')->name('edit.plans');
             Route::put('/{plan}/deactivate', 'deactivate')->name('deactivate.plans');
             Route::put('/{plan}/activate', 'activate')->name('activate.plans');
+        });
+
+        Route::controller(FAQController::class)->prefix('faqs')->group(function () {
+            Route::get('/', 'index')->name('faq');
+            Route::post('/', 'store')->name('create.faq');
+            Route::get('/{faq}', 'show')->name('show.faq');
+            Route::put('/{faq}', 'edit')->name('edit.faq');
+            Route::delete('/{faq}', 'delete')->name('delete.faq');
         });
     });
 

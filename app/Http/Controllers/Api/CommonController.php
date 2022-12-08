@@ -6,6 +6,7 @@ use App\Enums\PaymentStatusEnum;
 use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Faq;
 use App\Models\Payout;
 use App\Models\Plan;
 use App\Models\Promotion;
@@ -48,7 +49,7 @@ class CommonController extends Controller
             $data['title'] = $item->title;
             $data['slug'] = $item->slug;
             $data['category'] = $item->category->category;
-            $data['description'] = htmlspecialchars_decode($item->description);
+            $data['description'] = html_entity_decode($item->description);
             $data['url'] = $item->url;
             $data['video_url'] = $item->video_url;
             $data['cover'] = $item->cover;
@@ -273,5 +274,19 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['video_logs' => $mapped_videoLog]);
+    }
+
+    public function getFaqs()
+    {
+        $faq_collection = Faq::query()->get();
+        $mapped_faqs = $faq_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['title'] = $item->title;
+            $data['description'] = html_entity_decode($item->description);
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['faqs' => $mapped_faqs]);
     }
 }

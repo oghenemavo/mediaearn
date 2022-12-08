@@ -21,7 +21,7 @@ class VideoRepository implements IVideo
             'category_id' => data_get($attributes, 'category_id'),
             'title' => data_get($attributes, 'title'),
             'slug' => Str::of(data_get($attributes, 'title'))->slug('-') . '-' . uniqid(),
-            'description' => $this->clean(data_get($attributes, 'description')),
+            'description' => clean(data_get($attributes, 'description')),
             'video_type' => data_get($attributes, 'video_type'),
             'url' => $url,
             'cover' => $this->uploadFile('covers', 'cover'),
@@ -52,7 +52,7 @@ class VideoRepository implements IVideo
         return $video->update([
             'category_id' => data_get($attributes, 'category_id', $video->category_id),
             'title' => $title,
-            'description' => $this->clean(data_get($attributes, 'description', $video->description)),
+            'description' => clean(data_get($attributes, 'description', $video->description)),
             'video_type' => data_get($attributes, 'video_type', $video->video_type),
             'length' => data_get($attributes, 'length', $video->length),
             'charges' => data_get($attributes, 'charges', $video->charges),
@@ -90,12 +90,4 @@ class VideoRepository implements IVideo
         return $file;
     }
 
-    protected function clean($string)
-    {
-        $string = trim($string);
-        $string = stripslashes($string);
-        $string = htmlspecialchars($string, ENT_QUOTES);
-        $string = filter_var($string, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
-        return $string;
-    }
 }

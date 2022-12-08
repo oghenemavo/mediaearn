@@ -23,7 +23,7 @@ class PlanRepository implements IPlan
         return $this->plan->create([
             'title' => data_get($attributes, 'title'),
             'price' => data_get($attributes, 'price'),
-            'description' => $this->clean(data_get($attributes, 'description')),
+            'description' => clean(data_get($attributes, 'description')),
             'meta' => $meta,
             'status' => '1'
         ]);
@@ -40,7 +40,7 @@ class PlanRepository implements IPlan
         return $plan->update([
             'title' => data_get($attributes, 'title', $plan->title),
             'price' => data_get($attributes, 'price', $plan->price),
-            'description' => $this->clean(data_get($attributes, 'description', $plan->description)),
+            'description' => clean(data_get($attributes, 'description', $plan->description)),
             'meta' => $meta,
         ]);
     }
@@ -52,12 +52,4 @@ class PlanRepository implements IPlan
         ]);
     }
 
-    protected function clean($string)
-    {
-        $string = trim($string);
-        $string = stripslashes($string);
-        $string = htmlspecialchars($string, ENT_QUOTES);
-        $string = filter_var($string, FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
-        return $string;
-    }
 }

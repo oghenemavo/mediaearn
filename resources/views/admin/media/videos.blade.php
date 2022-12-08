@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/editors/tinymce.css?ver=2.8.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/editors/summernote.css?ver=2.8.0') }}">
     <style>
         img.cover-image {
             width: 150px;
@@ -171,7 +171,7 @@
                             <label class="form-label" for="description">Video Description</label>
                         </div>
                         <div class="form-control-wrap">
-                            <textarea class="form-control form-control-lg  @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                            <textarea class="form-control form-control-lg summernote-minimal @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                            
                            
                             @error('description')
@@ -305,7 +305,7 @@
 
 
 @push('scripts')
-    <script src="{{ asset('assets/js/libs/editors/tinymce.js?ver=2.8.0') }}"></script>
+    <script src="{{ asset('assets/js/libs/editors/summernote.js?ver=2.8.0') }}"></script>
     <script src="{{ asset('assets/js/editors.js?ver=2.8.0') }}"></script>
     <script src="{{ asset('assets/js/additional-methods.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.form.js') }}"></script>

@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/editors/tinymce.css?ver=2.8.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/editors/summernote.css?ver=2.8.0') }}">
 @endpush
 
 @section('content')
@@ -131,7 +131,7 @@
                         <label class="form-label" for="description">Video Description</label>
                     </div>
                     <div class="form-control-wrap">
-                        <textarea class="form-control form-control-lg  @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ $video->description }}</textarea>
+                        <textarea class="form-control form-control-lg summernote-minimal @error('description') is-invalid @enderror" id="description" name="description" rows="3">{!! $video->description !!}</textarea>
                         
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -252,7 +252,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/libs/editors/tinymce.js?ver=2.8.0') }}"></script>
+    <script src="{{ asset('assets/js/libs/editors/summernote.js?ver=2.8.0') }}"></script>
     <script src="{{ asset('assets/js/editors.js?ver=2.8.0') }}"></script>
     <script src="{{ asset('assets/js/additional-methods.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
