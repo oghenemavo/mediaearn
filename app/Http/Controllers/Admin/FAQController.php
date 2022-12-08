@@ -24,6 +24,7 @@ class FAQController extends Controller
         ]);
 
         $data = $request->only('title', 'description');
+        $data['description'] = clean($data['description']);
 
         if (Faq::create($data)) {
             return redirect()->route('admin.faq')->with('primary', 'Faq Created Successfully!');
@@ -46,6 +47,7 @@ class FAQController extends Controller
         ]);
 
         $data = $request->only('title', 'description');
+        
         $response = $faq->update([
             'title' => $data['title'],
             'description' => clean($data['description']),

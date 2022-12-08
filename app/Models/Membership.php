@@ -12,4 +12,9 @@ class Membership extends Model
     protected $guarded = [
         'id',
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
 }

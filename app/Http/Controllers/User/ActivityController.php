@@ -29,30 +29,52 @@ class ActivityController extends Controller
         $data['video_views'] = VideoViewLog::where('video_id', $video->id)->count() ?? 0;
 
         $user = auth()->guard('web')->user();
-        $data['is_viewed'] = (bool) VideoViewLog::where('video_id', $video->id)->where('user_id', $user->id)->count() ?? 0;
+        $data['is_viewed'] = (bool) VideoViewLog::where('video_id', $video->id)->where('user_id', $user?->id)?->count() ?? false;
         $data['user'] = $user;
         $data['video_link'] = $video->video_type == VideoTypeEnum::YOUTUBE ? $video->url : $video->video_url;
 
         // $data['tax'] = 0.01 * (Setting::where('slug', 'payout_tax_percentage')->first()->meta ?? '0.1');
         if ($user) {
-            $data['is_subscribed'] = is_null($user->membership);
+            $membership = $this->userRepository->getMembership($user->id);
+            $data['is_subscribed'] = $membership->count() ?? 0;
 
+            if ($data['is_subscribed']) {
+                $data['max_videos'] = $membership->plan->meta->get('max_views');
+            } else {
+                $data['max_videos'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
+            }
+            
+            // total videos watched today for any variant of user
             $data['watched_count'] = VideoViewLog::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->count();
             $data['is_watched'] = VideoViewLog::where('user_id', $user->id)->where('video_id', $video->id)->count();
 
+            // video not watched
+            if (!$data['is_watched'] && ($data['watched_count'] >= $data['max_videos'])) {
+                return redirect()->back()->with('sub_user', 'Maximum numbers of videos watched Today');
+            }
+
+            // dd($data['max_videos']);
+            
+
+            // dd($membership->plan->meta->get('max_views'));
+
+
+            // $data['is_subscribed'] = is_null($user->membership);
+
+
             // subscribed users max videos
-            $data['max_videos'] = AppSetting::query()->where('slug', 'max_videos_sub')->get()->first()->value;
+            // $data['max_videos'] = AppSetting::query()->where('slug', 'max_videos_sub')->get()->first()->value;
 
             // non subscribed users max videos
-            $data['max_videos_ns'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
+            // $data['max_videos_ns'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
 
             // echo '<pre>' . var_export($data['is_watched'], true) . '</pre>';
             
-            if (!$data['is_watched'] && !$data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos'])) { // subscription exists
-                return redirect()->back()->with('sub_user', 'Maximum numbers of videos watched Today');
-            } elseif (!$data['is_watched'] && $data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos_ns'])) {
-                return redirect()->back()->with('info', 'Maximum numbers of videos watched Today, Subscribe now to watch more');
-            }
+            // if (!$data['is_watched'] && !$data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos'])) { // subscription exists
+            //     return redirect()->back()->with('sub_user', 'Maximum numbers of videos watched Today');
+            // } elseif (!$data['is_watched'] && $data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos_ns'])) {
+            //     return redirect()->back()->with('info', 'Maximum numbers of videos watched Today, Subscribe now to watch more');
+            // }
         }
         $data['duration'] = function($seconds) {
             if ($seconds > 60) {
@@ -60,20 +82,20 @@ class ActivityController extends Controller
             }
             return 1;
         };
-        $data['earning'] = function($earnings = ['earnable' => 0, 'earnable_ns' => 0]) use($data) {
-            // return auth()->check() ?  : $earnings['earnable_ns'];
-            if (auth()->guard('web')->check()) {
-                if (!$data['is_subscribed']) {
-                    return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
-                } else {
-                    return $earnings['earnable_ns'] - ($earnings['earnable_ns'] * $data['tax']);
-                }
-            }
-            return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
-        };
+        // $data['earning'] = function($earnings = ['earnable' => 0, 'earnable_ns' => 0]) use($data) {
+        //     // return auth()->check() ?  : $earnings['earnable_ns'];
+        //     if (auth()->guard('web')->check()) {
+        //         if (!$data['is_subscribed']) {
+        //             return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
+        //         } else {
+        //             return $earnings['earnable_ns'] - ($earnings['earnable_ns'] * $data['tax']);
+        //         }
+        //     }
+        //     return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
+        // };
         $data['current_time'] = Carbon::now();
 
-        return view('user.video', $data);
+        return view('video', $data);
     }
 
     public function getReward(Request $request, Video $video)
@@ -96,11 +118,20 @@ class ActivityController extends Controller
                 'watched' => $playedTime,
             ];
 
-            if (! is_null(auth()->guard('web')->user()->membership)) { // if a subscriber
+            $membership = $this->userRepository->getMembership($user->id);
+            $data['is_subscribed'] = $membership->count() ?? 0;
+
+            if ($data['is_subscribed']) {
                 $data['earned_amount'] = $video->earnable;
             } else {
                 $data['earned_amount'] = $video->earnable_ns;
             }
+
+            // if (! is_null(auth()->guard('web')->user()->membership)) { // if a subscriber
+            //     $data['earned_amount'] = $video->earnable;
+            // } else {
+            //     $data['earned_amount'] = $video->earnable_ns;
+            // }
             
             $reward = VideoViewLog::firstOrCreate(
                 ['user_id' => $user->id, 'video_id' => $video->id],

@@ -103,4 +103,12 @@ class UserRepository implements IUser
         return false;
     }
 
+    public function getMembership($userId)
+    {
+        return $this->membership->query()->where('user_id', $userId)
+            ->where('status', '1')
+            ->orderby('id', 'desc')
+            ->first();
+    }
+
 }

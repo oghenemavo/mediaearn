@@ -119,13 +119,14 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
+
     @auth('web')
         @if(
-            (!$is_subscribed && ($watched_count < $max_videos) ) || 
-            ( $is_subscribed && ($watched_count < $max_videos_ns) )
+            ($is_subscribed && ($watched_count < $max_videos) ) || 
+            ( !$is_subscribed && ($watched_count < $max_videos) )
         )
 
-        <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const player = new Plyr('#player', {
