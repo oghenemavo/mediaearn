@@ -45,7 +45,7 @@
                                 @endauth
 
                                 <li class="header__nav-item">
-                                    <a href="faq.html" class="header__nav-link">Help</a>
+                                    <a href="{{ route('faq') }}" class="header__nav-link">FAQ</a>
                                 </li>
 
                                 <!-- dropdown -->

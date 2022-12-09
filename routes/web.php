@@ -31,6 +31,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('category/{category:slug}', [HomeController::class, 'category'])->name('category');
 Route::get('video/{video:slug}', [ActivityController::class, 'video'])->name('get.video');
 Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
+Route::get('faq', [HomeController::class, 'faq'])->name('faq');
 
 Route::middleware(['guest:web'])->group(function () {
     Route::get('signup/{referral_id?}', [AuthController::class, 'index'])->name('signup.page');

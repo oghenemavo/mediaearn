@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\IUser;
 use App\Models\Category;
+use App\Models\Faq;
 use App\Models\Plan;
 use App\Models\Transaction;
 use App\Models\Video;
@@ -57,5 +58,16 @@ class HomeController extends Controller
         $data['page_title'] = $category->category;
         $data['category'] = $category;
         return view('category', $data);
+    }
+
+    public function faq()
+    {
+        $data['page_title'] = 'Frequently Asked Questions';
+        $faqs = Faq::query()->get();
+        $count = ceil($faqs->count()/2);
+        $data['faq1'] = $faqs->slice(0, $count);
+        $data['faq2']= $faqs->slice($count);
+        // dd($faq1);
+        return view('faq', $data);
     }
 }
