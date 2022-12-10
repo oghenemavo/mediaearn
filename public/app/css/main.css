@@ -3740,3 +3740,24 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   padding: 4px;
   font-size: 8px;
 }
+
+.dataTables_paginate .pagination {
+  display: flex;
+}
+
+.dataTables_paginate .pagination li {
+  margin-top: 16px;
+  margin-right: 10px;
+  background: var(--theme-background-color);
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.dataTables_paginate .pagination a {
+  color: #fff !important;
+}
+
+.dataTables_info {
+  color: #fff;
+  font-size: 12px;
+}

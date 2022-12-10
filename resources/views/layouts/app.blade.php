@@ -12,7 +12,7 @@
                     <div class="col-12">
                         <div class="header__content">
                             <!-- header logo -->
-                            <a href="index.html" class="header__logo">
+                            <a href="{{ route('home') }}" class="header__logo">
                                 <img src="{{ asset('assets/images/earners-logo.png') }}" width="80" height="80" alt="earners logo">
                             </a>
                             <!-- end header logo -->
@@ -107,10 +107,10 @@
             <div class="row">
                 <!-- footer list -->
                 <div class="col-12 col-md-3">
-                    <h6 class="footer__title">Download Our App</h6>
+                    <h6 class="footer__title">Watch Videos, Earn Money!</h6>
                     <ul class="footer__app">
-                        <li><a href="#"><img src="img/Download_on_the_App_Store_Badge.svg" alt=""></a></li>
-                        <li><a href="#"><img src="img/google-play-badge.png" alt=""></a></li>
+                        <li><a href="{{ route('home') }}"><img src="{{ asset('assets/images/earners-logo.png') }}" alt=""></a></li>
+                        <!-- <li><a href="#"><img src="img/google-play-badge.png" alt=""></a></li> -->
                     </ul>
                 </div>
                 <!-- end footer list -->
@@ -120,8 +120,10 @@
                     <h6 class="footer__title">Resources</h6>
                     <ul class="footer__list">
                         <li><a href="#">About Us</a></li>
-                        <li><a href="#">Pricing Plan</a></li>
-                        <li><a href="#">Help</a></li>
+                        @auth('web')
+                            <li><a href="{{ route('pricing') }}">Pricing Plan</a></li>
+                        @endauth
+                        <li><a href="{{ route('faq') }}">FAQ</a></li>
                     </ul>
                 </div>
                 <!-- end footer list -->
@@ -142,7 +144,7 @@
                     <h6 class="footer__title">Contact</h6>
                     <ul class="footer__list">
                         <li><a href="tel:+18002345678">+1 (800) 234-5678</a></li>
-                        <li><a href="mailto:support@moviego.com">support@flixgo.com</a></li>
+                        <li><a href="mailto:support@earnersview.com">support@earnersview.com</a></li>
                     </ul>
                     <ul class="footer__social">
                         <li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
@@ -156,7 +158,7 @@
                 <!-- footer copyright -->
                 <div class="col-12">
                     <div class="footer__copyright">
-                        <small><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></small>
+                        <small><a target="_blank" href="{{ route('home') }}">Earners view</a></small>
 
                         <ul>
                             <li><a href="#">Terms of Use</a></li>

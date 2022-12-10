@@ -79,7 +79,7 @@
                                 @endif
                             @endforeach
                             
-                            @if($subscription && $subscription->plan_id == $item->id)
+                            @if(is_object($subscription) && $subscription?->plan_id == $item->id)
                                 <button class="price__btn make-payment" disabled>Selected</button>
                             @else
                                 <button class="price__btn make-payment" type="button" data-id="{{ $item->id }}">
