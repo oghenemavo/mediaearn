@@ -28,13 +28,13 @@ if (! function_exists('abc')) {
         $downlineSharingFactor = AppSetting::where('slug', 'downline_sharing_factor')->first()->value;
         $bonusPercent /= $downlineSharingFactor;
       }
-      $amount = ($bonusPercent/100) * $amount;
+      $amountFinal = ($bonusPercent/100) * $amount;
       
       $referredX = $user->referral;
       $referrerX = $user->referral->referrer;
       
       $referralService = new ReferralService(new Referral());
-      $referralService->setVideoDownlineBonus($referrerX->id, $referredX->referred_user_id, $videoId, $amount);
+      $referralService->setVideoDownlineBonus($referrerX->id, $referredX->referred_user_id, $videoId, $amountFinal);
       return abc($referrerX, $videoId, $amount, $bonusPercent, false);
     }
   }

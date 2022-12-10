@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('video_id')->constrained()->onDelete('cascade');
             $table->string('watched');
-            $table->decimal('earned_amount', 11, 2)->default('0.00');
+            $table->decimal('earned_amount', 11, 5)->default('0.00');
             $table->enum('is_credited', ['0', '1'])->default('0');
             $table->timestamps();
         });

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('receipt_no')->nullable();
-            $table->decimal('amount', 11, 2);
+            $table->decimal('amount', 11, 5);
             $table->string('reference');
             $table->enum('status', ['pending', 'completed', 'successful', 'reversed', 'failed'])->default('pending');
             $table->string('message')->nullable();

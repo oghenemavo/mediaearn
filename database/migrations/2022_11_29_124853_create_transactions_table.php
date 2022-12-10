@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->string('email')->nullable();
-            $table->decimal('amount', 11, 2);
+            $table->decimal('amount', 11, 5);
             $table->uuid('tx_ref')->nullable();
             $table->string('status');
             $table->dateTime('confirmed_at')->nullable()->default(null);

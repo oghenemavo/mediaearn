@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             $table->string('reference');
-            $table->decimal('amount', 11, 2, true);
+            $table->decimal('amount', 11, 5, true);
             $table->enum('status', ['0', '1'])->default('0');
             $table->dateTime('expires_at')->nullable();
             $table->timestamps();

@@ -242,7 +242,7 @@ ul {
   align-items: center;
   height: 70px;
   padding: 0 15px;
-  background-color: #28282d;
+  /* background-color: #28282d; */
   width: 140px;
 }
 .header__logo img {
@@ -3726,4 +3726,17 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .error {
   color: red;
   font-size: 12px;
+}
+.image-feature-cover {
+  height: 391px;
+  object-fit: cover;
+}
+.image-post-cover {
+  height: 204px;
+  object-fit: cover;
+}
+.ads-label {
+  background: var(--theme-background-color);
+  padding: 4px;
+  font-size: 8px;
 }

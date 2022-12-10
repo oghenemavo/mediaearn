@@ -30,10 +30,12 @@
 			<div class="row">
                 <!-- card -->
                 @foreach($category->videos()->where('status', '1')->get() as $video)
-                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+					<div class="col-lg-3 col-md-3 col-sm-2">
+                    <!-- <div class="col-6 col-sm-4 col-lg-3 col-xl-2"> -->
                         <div class="card">
                             <div class="card__cover">
-                                <img src="{{ $video->cover }}" alt="">
+								<span class="ads-label">ADS</span>
+                                <img class="image-post-cover" src="{{ $video->cover }}" alt="{{ $video->slug }}">
                                 <a href="{{ route('get.video', $video->slug) }}" class="card__play">
                                     <i class="icon ion-ios-play"></i>
                                 </a>

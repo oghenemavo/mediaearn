@@ -13,7 +13,7 @@
                         <div class="header__content">
                             <!-- header logo -->
                             <a href="index.html" class="header__logo">
-                                <img src="{{ asset('img/logo.svg') }}" alt="">
+                                <img src="{{ asset('assets/images/earners-logo.png') }}" width="80" height="80" alt="earners logo">
                             </a>
                             <!-- end header logo -->
 

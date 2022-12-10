@@ -34,7 +34,8 @@
                             <!-- card -->
                             <div class="card card--big">
                                 <div class="card__cover">
-                                    <img src="{{ $item->cover }}" alt="">
+                                    <span class="ads-label">ADS</span>
+                                    <img class="image-feature-cover" src="{{ $item->cover }}" alt="">
                                     <a href="{{ route('get.video', $item->slug) }}" class="card__play">
                                         <i class="icon ion-ios-play"></i>
                                     </a>
@@ -71,16 +72,18 @@
 
                 <!-- card -->
                 @foreach($videos as $video)
-                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                    <div class="col-lg-3 col-md-3 col-sm-2">
+                    <!-- <div class="col-6 col-sm-4 col-lg-3 col-xl-2"> -->
                         <div class="card">
                             <div class="card__cover">
-                                <img src="{{ $video->cover }}" alt="{{ route('get.video', $video->slug) }}">
+                                <span class="ads-label">ADS</span>
+                                <img class="image-post-cover" src="{{ $video->cover }}" alt="{{ $video->slug }}">
                                 <a href="{{ route('get.video', $video->slug) }}" class="card__play">
                                     <i class="icon ion-ios-play"></i>
                                 </a>
                             </div>
                             <div class="card__content">
-                                <h3 class="card__title"><a href="#">{{ $video->title }}</a></h3>
+                                <h3 class="card__title"><a href="{{ route('get.video', $video->slug) }}">{{ $video->title }}</a></h3>
                                 <span class="card__category">
                                     <a href="{{ route('category', $video->category->slug) }}">{{ $video->category->category }}</a>
                                     <a href="#">Triler</a>
