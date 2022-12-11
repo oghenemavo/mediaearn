@@ -6,8 +6,10 @@ use App\Contracts\IUser;
 use App\Models\Category;
 use App\Models\Faq;
 use App\Models\Plan;
+use App\Models\Promotion;
 use App\Models\Transaction;
 use App\Models\Video;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -20,8 +22,44 @@ class HomeController extends Controller
     public function index()
     {
         $data['page_title'] = "Earner's view | Welcome";
-        $data['carousel'] = Video::query()->where('status', '1')->orderby('id', 'desc')->limit(5)->get();
-        $data['videos'] = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
+        $carousel = Video::query()->where('status', '1')->orderby('id', 'desc')->limit(5)->get();
+        $videos = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
+        $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
+        
+        $mapped_carousel = $carousel->map(function($item, $key) {
+            $data['type'] = 'post';
+            $data['cover'] = $item->cover;
+            $data['slug'] = $item->slug;
+            $data['title'] = $item->title;
+            $data['category'] = $item->category;
+
+            return $data;
+        });
+        
+        $mapped_videos = $videos->map(function($item, $key) {
+            $data['type'] = 'post';
+            $data['cover'] = $item->cover;
+            $data['slug'] = $item->slug;
+            $data['title'] = $item->title;
+            $data['category'] = $item->category;
+
+            return $data;
+        });
+        $mapped_promotions = $promotions->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['type'] = 'ads';
+            $ext = Str::substr($item->material, -3);
+            $imageExtensions = ['jpeg','png','jpg','gif','svg',];
+            $data['ads_type'] = in_array($ext, $imageExtensions) ? 'image' : 'video';
+            $data['cover'] = $item->material;
+            $data['slug'] = $item->slug;
+            $data['title'] = $item->title;
+
+            return $data;
+        });
+
+        $data['carousel'] = [...$mapped_carousel, ...$mapped_promotions];
+        $data['posts'] = [...$mapped_videos, ...$mapped_promotions];
         return view('welcome', $data);
     }
 

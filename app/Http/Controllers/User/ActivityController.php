@@ -194,6 +194,7 @@ class ActivityController extends Controller
                 'amount' => $balance,
                 'reference' => str::uuid(),
                 // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
+                'status' => 'REQUESTED',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
@@ -201,7 +202,6 @@ class ActivityController extends Controller
             unset($data['user_id'], $data['created_at'], $data['updated_at']);
             $data['bank_code'] = $user->bank_code;
             $data['account_number'] = $user->account_number;
-            // $data['narration'] = 'Earnersview - Payout ' . uniqid();
 
             ProcessPayout::dispatch($data);
             return response()->json(['success' => true]);

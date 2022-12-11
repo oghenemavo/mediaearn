@@ -17,5 +17,10 @@ class Payout extends Model
     protected $casts = [
         'meta' => AsCollection::class,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }

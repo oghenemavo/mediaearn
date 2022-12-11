@@ -63,4 +63,9 @@ class PaymentController extends Controller
             return redirect()->route('pricing', ['ref' => $request->query('tx_ref')]);
         }
     }
+
+    public function fetchTransfer($transferId)
+    {
+        return $this->flwService->getTransfer($transferId);
+    }
 }

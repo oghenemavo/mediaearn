@@ -82,10 +82,13 @@ class FlutterWaveService
             // 'callback_url' => 'https://www.flutterwave.com/ng/',
             'debit_currency' => 'NGN'
         ];
-        // var_dump($payload);
-        // exit;
-        $response = Http::withToken($this->token)->post($url, $payload);
-        return $response;
+        return Http::withToken($this->token)->post($url, $payload);
+    }
+
+    public function getTransfer(string $transferId)
+    {
+        $url = $this->url . '/transfers/' . $transferId;
+        return Http::withToken($this->token)->get($url);
     }
 
 }

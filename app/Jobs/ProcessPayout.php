@@ -46,6 +46,7 @@ class ProcessPayout implements ShouldQueue
             $payout = Payout::where('reference', $meta['reference'])->first();
             if ($payout) {
                 $payout->meta = $meta;
+                $payout->message = $response['message'];
                 $payout->status = $meta['status'];
                 return $payout->save();
             }
