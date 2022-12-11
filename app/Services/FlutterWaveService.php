@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class FlutterWaveService
@@ -33,8 +34,8 @@ class FlutterWaveService
                 'name' => $data['name']
             ],
             'customizations' => [
-                'title' => 'Pied Piper Payments',
-                'logo' => 'http://www.piedpiper.com/app/themes/joystick-v27/images/logo.png'
+                'title' => 'Earners view',
+                'logo' => asset('assets/images/earners-logo.png')
             ]
         ];
 
@@ -65,6 +66,26 @@ class FlutterWaveService
         ];
         $response = Http::withToken($this->token)->post($url, $payload);
         return $response->json();
+    }
+
+    public function transfer(array $data)
+    {
+        $url = $this->url . '/transfers';
+        $payload = [
+            'account_bank' => $data['bank_code'],
+            'account_number' => $data['account_number'],
+            'amount' => $data['amount'],
+            'narration' => 'Earnersview - Payout ' . uniqid(),
+            'currency' => 'NGN',
+            'reference' => $data['reference'],
+            // 'reference' => $data['reference'],
+            // 'callback_url' => 'https://www.flutterwave.com/ng/',
+            'debit_currency' => 'NGN'
+        ];
+        // var_dump($payload);
+        // exit;
+        $response = Http::withToken($this->token)->post($url, $payload);
+        return $response;
     }
 
 }

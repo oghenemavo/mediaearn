@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('receipt_no')->nullable();
             $table->decimal('amount', 11, 5);
             $table->string('reference');
+            $table->string('meta');
             $table->enum('status', ['pending', 'completed', 'successful', 'reversed', 'failed'])->default('pending');
             $table->string('message')->nullable();
             $table->enum('is_notified', ['0', '1'])->default(0);
-            $table->integer('attempts')->default(0);
             $table->timestamps();
         });
     }

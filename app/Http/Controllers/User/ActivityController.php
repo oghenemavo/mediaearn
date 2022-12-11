@@ -5,14 +5,15 @@ namespace App\Http\Controllers\User;
 use App\Contracts\IUser;
 use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessPayout;
 use App\Models\AppSetting;
 use App\Models\Payout;
-use App\Models\Referral;
 use App\Models\Video;
 use App\Models\VideoViewLog;
+use App\Services\FlutterWaveService;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ActivityController extends Controller
 {
@@ -188,15 +189,21 @@ class ActivityController extends Controller
         $user->wallet->balance = '0.00';
         $user->wallet->ledger_balance += $balance;
         if ($user->wallet->save()) {
-            $payout = [
+            $data = [
                 'user_id' => $user->id,
-                // 'reason' => 'Payout',
                 'amount' => $balance,
-                'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
+                'reference' => str::uuid(),
+                // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
-            Payout::create($payout);
+            Payout::create($data);
+            unset($data['user_id'], $data['created_at'], $data['updated_at']);
+            $data['bank_code'] = $user->bank_code;
+            $data['account_number'] = $user->account_number;
+            // $data['narration'] = 'Earnersview - Payout ' . uniqid();
+
+            ProcessPayout::dispatch($data);
             return response()->json(['success' => true]);
         }
         return response()->json(['success' => false]);

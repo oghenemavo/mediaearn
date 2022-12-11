@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,10 @@ class Payout extends Model
     
     protected $guarded = [
         'id',
+    ];
+    
+    protected $casts = [
+        'meta' => AsCollection::class,
     ];
     
 }
