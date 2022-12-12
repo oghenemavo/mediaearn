@@ -49,19 +49,29 @@ class UserRepository implements IUser
             // create wallet
             $this->wallet->createWallet($user->id);
 
+            $signupBonus = AppSetting::where('slug', 'signup_bonus')->first();
+
+            if ($signupBonus && $signupBonus?->value > 0) {
+                $user->wallet->balance = $signupBonus->value;
+                $user->wallet->save();
+            }
+
             return true;
         });
 
         return false;
     }
 
-    public function createMembership($user_id, $tx_ref, $amount)
+    public function createMembership($user_id, $tx_ref, $amount, $planId)
     {
         // creates only once
-        $membership = $this->membership->firstOrCreate(
-            ['user_id' => $user_id],
-            ['reference' => $tx_ref, 'amount' => $amount, 'status' => '1']
-        );
+        $membership = $this->membership->create([
+            'reference' => $tx_ref, 
+            'amount' => $amount, 
+            'status' => '1',
+            'user_id' => $user_id,
+            'plan_id' => $planId,
+        ]);
 
         if ($membership) {
             // check if this user is referred

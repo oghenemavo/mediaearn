@@ -26,7 +26,8 @@ class FlutterWaveService
             'redirect_url' => 'http://127.0.0.1:8000/api/payment-callback',
             'meta' => [
                 'consumer_id' => $data['user_id'],
-                // 'consumer_mac' => '92a3-912ba-1192a'
+                'payment_type' => 'Gateway',
+                'plan' => $data['plan'],
             ],
             'customer' => [
                 'email' => $data['email'],

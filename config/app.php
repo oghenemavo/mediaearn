@@ -214,6 +214,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'youtube_api_key' => env('YOUTUBE_API_KEY'),
+
     'flw' => [
         'base_url' => env('FLW_BASE_URL'),
         'secret_key' => env('FLW_SECRET_KEY')

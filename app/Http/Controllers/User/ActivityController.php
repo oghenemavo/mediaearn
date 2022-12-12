@@ -24,20 +24,14 @@ class ActivityController extends Controller
 
     public function video(Video $video)
     {
-        // var_dump($this->userRepository->referralVideoReward(auth()->guard('web')->user(), 2, 100));
-        // exit;
-
         $data['page_title'] = $video->title;
         $data['video'] = $video;
-        // $data['video_type'] = $video->video_type;
         $data['video_views'] = VideoViewLog::where('video_id', $video->id)->count() ?? 0;
 
         $user = auth()->guard('web')->user();
         $data['is_viewed'] = (bool) VideoViewLog::where('video_id', $video->id)->where('user_id', $user?->id)?->count() ?? false;
         $data['user'] = $user;
         $data['video_link'] = $video->video_type == VideoTypeEnum::YOUTUBE ? $video->url : $video->video_url;
-
-        // $data['tax'] = 0.01 * (Setting::where('slug', 'payout_tax_percentage')->first()->meta ?? '0.1');
         if ($user) {
             $membership = $this->userRepository->getMembership($user->id);
             $data['is_subscribed'] = $membership?->count() ?? 0;
@@ -54,33 +48,6 @@ class ActivityController extends Controller
             $data['watched_count'] = VideoViewLog::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->count();
             $data['is_watched'] = VideoViewLog::where('user_id', $user->id)->where('video_id', $video->id)->count();
 
-            // video not watched
-            if (!$data['is_watched'] && ($data['watched_count'] >= $data['max_videos'])) {
-                return redirect()->back()->with('sub_user', 'Maximum numbers of videos watched Today');
-            }
-
-            // dd($data['max_videos']);
-            
-
-            // dd($membership->plan->meta->get('max_views'));
-
-
-            // $data['is_subscribed'] = is_null($user->membership);
-
-
-            // subscribed users max videos
-            // $data['max_videos'] = AppSetting::query()->where('slug', 'max_videos_sub')->get()->first()->value;
-
-            // non subscribed users max videos
-            // $data['max_videos_ns'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
-
-            // echo '<pre>' . var_export($data['is_watched'], true) . '</pre>';
-            
-            // if (!$data['is_watched'] && !$data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos'])) { // subscription exists
-            //     return redirect()->back()->with('sub_user', 'Maximum numbers of videos watched Today');
-            // } elseif (!$data['is_watched'] && $data['is_subscribed'] && ($data['watched_count'] >= $data['max_videos_ns'])) {
-            //     return redirect()->back()->with('info', 'Maximum numbers of videos watched Today, Subscribe now to watch more');
-            // }
         }
         $data['duration'] = function($seconds) {
             if ($seconds > 60) {
@@ -88,17 +55,7 @@ class ActivityController extends Controller
             }
             return 1;
         };
-        // $data['earning'] = function($earnings = ['earnable' => 0, 'earnable_ns' => 0]) use($data) {
-        //     // return auth()->check() ?  : $earnings['earnable_ns'];
-        //     if (auth()->guard('web')->check()) {
-        //         if (!$data['is_subscribed']) {
-        //             return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
-        //         } else {
-        //             return $earnings['earnable_ns'] - ($earnings['earnable_ns'] * $data['tax']);
-        //         }
-        //     }
-        //     return $earnings['earnable'] - ($earnings['earnable'] * $data['tax']);
-        // };
+        
         $data['current_time'] = Carbon::now();
 
         return view('video', $data);
@@ -185,26 +142,30 @@ class ActivityController extends Controller
     public function requestPayout(Request $request)
     {
         $user = auth()->guard('web')->user();
-        $balance = $request->balance;
-        $user->wallet->balance = '0.00';
-        $user->wallet->ledger_balance += $balance;
-        if ($user->wallet->save()) {
-            $data = [
-                'user_id' => $user->id,
-                'amount' => $balance,
-                'reference' => str::uuid(),
-                // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
-                'status' => 'REQUESTED',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ];
-            Payout::create($data);
-            unset($data['user_id'], $data['created_at'], $data['updated_at']);
-            $data['bank_code'] = $user->bank_code;
-            $data['account_number'] = $user->account_number;
+        $balance = $user->wallet->balance;
+        $minPayout = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
 
-            ProcessPayout::dispatch($data);
-            return response()->json(['success' => true]);
+        if ($balance >= $minPayout) {
+            $user->wallet->balance = '0.00';
+            $user->wallet->ledger_balance += $balance;
+            if ($user->wallet->save()) {
+                $data = [
+                    'user_id' => $user->id,
+                    'amount' => $balance,
+                    'reference' => str::uuid(),
+                    // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
+                    'status' => 'REQUESTED',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                Payout::create($data);
+                unset($data['user_id'], $data['created_at'], $data['updated_at']);
+                $data['bank_code'] = $user->bank_code;
+                $data['account_number'] = $user->account_number;
+    
+                ProcessPayout::dispatch($data);
+                return response()->json(['success' => true]);
+            }
         }
         return response()->json(['success' => false]);
     }

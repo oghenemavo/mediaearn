@@ -242,6 +242,8 @@
                         </div>
                     </div>
                 </div>
+                    
+                <input type="hidden" id="youtube_key" value="{{ $youtube_key }}">
 
                 <button type="submit" class="btn btn-lg btn-primary">Edit Video</button>
             </form>
@@ -274,10 +276,12 @@
                 }
             });
 
+            const youtubeKey = $('#youtube_key').val();
+
             $('#video_id').on('input', function() {
                 const video_id = $(this).val();
                 if (video_id.length == 11) {
-                    fetchVideoInfo(`https://www.googleapis.com/youtube/v3/videos?id=${video_id}&part=contentDetails&key={{ env('YOUTUBE_KEY') }}`)
+                    fetchVideoInfo(`https://www.googleapis.com/youtube/v3/videos?id=${video_id}&part=contentDetails&key=${youtubeKey}`)
                     .then(data => {
                         $('#length').val(`{{ $video->length }}`);
                         $('div[data-note="length"]').text(hhmmss(`{{ $video->length }}`));

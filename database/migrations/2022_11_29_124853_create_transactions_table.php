@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->decimal('amount', 11, 5);
             $table->uuid('tx_ref')->nullable();
+            $table->string('meta')->nullable();
             $table->string('status');
             $table->dateTime('confirmed_at')->nullable()->default(null);
             $table->timestamps();

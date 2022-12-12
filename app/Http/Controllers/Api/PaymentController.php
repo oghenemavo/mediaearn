@@ -26,6 +26,7 @@ class PaymentController extends Controller
         $preferences['tx_ref'] = Str::uuid();
         $preferences['amount'] = (float) $plan->meta->get('set_discount') ? $plan->meta->get('discount') : $plan->price;
         $preferences['status'] = PaymentStatusEnum::OPENED;
+        $preferences['plan'] =  $plan->id;
 
         // insert into transactions table
         if(Transaction::create($preferences)) {
@@ -50,11 +51,15 @@ class PaymentController extends Controller
             ) {
                 // Success! Confirm the customer's payment
                 $transaction->status = PaymentStatusEnum::SUCCESS;
+                $transaction->meta = [
+                    'payment_type' => $response->data['meta']['payment_type'],
+                    'plan' => $response->data['meta']['plan'],
+                ];
                 $transaction->confirmed_at = Carbon::now();
                 $transaction->save();
 
                 // set membership & referrals bonus on signup
-                $this->userRepository->createMembership($transaction->user_id, $transaction->tx_ref, $transaction->amount);
+                $this->userRepository->createMembership($transaction->user_id, $transaction->tx_ref, $transaction->amount, $response->data['meta']['plan']);
             } else {
                 // Inform the customer their payment was unsuccessful
                 $transaction->status = PaymentStatusEnum::FAILED;

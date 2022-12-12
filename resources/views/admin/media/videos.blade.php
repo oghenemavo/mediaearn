@@ -296,11 +296,14 @@
                             </ul>
                         </div>
                     </div>
+                    
+                    <input type="hidden" id="youtube_key" value="{{ $youtube_key }}">
                 </form>
             </div><!-- .modal-body -->
         </div><!-- .modal-content -->
     </div><!-- .modal-dialog -->
 </div><!--Video Create .modal -->
+
 @endsection
 
 
@@ -319,11 +322,13 @@
                     $('div[data-note="earned_after"]').text(hhmmss($(this).val()))
                 }
             });
+
+            const youtubeKey = $('#youtube_key').val();
             
             $('#video_id').on('input', function() {
                 const video_id = $(this).val();
                 if (video_id.length == 11) {
-                    fetchVideoInfo(`https://www.googleapis.com/youtube/v3/videos?id=${video_id}&part=contentDetails&key={{ env('YOUTUBE_KEY') }}`)
+                    fetchVideoInfo(`https://www.googleapis.com/youtube/v3/videos?id=${video_id}&part=contentDetails&key=${youtubeKey}`)
                     .then(data => {
                         $('#length').val('');
                         $('#earned_after').val('').attr('readonly', true).removeAttr('max');

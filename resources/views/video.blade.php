@@ -128,137 +128,148 @@
             ( !$is_subscribed && ($watched_count < $max_videos) )
         )
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const player = new Plyr('#player', {
-                    title: 'Example Title',
-                    // enabled: false, // disable video
-                    // debug: true,
-                    controls: [
-                        'play-large', 
-                        'play', 
-                        // 'progress', 
-                        'current-time', 
-                        'mute', 
-                        'volume', 
-                        'captions', 
-                        // 'settings', 
-                        'pip', 
-                        'airplay', 
-                        'fullscreen'
-                    ],
-                    previewThumbnails: { enabled: false, src: '' }
-                });
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const player = new Plyr('#player', {
+                        title: 'Example Title',
+                        // enabled: false, // disable video
+                        // debug: true,
+                        controls: [
+                            'play-large', 
+                            'play', 
+                            // 'progress', 
+                            'current-time', 
+                            'mute', 
+                            'volume', 
+                            'captions', 
+                            // 'settings', 
+                            'pip', 
+                            'airplay', 
+                            'fullscreen'
+                        ],
+                        previewThumbnails: { enabled: false, src: '' }
+                    });
 
-                const src = $('#video_link').val()
-                const cover = $('#cover').val()
-                
-                
-                const rewardTime = $('#earn_after').val(); //secs
-                var isDone = false;
-                var currentTime = 0;
+                    const src = $('#video_link').val()
+                    const cover = $('#cover').val()
+                    
+                    
+                    const rewardTime = $('#earn_after').val(); //secs
+                    var isDone = false;
+                    var currentTime = 0;
 
-                if (!$('#is_viewed').val()) {
-                    player.on('timeupdate', (event) => {
-                        const instance = event.detail.plyr;
-                        
-                        if (instance.currentTime > rewardTime && !isDone) {
-                            currentTime = instance.currentTime;
-                            isDone = true;
-                            console.log("done...");
-                            console.log('reward user');
-    
-                            let url = `{{ route('get.user.reward', ':id') }}`;
-                            url = url.replace(':id', $('#video_id').val());
-    
-                            fetch(url, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    '_token': `{{ csrf_token() }}`,
-                                    played_time: currentTime
-                                }),
-                            })
-                            .then(data => {
-                                if (!data.ok) {
-                                    if (data.error) {
+                    if (!$('#is_viewed').val()) {
+                        player.on('timeupdate', (event) => {
+                            const instance = event.detail.plyr;
+                            
+                            if (instance.currentTime > rewardTime && !isDone) {
+                                currentTime = instance.currentTime;
+                                isDone = true;
+                                console.log("done...");
+                                console.log('reward user');
+        
+                                let url = `{{ route('get.user.reward', ':id') }}`;
+                                url = url.replace(':id', $('#video_id').val());
+        
+                                fetch(url, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        '_token': `{{ csrf_token() }}`,
+                                        played_time: currentTime
+                                    }),
+                                })
+                                .then(data => {
+                                    if (!data.ok) {
+                                        if (data.error) {
+                                            Swal.fire({
+                                                position: 'top-end',
+                                                icon: 'danger',
+                                                title: `Unable to approve video activity`,
+                                                showConfirmButton: false,
+                                                timer: 3500,
+                                            })
+                                        }
+                                        throw Error(data.status);
+                                    }
+                                    return data.json();
+                                }).then(update => {
+                                    if (update.success) {
                                         Swal.fire({
                                             position: 'top-end',
-                                            icon: 'danger',
-                                            title: `Unable to approve video activity`,
+                                            icon: 'success',
+                                            title: `Your wallet has been credited with &#8358;{{ $earnable }}`,
                                             showConfirmButton: false,
                                             timer: 3500,
                                         })
                                     }
-                                    throw Error(data.status);
-                                }
-                                return data.json();
-                            }).then(update => {
-                                if (update.success) {
-                                    Swal.fire({
-                                        position: 'top-end',
-                                        icon: 'success',
-                                        title: `Your wallet has been credited with &#8358;{{ $earnable }}`,
-                                        showConfirmButton: false,
-                                        timer: 3500,
-                                    })
-                                }
-                                
-                                console.log(update);
-                            }).catch(e => {
-                                console.log(e);
-                            });
-                        }
-                    });
-    
-                    player.on('seeking', (event) => {
-                        const instance = event.detail.plyr;
-                        console.log(currentTime);
-                        console.log(instance.currentTime);
-                        console.log("return player back to 0 secs");
+                                    
+                                    console.log(update);
+                                }).catch(e => {
+                                    console.log(e);
+                                });
+                            }
+                        });
+        
+                        player.on('seeking', (event) => {
+                            const instance = event.detail.plyr;
+                            console.log(currentTime);
+                            console.log(instance.currentTime);
+                            console.log("return player back to 0 secs");
+                            
+                            const seekedTime = instance.currentTime;
+                            
+                            if ((currentTime < rewardTime) && (seekedTime > currentTime)) {
+                                instance.stop();
+                                console.log("stopped");
+                            }
+                        });
+        
+                        player.on('ratechange', (event) => {
+                            const instance = event.detail.plyr;
+                            console.log("return player back to 0 secs");
+                            
+                            const rateTime = instance.currentTime;
+                            
+                            if ((currentTime < rewardTime) && (rateTime > currentTime)) {
+                                instance.stop();
+                                instance.speed = 1;
+                                console.log("stopped");
+                            }
+                        });
                         
-                        const seekedTime = instance.currentTime;
-                        
-                        if ((currentTime < rewardTime) && (seekedTime > currentTime)) {
-                            instance.stop();
-                            console.log("stopped");
-                        }
-                    });
-    
-                    player.on('ratechange', (event) => {
-                        const instance = event.detail.plyr;
-                        console.log("return player back to 0 secs");
-                        
-                        const rateTime = instance.currentTime;
-                        
-                        if ((currentTime < rewardTime) && (rateTime > currentTime)) {
-                            instance.stop();
-                            instance.speed = 1;
-                            console.log("stopped");
-                        }
-                    });
-                    
-                }
+                    }
 
-                // player.on('controlsshown', (event) => {
-                //     const instance = event.detail.plyr;
-                //     console.log("return player back to 0 secs");
-                    
-                //     const controlTime = instance.currentTime;
-                    
-                //     if ((currentTime < rewardTime) && (controlTime > currentTime)) {
-                //         instance.stop();
-                //         console.log("stopped");
-                //     }
-                // });
+                    // player.on('controlsshown', (event) => {
+                    //     const instance = event.detail.plyr;
+                    //     console.log("return player back to 0 secs");
+                        
+                    //     const controlTime = instance.currentTime;
+                        
+                    //     if ((currentTime < rewardTime) && (controlTime > currentTime)) {
+                    //         instance.stop();
+                    //         console.log("stopped");
+                    //     }
+                    // });
 
-                // if (player.playing && player.currentTime > rewardTime) {
-                //     console.log('reward user');
-                // }
-            });
-        </script>
+                    // if (player.playing && player.currentTime > rewardTime) {
+                    //     console.log('reward user');
+                    // }
+                });
+            </script>
+
+        @else
+            <script>
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'info',
+                    title: `Watching Limit Today Reached Upgrade to watch more`,
+                    showConfirmButton: false,
+                    timer: 7500,
+                })
+            </script>
 
         @endif
     @endauth

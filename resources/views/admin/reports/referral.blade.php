@@ -23,10 +23,10 @@
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Referred</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Amount</span></th>
                             <!-- <th class="nk-tb-col tb-col-md"><span class="sub-text">Tax</span></th> -->
-                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Bonus</span></th>
+                            <!-- <th class="nk-tb-col tb-col-md"><span class="sub-text">Bonus</span></th> -->
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Bonus in</span></th>
-                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Bonus out</span></th>
+                            <!-- <th class="nk-tb-col tb-col-md"><span class="sub-text">Bonus out</span></th> -->
                             <th class="nk-tb-col tb-col-lg"><span class="sub-text">Created at</span></th>
                         </tr>
                     </thead>
@@ -69,7 +69,7 @@
                     { data : 'referred', className : 'nk-tb-col tb-col-md' },
                     { data : 'amount', className : 'nk-tb-col tb-col-md' },
                     // { data : 'tax', className : 'nk-tb-col tb-col-md', render: data => `${data}%` },
-                    { data : 'bonus', className : 'nk-tb-col tb-col-md' },
+                    // { data : 'bonus', className : 'nk-tb-col tb-col-md' },
                     { 
                         data : 'status', className : 'nk-tb-col tb-col-md',
                         render: function(data) {
@@ -96,12 +96,12 @@
                             return `<span>${moment(data).format('DD-MM-YYYY')}</span>`;
                         } 
                     },
-                    { 
-                        data        : 'credited_at', className   : 'nk-tb-col tb-col-lg',
-                        render      : function (data) {
-                            return `<span>${moment(data).format('DD-MM-YYYY')}</span>`;
-                        } 
-                    },
+                    // { 
+                    //     data        : 'credited_at', className   : 'nk-tb-col tb-col-lg',
+                    //     render      : function (data) {
+                    //         return `<span>${moment(data).format('DD-MM-YYYY')}</span>`;
+                    //     } 
+                    // },
                     { 
                         data        : 'created_at', className   : 'nk-tb-col tb-col-lg',
                         render      : function (data) {

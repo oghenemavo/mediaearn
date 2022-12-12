@@ -123,6 +123,19 @@ class AppSettingSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Sign up Bonus',
+                'slug' => 'signup_bonus',
+                'description' => 'Bonus Added to User Wallet when they sign up',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '0.01',
+                    'step' => '0.01'
+                ]),
+                'value' => '500',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         AppSetting::upsert($data, 'slug');
     }

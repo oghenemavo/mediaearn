@@ -69,6 +69,7 @@ class VideoController extends Controller
         $data['page_title'] = 'Create & Manage Videos';
         $data['categories'] = Category::query()->get();
         $data['video_types'] = VideoTypeEnum::cases();
+        $data['youtube_key'] = config('app.youtube_api_key');
         return view('admin.media.videos', $data);
     }
 
@@ -88,6 +89,7 @@ class VideoController extends Controller
         $data['categories'] = Category::query()->get();
         $data['video_types'] = VideoTypeEnum::cases();
         $data['video'] = $video;
+        $data['youtube_key'] = config('app.youtube_api_key');
         return view('admin.media.edit-video', $data);
     }
 

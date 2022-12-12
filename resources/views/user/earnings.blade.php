@@ -85,6 +85,9 @@
                                     showConfirmButton: false,
                                     timer: 3500,
                                 })
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 4000);
                             }
                             if (data.error) {
                                 Swal.fire({

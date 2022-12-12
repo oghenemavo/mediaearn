@@ -110,11 +110,11 @@ class CommonController extends Controller
 
     public function getReferrals()
     {
-        $referral_collection = Referral::query()->get()->where('referral_type', ReferralTypeEnum::SIGNUP);
+        $referral_collection = Referral::query()->where('referral_type', ReferralTypeEnum::SIGNUP)->get();
         $mapped_referrals = $referral_collection->map(function($item, $key) {
             $data['id'] = $item->id;
-            $data['referrer'] = $item->referrer->name;
-            $data['referred'] = $item->referred->name;
+            $data['referrer'] = $item->referrer->email;
+            $data['referred'] = $item->referred->email;
             $data['bonus'] = $item->bonus;
             $data['referral_type'] = $item->referral_type;
             // $data['tax'] = $item->tax;

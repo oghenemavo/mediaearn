@@ -75,6 +75,9 @@ class HomeController extends Controller
         // }
         $membership = $this->userRepository->getMembership($user->id);
         $data['subscription'] = $membership?->count() ?? false;
+        if ($data['subscription']) {
+            $data['membership'] = $membership;
+        }
         // dd($userSubscription->plan_id);
         // dd($data['subscription']);
         $data['preferences'] = base64_encode(json_encode([
