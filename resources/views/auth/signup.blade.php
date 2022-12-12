@@ -4,8 +4,8 @@
     <!-- authorization form -->
     <form class="sign__form" action="{{ route('user.create') }}" method="post">
         @csrf
-        <a href="index.html" class="sign__logo">
-            <img src="{{ asset('app/img/logo.svg') }}" alt="">
+        <a href="{{ route('home') }}" class="sign__logo">
+            <img src="{{ asset('assets/images/earners-logo.png') }}" width="100" height="100" alt="earners view logo">
         </a>
 
         <input type="hidden" name="referral_id" value="{{ $referral_id ?? '' }}">

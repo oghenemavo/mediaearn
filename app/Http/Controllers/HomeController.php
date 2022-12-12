@@ -95,6 +95,34 @@ class HomeController extends Controller
     {
         $data['page_title'] = $category->category;
         $data['category'] = $category;
+
+        $videos = $category->videos()->where('status', '1')->get();
+        $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
+        $mapped_videos = $videos->map(function($item, $key) {
+            $post['id'] = $item->id;
+            $post['type'] = 'post';
+            $post['cover'] = $item->cover;
+            $post['slug'] = $item->slug;
+            $post['title'] = $item->title;
+            $post['category'] = $item->category;
+
+            return $post;
+        });
+        $mapped_promotions = $promotions->map(function($item, $key) {
+            
+            $post['type'] = 'ads';
+            $ext = Str::substr($item->material, -3);
+            $imageExtensions = ['jpeg','png','jpg','gif','svg',];
+            $post['ads_type'] = in_array($ext, $imageExtensions) ? 'image' : 'video';
+            $post['cover'] = $item->material;
+            // $post['slug'] = $item->slug;
+            $post['title'] = $item->title;
+
+            return $post;
+        });
+        $data['posts'] = [...$mapped_videos, ...$mapped_promotions];
+        $data['sponsored'] = $mapped_promotions->slice(0, 6);
+        // dd($data['sponsored']);
         return view('category', $data);
     }
 
