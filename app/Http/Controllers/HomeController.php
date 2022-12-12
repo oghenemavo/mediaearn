@@ -69,17 +69,13 @@ class HomeController extends Controller
         $data['pricing'] = Plan::query()->where('status', '1')->get();
         $data['subscription'] = false;
         $user = auth('web')->user();
-        // $userSubscription = $user->membership;
-        // if ($userSubscription) {
-        //     $data['subscription'] = $userSubscription;
-        // }
+        
         $membership = $this->userRepository->getMembership($user->id);
         $data['subscription'] = $membership?->count() ?? false;
         if ($data['subscription']) {
             $data['membership'] = $membership;
         }
-        // dd($userSubscription->plan_id);
-        // dd($data['subscription']);
+        
         $data['preferences'] = base64_encode(json_encode([
             'user_id' => $user->id,
             'email' => $user->email,
@@ -125,7 +121,7 @@ class HomeController extends Controller
         });
         $data['posts'] = [...$mapped_videos, ...$mapped_promotions];
         $data['sponsored'] = $mapped_promotions->slice(0, 6);
-        // dd($data['sponsored']);
+        
         return view('category', $data);
     }
 
@@ -136,7 +132,7 @@ class HomeController extends Controller
         $count = ceil($faqs->count()/2);
         $data['faq1'] = $faqs->slice(0, $count);
         $data['faq2']= $faqs->slice($count);
-        // dd($faq1);
+        
         return view('faq', $data);
     }
 }

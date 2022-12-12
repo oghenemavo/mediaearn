@@ -69,6 +69,11 @@ class PaymentController extends Controller
         }
     }
 
+    public function transfer(Request $request)
+    {
+        return $this->flwService->transfer($request->all());
+    }
+
     public function fetchTransfer($transferId)
     {
         return $this->flwService->getTransfer($transferId);

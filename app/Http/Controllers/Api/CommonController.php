@@ -245,7 +245,7 @@ class CommonController extends Controller
             $data['receipt'] = $item->receipt_no;
             $data['amount'] = $item->amount;
             $data['reference'] = $item->reference;
-            $data['status'] = $item->status;
+            $data['status'] = strtolower($item->status);
             $data['message'] = $item->message;
             $data['is_notified'] = $item->is_notified;
             $data['attempts'] = $item->attempts;

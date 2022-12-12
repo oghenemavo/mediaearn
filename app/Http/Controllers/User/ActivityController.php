@@ -17,9 +17,10 @@ use Illuminate\Support\Str;
 
 class ActivityController extends Controller
 {
-    public function __construct(protected IUser $userRepository)
+    public function __construct(protected IUser $userRepository, FlutterWaveService $flwService)
     {
         $this->userRepository = $userRepository;
+        $this->flwService = $flwService;
     }
 
     public function video(Video $video)
@@ -89,12 +90,6 @@ class ActivityController extends Controller
             } else {
                 $data['earned_amount'] = $video->earnable_ns;
             }
-
-            // if (! is_null(auth()->guard('web')->user()->membership)) { // if a subscriber
-            //     $data['earned_amount'] = $video->earnable;
-            // } else {
-            //     $data['earned_amount'] = $video->earnable_ns;
-            // }
             
             $reward = VideoViewLog::firstOrCreate(
                 ['user_id' => $user->id, 'video_id' => $video->id],
@@ -134,8 +129,11 @@ class ActivityController extends Controller
     public function earnings()
     {
         $data['page_title'] = 'Earnings';
-        $data['balance'] = auth()->guard('web')->user()->wallet->balance;
+        $user = auth()->guard('web')->user();
+        $data['bank'] = $user->bank_code;
+        $data['account_number'] = $user->account_number;
         $data['min'] = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
+        $data['balance'] = $user->wallet->balance;
         return view('user.earnings', $data);
     }
 
@@ -148,24 +146,31 @@ class ActivityController extends Controller
         if ($balance >= $minPayout) {
             $user->wallet->balance = '0.00';
             $user->wallet->ledger_balance += $balance;
-            if ($user->wallet->save()) {
-                $data = [
-                    'user_id' => $user->id,
-                    'amount' => $balance,
-                    'reference' => str::uuid(),
-                    // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
-                    'status' => 'REQUESTED',
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
-                Payout::create($data);
-                unset($data['user_id'], $data['created_at'], $data['updated_at']);
-                $data['bank_code'] = $user->bank_code;
-                $data['account_number'] = $user->account_number;
-    
-                ProcessPayout::dispatch($data);
-                return response()->json(['success' => true]);
+
+            // verify account details
+            $response = $this->flwService->resolveAccount($user->bank_code, $user->account_number);
+
+            if ($response['status'] == 'success') {
+                if ($user->wallet->save()) {
+                    $data = [
+                        'user_id' => $user->id,
+                        'amount' => $balance,
+                        'reference' => str::uuid(),
+                        // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
+                        'status' => 'REQUESTED',
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                    Payout::create($data);
+                    unset($data['user_id'], $data['created_at'], $data['updated_at']);
+                    $data['bank_code'] = $user->bank_code;
+                    $data['account_number'] = $user->account_number;
+        
+                    ProcessPayout::dispatch($data);
+                    return response()->json(['success' => true]);
+                }
             }
+            return response()->json(['success' => false, 'message' => $response['message']]);
         }
         return response()->json(['success' => false]);
     }

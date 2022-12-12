@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessPayout implements ShouldQueue
 {
@@ -45,9 +46,7 @@ class ProcessPayout implements ShouldQueue
             $meta = $response['data'];
             $payout = Payout::where('reference', $meta['reference'])->first();
             if ($payout) {
-                $payout->transfer_id = $meta['id'];
                 $payout->meta = $meta;
-                $payout->message = $response['message'];
                 $payout->status = $meta['status'];
                 return $payout->save();
             }

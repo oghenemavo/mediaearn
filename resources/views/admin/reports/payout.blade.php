@@ -79,9 +79,13 @@
                                 activity += `<span class="badge badge-dim badge-pill badge-danger">
                                     <em class="icon ni ni-na text-danger"></em>&nbsp; Failed
                                 </span>`;
+                            } else if (data == 'new') {
+                                activity += `<span class="badge badge-dim badge-pill badge-info">
+                                <em class="icon ni ni-layers text-info"></em>&nbsp; Queued
+                                </span>`;
                             } else {
-                                activity += `<span class="badge badge-dim badge-pill badge-warning">
-                                <em class="icon ni ni-na text-warning"></em>&nbsp; Pending
+                                activity += `<span class="badge badge-dim badge-pill badge-primary">
+                                <em class="icon ni ni-loader text-primary"></em>&nbsp; Pending
                                 </span>`;
                             }
                             return activity;

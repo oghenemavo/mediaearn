@@ -11,7 +11,8 @@
                         <div class="d-flex justify-content-between">
                             <h2 class="content__title">Earnings</h2>
                             <button data-min="{{ $min }}" data-balance="{{ $balance }}" id="payout" class="form__btn">Payout</button>
-
+                            <input type="hidden" id="bank" value="{{ $bank }}">
+                            <input type="hidden" id="account_number" value="{{ $account_number }}">
                         </div>
 						<!-- end content title -->
 
@@ -67,48 +68,73 @@
 
     <script>
         $(document).ready(function() {
+            let bank = $('#bank').val();
+            let accountNumber = $('#account_number').val();
+            
             $('#payout').click(function () { 
                 let balance = parseFloat(`{{ $balance }}`);
                 let min = parseFloat(`{{ $min }}`);
-                if (balance >= min) {
-                    $.post("{{ route('request.payout') }}",
-                        {
-                            "_token": `{{ csrf_token() }}`,
-                            balance: `{{ $balance }}`,
-                        },
-                        function (data, textStatus, jqXHR) {
-                            if (data.success) {
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: `&#8358;{{ $balance }} has been approved for payout`,
-                                    showConfirmButton: false,
-                                    timer: 3500,
-                                })
-                                setTimeout(function() {
-                                    window.location.reload();
-                                }, 4000);
-                            }
-                            if (data.error) {
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'danger',
-                                    title: `Unable to process payout`,
-                                    showConfirmButton: false,
-                                    timer: 3500,
-                                })
-                            }
-                        },
-                        "json"
-                    );
-                } else {
+
+                if (bank == '' || accountNumber == '') {
                     Swal.fire({
                         position: 'top-end',
                         icon: 'warning',
-                        title: `Insufficient Balance, Min Payout is &#8358;{{ $min }} `,
+                        title: `Set your Account Number and Bank to enable withdrawal`,
                         showConfirmButton: false,
-                        timer: 3500,
+                        timer: 4500,
                     })
+                } else {
+                    if (balance >= min) {
+                        $.post("{{ route('request.payout') }}",
+                            {
+                                "_token": `{{ csrf_token() }}`,
+                                balance: `{{ $balance }}`,
+                            },
+                            function (data, textStatus, jqXHR) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: `&#8358;{{ $balance }} has been approved for payout`,
+                                        showConfirmButton: false,
+                                        timer: 3500,
+                                    })
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 4000);
+                                } else {
+                                    if (data.hasOwnProperty('message')) {
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            icon: 'info',
+                                            title: data.message,
+                                            showConfirmButton: false,
+                                            timer: 3500,
+                                        })
+                                    }
+                                }
+                                if (data.error) {
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'danger',
+                                        title: `Unable to process payout`,
+                                        showConfirmButton: false,
+                                        timer: 3500,
+                                    })
+                                }
+                            },
+                            "json"
+                        );
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'warning',
+                            title: `Insufficient Balance, Min Payout is &#8358;{{ $min }} `,
+                            showConfirmButton: false,
+                            timer: 3500,
+                        })
+                    }
+                    
                 }
             });
 
