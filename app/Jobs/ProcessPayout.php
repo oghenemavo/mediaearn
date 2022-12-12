@@ -42,13 +42,24 @@ class ProcessPayout implements ShouldQueue
     public function handle(FlutterWaveService $processor)
     {
         $response = $processor->transfer($this->data);
-        if (strtolower($response['status']) == 'success') {
-            $meta = $response['data'];
-            $payout = Payout::where('reference', $meta['reference'])->first();
-            if ($payout) {
-                $payout->meta = $meta;
-                $payout->status = $meta['status'];
-                return $payout->save();
+        if ($response) {
+            $meta = $response['data'] ?? null;
+            if ($meta) {
+                $payout = Payout::where('reference', $meta['reference'])->first();
+                
+                if (strtolower($response['status']) == 'error' || strtolower($meta['status']) == 'failed') {
+                    $payout->user->wallet->balance += $meta['amount'];
+                    $payout->user->wallet->ledger_balance -= $meta['amount'];
+                    $payout->user->wallet->save();
+                } 
+
+                if ($payout) {
+                    $payout->meta = $meta;
+                    $payout->message = $meta['complete_message'];
+                    $payout->status = $meta['status'];
+                    return $payout->save();
+                }
+
             }
         }
         return false;
