@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('payouts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('receipt_no')->nullable();
+            $table->string('transfer_id')->nullable();
             $table->decimal('amount', 11, 5);
             $table->string('reference');
             $table->string('meta');

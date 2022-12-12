@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 
 class FlutterWaveService
@@ -86,10 +87,15 @@ class FlutterWaveService
         return Http::withToken($this->token)->post($url, $payload);
     }
 
-    public function getTransfer(string $transferId)
-    {
-        $url = $this->url . '/transfers/' . $transferId;
-        return Http::withToken($this->token)->get($url);
+    public function getTransfer($collection)
+    {   
+        $responses = Http::pool(function (Pool $pool) use ($collection) {
+            $url = $this->url . '/transfers/';
+
+            return $collection->map(fn ($data) => $pool->withToken($this->token)->get($url . $data->transfer_id));
+        });
+
+        return $responses;
     }
 
 }
