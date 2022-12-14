@@ -50,6 +50,7 @@
         <script src="{{ asset('app/js/jquery.morelines.min.js') }}"></script>
         <script src="{{ asset('app/js/photoswipe.min.js') }}"></script>
         <script src="{{ asset('app/js/photoswipe-ui-default.min.js') }}"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('app/js/main.js') }}"></script>
 
         @stack('scripts')

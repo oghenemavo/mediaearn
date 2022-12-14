@@ -12,18 +12,38 @@
 
         <div class="sign__group">
             <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="sign__input" placeholder="First Name">
+            @error('first_name')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
 
         <div class="sign__group">
             <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="sign__input" placeholder="Last Name">
+            @error('last_name')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
 
         <div class="sign__group">
             <input type="email" id="email" name="email" value="{{ old('email') }}" class="sign__input" placeholder="Email">
+            @error('email')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
 
         <div class="sign__group">
             <input type="password" id="password" name="password" class="sign__input" placeholder="Password">
+            @error('password')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
 
         <div class="sign__group sign__group--checkbox">

@@ -25,41 +25,10 @@ class HomeController extends Controller
         $carousel = Video::query()->where('status', '1')->orderby('id', 'desc')->limit(5)->get();
         $videos = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
         $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
-        
-        $mapped_carousel = $carousel->map(function($item, $key) {
-            $data['type'] = 'post';
-            $data['cover'] = $item->cover;
-            $data['slug'] = $item->slug;
-            $data['title'] = $item->title;
-            $data['category'] = $item->category;
 
-            return $data;
-        });
-        
-        $mapped_videos = $videos->map(function($item, $key) {
-            $data['type'] = 'post';
-            $data['cover'] = $item->cover;
-            $data['slug'] = $item->slug;
-            $data['title'] = $item->title;
-            $data['category'] = $item->category;
-
-            return $data;
-        });
-        $mapped_promotions = $promotions->map(function($item, $key) {
-            $data['id'] = $item->id;
-            $data['type'] = 'ads';
-            $ext = Str::substr($item->material, -3);
-            $imageExtensions = ['jpeg','png','jpg','gif','svg',];
-            $data['ads_type'] = in_array($ext, $imageExtensions) ? 'image' : 'video';
-            $data['cover'] = $item->material;
-            $data['slug'] = $item->slug;
-            $data['title'] = $item->title;
-
-            return $data;
-        });
-
-        $data['carousel'] = [...$mapped_carousel, ...$mapped_promotions];
-        $data['posts'] = [...$mapped_videos, ...$mapped_promotions];
+        $data['carousel'] = $carousel;
+        $data['posts'] = $videos;
+        $data['promotions'] = $promotions;
         return view('welcome', $data);
     }
 
@@ -69,6 +38,7 @@ class HomeController extends Controller
         $data['pricing'] = Plan::query()->where('status', '1')->get();
         $data['subscription'] = false;
         $user = auth('web')->user();
+        $data['wallet'] = $user->wallet;
         
         $membership = $this->userRepository->getMembership($user->id);
         $data['subscription'] = $membership?->count() ?? false;
@@ -119,7 +89,9 @@ class HomeController extends Controller
 
             return $post;
         });
-        $data['posts'] = [...$mapped_videos, ...$mapped_promotions];
+
+        $data['posts'] = $videos;
+        $data['promotions'] = $promotions;
         $data['sponsored'] = $mapped_promotions->slice(0, 6);
         
         return view('category', $data);

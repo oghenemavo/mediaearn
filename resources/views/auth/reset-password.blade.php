@@ -13,10 +13,20 @@
 
         <div class="sign__group">
             <input type="password" id="password" name="password" class="sign__input" placeholder="Password">
+            @error('password')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
 
         <div class="sign__group">
             <input type="password" id="password_confirmation" name="password_confirmation" class="sign__input" placeholder="password_confirmation">
+            @error('password_confirmation')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
         
         <button class="sign__btn" type="submit">Reset Password</button>

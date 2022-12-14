@@ -51,6 +51,15 @@
 				<div class="col-12 col-lg-8 col-xl-8">
 					<!-- content tabs -->
 					<div class="tab-content" id="myTabContent">
+
+                        <!-- notifications alert -->
+                        @foreach(['primary', 'secondary', 'success', 'info', 'warning', 'danger'] as $alert)
+                            @if(session()->has($alert))
+                                <x-app-alert type="{{ $alert }}" :message="session()->get($alert)"/>
+                            @endif
+                        @endforeach
+                        <!-- notifications alert -->
+
 						<div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
 							<div class="row">
 								<!-- comments -->

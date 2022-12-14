@@ -27,6 +27,15 @@
 	<!-- pricing -->
 	<div class="section">
 		<div class="container">
+            
+            <!-- notifications alert -->
+            @foreach(['primary', 'secondary', 'success', 'info', 'warning', 'danger'] as $alert)
+                @if(session()->has($alert))
+                    <x-app-alert type="{{ $alert }}" :message="session()->get($alert)"/>
+                @endif
+            @endforeach
+            <!-- notifications alert -->
+
 			<div id="pricing_list" class="row">
 				<!-- plan features -->
 				<div class="col-12">

@@ -17,40 +17,28 @@ class ProfileController extends Controller
 
     public function index()
     {
-        // $user = $user = auth()->guard('web')->user();
-        // $leg1 = $user->referral->referrer;
-        // $leg2 = $leg1->referral->referrer;
-        // $leg3 = $leg2->referral->referrer;
-
-        // dd($leg3->referral);
-
-        // exit;
-
-
-
-
         $data['page_title'] = 'Profile';
         $data['user'] = $user = auth()->guard('web')->user();
-        // $data['banks'] = $this->flwService->fetchBanks();
-        $data['banks'] = [ 
-            'data' => [
-                0 => [
-                    "id" => 044,
-                    "code" => "560",
-                    "name" => "Page MFBank"
-                ],
-                1 => [
-                    "id" => 133,
-                    "code" => "304",
-                    "name" => "Stanbic Mobile Money"
-                ],
-                2 => [
-                    "id" => 134,
-                    "code" => "308",
-                    "name" => "FortisMobile"
-                ]
-            ],
-        ];
+        $data['banks'] = $this->flwService->fetchBanks();
+        // $data['banks'] = [ 
+        //     'data' => [
+        //         0 => [
+        //             "id" => 044,
+        //             "code" => "560",
+        //             "name" => "Page MFBank"
+        //         ],
+        //         1 => [
+        //             "id" => 133,
+        //             "code" => "304",
+        //             "name" => "Stanbic Mobile Money"
+        //         ],
+        //         2 => [
+        //             "id" => 134,
+        //             "code" => "308",
+        //             "name" => "FortisMobile"
+        //         ]
+        //     ],
+        // ];
         
         $bank = function($array, $user) {
             return array_filter($array, function($arr) use($user) {

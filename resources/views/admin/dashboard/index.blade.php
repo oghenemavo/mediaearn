@@ -36,6 +36,13 @@
                     <div class="title"><em class="icon ni ni-arrow-up-left"></em> Active Videos</div>
                 </div>
             </div>
+            <div class="col-sm-4 col-xxl-12">
+                <div class="nk-order-ovwg-data sell">
+                    <div class="amount">{{ $subscriptions }} <small class="currenct currency-usd">Subscriptions</small></div>
+                    <!-- <div class="info">Last month <strong>39,485 <span class="currenct currency-usd">USD</span></strong></div> -->
+                    <div class="title"><em class="icon ni ni-arrow-up-left"></em> Subscriptions</div>
+                </div>
+            </div>
         </div><!-- .row -->
     </div><!-- .nk-block -->
 <!-- main content -->

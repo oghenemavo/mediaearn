@@ -10,6 +10,11 @@
 
         <div class="sign__group">
             <input type="email" id="email" name="email" value="{{ old('email') }}" class="sign__input" placeholder="Email">
+            @error('email')
+            <div style="color: red; font-size:12px">
+            {{ $message }}
+            </div>
+            @enderror
         </div>
         
         <button class="sign__btn" type="submit">Forgot Password</button>

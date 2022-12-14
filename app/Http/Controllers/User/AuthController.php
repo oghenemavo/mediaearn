@@ -28,7 +28,7 @@ class AuthController extends Controller
         $user = $this->user->createUser($data);
 
         if ($user) {
-            return redirect()->route('homepage');
+            return redirect()->route('login.page')->with('success', 'Sign up successful, Login!');
             // return redirect()->back()->withInput()->with('error', 'unable to signup user, try again!');
         }
         return redirect()->back()->withInput()->with('error', 'unable to signup user, try again!');
@@ -36,7 +36,7 @@ class AuthController extends Controller
 
     public function login()
     {
-        $data['page_title'] = 'Login up';
+        $data['page_title'] = 'Login';
         return view('auth.login', $data);
     }
 
@@ -54,7 +54,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended();
         } else {
-            return redirect()->back()->onlyInput('email')->with('error', 'Invalid credentials');
+            return redirect()->back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->withInput();
         }
     }
 
