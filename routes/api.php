@@ -43,6 +43,7 @@ Route::controller(CommonController::class)->group(function () {
 
 Route::controller(PaymentController::class)->group(function () {
     Route::post('plans/{plan}/payment', 'makeSubscriptionPayment')->name('plans.payment');
+    Route::post('plans/{plan}/wallet/{user}', 'walletSubscriptionPayment')->name('wallet.plans.payment');
     Route::get('payment-callback', 'paymentCallback')->name('payment.callback');
     Route::get('transfers/{transferId}', 'fetchTransfer');
     Route::post('transfers', 'transfer');

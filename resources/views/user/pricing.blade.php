@@ -89,8 +89,14 @@
                             @endforeach
                             
                             @if($subscription && $membership->plan_id == $item->id)
-                                <button class="price__btn make-payment" disabled>Selected</button>
+                                <button class="price__btn make-payment" disabled style="background-color: green; background-image: none; box-shadow: none;">Selected</button>
                             @else
+                                @if($balance >= $item->price)
+                                    <button class="price__btn wallet-payment" type="button" data-id="{{ $item->id }}" style="background-color: black !important; background-image: none; box-shadow: none;">
+                                        Pay with Wallet
+                                    </button>
+                                @endif
+
                                 <button class="price__btn make-payment" type="button" data-id="{{ $item->id }}">
                                     Choose Plan
                                 </button>
@@ -108,15 +114,75 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(function() {
+            $('#pricing_list').on('click', 'button.wallet-payment', function (e) { // activate user
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Pay with Wallet?',
+                    text: "Are you sure you want to pay with wallet!",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, use wallet!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const btn = $(e.target);
+                        const id = btn.attr('data-id');
+                            
+                        let paymentUrl = `{{ route('wallet.plans.payment', [':id', ':uid']) }}`;
+                        paymentUrl = paymentUrl.replace(':id', id);
+                        paymentUrl = paymentUrl.replace(':uid', `{{ auth('web')->user()->id }}`);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: paymentUrl,
+                            data: {
+                                "_token": `{{ csrf_token() }}`,
+                                'preferences': `{{ $preferences }}`
+                            },
+                            success: function(response) {
+                                if (response.hasOwnProperty('status') && response.status == 'success') {
+                                    Swal.fire(
+                                    'Successful!',
+                                    'Your payment has been made.',
+                                    'success'
+                                    )
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 3500);
+                                } else {
+                                    Swal.fire(
+                                    'Failed!',
+                                    'Unable to make payment.',
+                                    'error'
+                                    )
+
+                                }
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                console.log( XMLHttpRequest.responseJSON.errors);
+                                console.log(XMLHttpRequest.status)
+                                console.log(XMLHttpRequest.statusText)
+                                console.log(errorThrown)
+                            }
+                        });
+                    }
+                })
+    
+    
+                console.log();
+            });
+
             $('#pricing_list').on('click', 'button.make-payment', function (e) { // activate user
                 e.preventDefault();
     
                 const btn = $(e.target);
                 const id = btn.attr('data-id');
-    
-                console.log();
                     
                 let paymentUrl = `{{ route('plans.payment', ':id') }}`;
                 paymentUrl = paymentUrl.replace(':id', id);

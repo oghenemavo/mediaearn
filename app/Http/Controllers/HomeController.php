@@ -38,7 +38,7 @@ class HomeController extends Controller
         $data['pricing'] = Plan::query()->where('status', '1')->get();
         $data['subscription'] = false;
         $user = auth('web')->user();
-        $data['wallet'] = $user->wallet;
+        $data['balance'] = $user->wallet->balance;
         
         $membership = $this->userRepository->getMembership($user->id);
         $data['subscription'] = $membership?->count() ?? false;

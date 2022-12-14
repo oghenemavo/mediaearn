@@ -7,6 +7,7 @@ use App\Enums\PaymentStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Services\FlutterWaveService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -67,6 +68,40 @@ class PaymentController extends Controller
             }
             return redirect()->route('pricing', ['ref' => $request->query('tx_ref')]);
         }
+    }
+
+    public function walletSubscriptionPayment(Request $request, Plan $plan, User $user)
+    {
+        $preferences = json_decode(base64_decode($request->preferences), true);
+        $preferences['tx_ref'] = Str::uuid();
+        $preferences['amount'] = (float) $plan->meta->get('set_discount') ? $plan->meta->get('discount') : $plan->price;
+        $preferences['status'] = PaymentStatusEnum::SUCCESS;
+        $preferences['plan'] = $plan->id;
+        $preferences['meta'] = [
+            'payment_type' => 'Wallet',
+            'plan' => $plan->id
+        ];
+
+        $wallet = $user->wallet;
+
+        if ($wallet->balance >= $preferences['amount']) {
+            $wallet->balance -= $preferences['amount'];
+            $wallet->save();
+
+            // insert into transactions table
+            if($transaction = Transaction::create($preferences)) {
+                $this->userRepository->createMembership($transaction->user_id, $transaction->tx_ref, $transaction->amount, $plan->id);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Payment Successful',
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Unable to start gateway, please try again',
+        ]);
     }
 
     public function transfer(Request $request)

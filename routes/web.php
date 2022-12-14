@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('category/{category:slug}', [HomeController::class, 'category'])->name('category');
 Route::get('video/{video:slug}', [ActivityController::class, 'video'])->name('get.video');
-Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('faq', [HomeController::class, 'faq'])->name('faq');
 
 Route::middleware(['guest:web'])->group(function () {
@@ -61,6 +60,8 @@ Route::middleware(['auth:web'])->group(function () {
     
     Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
     Route::post('request-payout', [ActivityController::class, 'requestPayout'])->name('request.payout');
+    
+    Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
