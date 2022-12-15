@@ -131,14 +131,31 @@
                 <!-- end card -->
 
                 <!-- section btn -->
-                <div class="col-12">
+                <!-- <div class="col-12">
                     <a href="#" class="section__btn">Show more</a>
-                </div>
+                </div> -->
                 <!-- end section btn -->
             </div>
         </div>
     </section>
     <!-- end expected premiere -->
+
+    <!-- expected premiere -->
+	<section class="section section--bg" data-bg="{{ asset('app/img/section/section.jpg') }}">
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-12">
+					<h2 class="section__title">Sponsored Content</h2>
+				</div>
+				<!-- end section title -->
+
+				<x-part-ads limit="4"></x-part-ads>
+
+			</div>
+		</div>
+	</section>
+	<!-- end expected premiere -->
 
 @endsection
 

@@ -24,12 +24,31 @@
 	</section>
 	<!-- end page title -->
 
+	<div class="container" style="margin-top: 16px;">
+		<div class="row">
+			<!-- section title -->
+			<div class="col-12">
+				<h2 class="section__title">Sponsored</h2>
+			</div>
+			<!-- end section title -->
+
+			<x-part-ads limit="4"></x-part-ads>
+		</div>
+	</div>
+
 	@php $j = 0; @endphp
     
 	<!-- catalog -->
 	<div class="catalog" style="margin-top: 24px;">
 		<div class="container">
 			<div class="row">
+
+			<!-- section title -->
+			<div class="col-12">
+				<h2 class="section__title">Posts</h2>
+			</div>
+			<!-- end section title -->
+
 				<!-- card -->
                 @for($i=0; $i < count($posts); $i++)
                     <div class="col-lg-3 col-md-3 col-sm-2">
@@ -74,7 +93,7 @@
 
 
 				<!-- paginator -->
-				<div class="col-12">
+				<!-- <div class="col-12">
 					<ul class="paginator">
 						<li class="paginator__item paginator__item--prev">
 							<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
@@ -87,7 +106,7 @@
 							<a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
 						</li>
 					</ul>
-				</div>
+				</div> -->
 				<!-- end paginator -->
 
 			</div>
@@ -105,25 +124,7 @@
 				</div>
 				<!-- end section title -->
 
-				@foreach($sponsored as $post)
-					@if($post['ads_type'] == 'video')
-						@continue
-					@endif
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<div class="card__cover">
-								<img src="{{ $post['cover'] }}" width="160" height="237" style="object-fit: cover;" alt="">
-								<!-- <a href="#" class="card__play">
-									<i class="icon ion-ios-play"></i>
-								</a> -->
-							</div>
-							
-						</div>
-					</div>
-					<!-- end card -->
-				@endforeach
+				<x-part-ads limit="4"></x-part-ads>
 
 			</div>
 		</div>

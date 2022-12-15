@@ -42,11 +42,12 @@
 									</div>
 
 									<ul class="card__meta">
-										<li><span>Genre:</span> <a href="#">Action</a>
-										<a href="#">Triler</a></li>
-										<li><span>Release year:</span> 2017</li>
-										<li><span>Running time:</span> 120 min</li>
-										<li><span>Country:</span> <a href="#">USA</a> </li>
+										<li><span>Genre:</span> <a href="#">{{ $video->category->category }}</a></li>
+										<!-- <a href="#">Triler</a></li> -->
+										<li><span>Views:</span> {{ $video_views }}</li>
+										<li><span>Earn Amount Subscriber:</span> &#8358; {{ $video->earnable }}</li>
+										<li><span>Earn Amount Free:</span> &#8358; {{ $video->earnable_ns }}</li>
+										<!-- <li><span>Country:</span> <a href="#">USA</a> </li> -->
 									</ul>
 
 									<div class="card__description card__description--details">
@@ -81,6 +82,7 @@
 				</div>
 				<!-- end player -->
 
+                <x-part-ads limit="2"></x-part-ads>
 
 				<div class="col-12">
 					<div class="details__wrap">

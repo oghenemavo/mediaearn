@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Contracts\IUser;
+use App\Enums\UserStatusEnum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
@@ -48,7 +49,7 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->except(['_token', 'remember']);
-        // $credentials['status'] = UserStatusEnum::ACTIVE;
+        $credentials['status'] = UserStatusEnum::ACTIVE;
 
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();

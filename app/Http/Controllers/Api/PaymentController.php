@@ -49,7 +49,8 @@ class PaymentController extends Controller
                 $response->data['status'] === "successful"
                 && $response->data['amount'] == $transaction->amount 
                 && $response->data['currency'] === "NGN"
-            ) {
+            ) 
+            {
                 // Success! Confirm the customer's payment
                 $transaction->status = PaymentStatusEnum::SUCCESS;
                 $transaction->meta = [

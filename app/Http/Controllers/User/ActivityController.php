@@ -6,6 +6,7 @@ use App\Contracts\IUser;
 use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPayout;
+use App\Mail\EarningsMail;
 use App\Models\AppSetting;
 use App\Models\Payout;
 use App\Models\Video;
@@ -13,6 +14,7 @@ use App\Models\VideoViewLog;
 use App\Services\FlutterWaveService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ActivityController extends Controller
@@ -102,6 +104,15 @@ class ActivityController extends Controller
             if ($reward->wasRecentlyCreated) {
                 $user->wallet->balance += $data['earned_amount'];
                 $user->wallet->save();
+
+                $mailData = (object) [
+                    'title' => $video->title,
+                    'amount' => $data['earned_amount'],
+                    'name' => $user->first_name . ' ' . $user->last_name
+                ];
+
+                // send Mail
+                Mail::to($user->email)->send(new EarningsMail($mailData));
 
                 return response()->json(['success' => true]);
             }

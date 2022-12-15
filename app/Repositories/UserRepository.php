@@ -29,7 +29,7 @@ class UserRepository implements IUser
 
     public function createUser($attributes)
     {
-        DB::transaction(function() use($attributes) {
+        return DB::transaction(function() use($attributes) {
             // create user account
             $user = $this->user->create([
                 'first_name' => data_get($attributes, 'first_name'),
@@ -37,7 +37,7 @@ class UserRepository implements IUser
                 'email' => data_get($attributes, 'email'),
                 'password' => data_get($attributes, 'password'),
                 'referral_code' => uniqid(substr(data_get($attributes, 'email'), 0, 3)),
-                'status' => UserStatusEnum::INACTIVE,
+                'status' => UserStatusEnum::ACTIVE,
             ]);
     
             // create referral record
@@ -76,7 +76,7 @@ class UserRepository implements IUser
         if ($membership) {
             // check if this user is referred
             $referral_info = Referral::where('referred_user_id', $user_id)->first();
-            if ($referral_info) {
+            if ($referral_info && $referral_info->status != '2') {
                 $bonus_value = 0;
                 $bonusType = AppSetting::query()->where('slug', 'referral_bonus_type')->first()->value;
                 $bonus = AppSetting::query()->where('slug', 'referral_bonus')->first()->value;

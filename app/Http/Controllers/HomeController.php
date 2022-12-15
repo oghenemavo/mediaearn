@@ -54,7 +54,7 @@ class HomeController extends Controller
         if ($request->has('ref')) {
             $transaction = Transaction::query()->where('tx_ref', $request->query('ref'))->get();
             if ($transaction) {
-                session()->flash('payment_status', $transaction->first()->status);
+                session()->flash('info', $transaction->first()->status);
             }
          }
         return view('user.pricing', $data);
