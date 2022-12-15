@@ -16,10 +16,9 @@ if (! function_exists('clean')) {
   }
 }
 
-if (! function_exists('abc')) {
-  function abc(User $user, $videoId, $amount, $bonusPercent, $first = true)
+if (! function_exists('downlineBonusDistribution')) {
+  function downlineBonusDistribution(User $user, $videoId, $amount, $bonusPercent, $first = true)
   {
-    // dd(is_null($user->referral?->referrer));
     if (is_null($user->referral)) {
       return true;
     } else {
@@ -35,7 +34,7 @@ if (! function_exists('abc')) {
       
       $referralService = new ReferralService(new Referral());
       $referralService->setVideoDownlineBonus($referrerX->id, $referredX->referred_user_id, $videoId, $amountFinal);
-      return abc($referrerX, $videoId, $amount, $bonusPercent, false);
+      return downlineBonusDistribution($referrerX, $videoId, $amount, $bonusPercent, false);
     }
   }
 }

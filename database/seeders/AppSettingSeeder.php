@@ -54,7 +54,7 @@ class AppSettingSeeder extends Seeder
                         'fixed' => 'Fixed Value'
                     ]
                 ]),
-                'value' => 'percentage',
+                'value' => 'fixed',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

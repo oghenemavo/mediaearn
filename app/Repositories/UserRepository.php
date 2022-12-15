@@ -81,20 +81,27 @@ class UserRepository implements IUser
                 $bonusType = AppSetting::query()->where('slug', 'referral_bonus_type')->first()->value;
                 $bonus = AppSetting::query()->where('slug', 'referral_bonus')->first()->value;
 
+                $user = $referral_info->referrer;
+
                 if ($bonusType == 'percentage') {
                     $bonus_value = $amount * ($bonus / 100);
+                    $referral_info->amount = $bonus_value;
+                    $referral_info->bonus_at = Carbon::now();
+                    
+                    $referral_info->meta = [
+                        'bonus_type' => $bonusType,
+                        'bonus' => $bonus,
+                    ];
+
+                    $user->wallet->balance += $bonus_value;
+                    $user->wallet->save();
                 } else {
-                    $bonus_value = $bonus;
+                    // for fixed
+                    $user->wallet->balance += $referral_info->amount;
+                    $user->wallet->save();
                 }
 
-                $referral_info->meta = [
-                    'bonus_type' => $bonusType,
-                    'bonus' => $bonus,
-                ];
-                
-                $referral_info->amount = $bonus_value;
-                $referral_info->status = '1';
-                $referral_info->bonus_at = Carbon::now();
+                $referral_info->status = '2';
                 $referral_info->save();
             }
 
@@ -112,7 +119,7 @@ class UserRepository implements IUser
         // }
         // return false;
         $bonusPercent = AppSetting::where('slug', 'downline_bonus')->first()->value;
-        return abc($user, $videoId, $amount, $bonusPercent, true);
+        return downlineBonusDistribution($user, $videoId, $amount, $bonusPercent, true);
     }
 
     public function getMembership($userId)

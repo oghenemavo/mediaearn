@@ -100,6 +100,8 @@ class ActivityController extends Controller
             $this->userRepository->referralVideoReward($user, $video->id, $data['earned_amount']);
             
             if ($reward->wasRecentlyCreated) {
+                $user->wallet->balance += $data['earned_amount'];
+                $user->wallet->save();
 
                 return response()->json(['success' => true]);
             }
