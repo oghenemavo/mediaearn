@@ -51,7 +51,7 @@
 									</ul>
 
 									<div class="card__description card__description--details">
-                                        {{ $video->description }}
+                                        {!! html_entity_decode($video->description) !!}
 									</div>
 								</div>
 							</div>

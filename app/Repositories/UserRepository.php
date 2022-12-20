@@ -56,7 +56,7 @@ class UserRepository implements IUser
                 $user->wallet->save();
             }
 
-            return true;
+            return $user;
         });
 
         return false;

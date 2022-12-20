@@ -5,8 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Contracts\IUser;
 use App\Enums\VideoTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessEarningMail;
 use App\Jobs\ProcessPayout;
-use App\Mail\EarningsMail;
 use App\Models\AppSetting;
 use App\Models\Payout;
 use App\Models\Video;
@@ -14,7 +14,6 @@ use App\Models\VideoViewLog;
 use App\Services\FlutterWaveService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ActivityController extends Controller
@@ -82,12 +81,13 @@ class ActivityController extends Controller
                 'user_id' => $user->id,
                 'video_id' => $video->id,
                 'watched' => $playedTime,
+                'is_credited' => '1'
             ];
 
             $membership = $this->userRepository->getMembership($user->id);
-            $data['is_subscribed'] = $membership?->count() ?? false;
+            $subscribed = $membership?->count() ?? false;
 
-            if ($data['is_subscribed']) {
+            if ($subscribed) {
                 $data['earned_amount'] = $video->earnable;
             } else {
                 $data['earned_amount'] = $video->earnable_ns;
@@ -105,14 +105,15 @@ class ActivityController extends Controller
                 $user->wallet->balance += $data['earned_amount'];
                 $user->wallet->save();
 
-                $mailData = (object) [
+                $mail = (object) [
                     'title' => $video->title,
                     'amount' => $data['earned_amount'],
-                    'name' => $user->first_name . ' ' . $user->last_name
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'email' => $user->email
                 ];
 
                 // send Mail
-                Mail::to($user->email)->send(new EarningsMail($mailData));
+                ProcessEarningMail::dispatch($mail);
 
                 return response()->json(['success' => true]);
             }
