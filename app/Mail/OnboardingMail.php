@@ -46,7 +46,10 @@ class OnboardingMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.onboarding',
+            markdown: 'mails.onboarding',
+            with: [
+                'url' => route('home'),
+            ],
         );
     }
 

@@ -27,6 +27,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use Illuminate\Mail\Markdown;
+
+Route::get('mail', function () {
+    $markdown = new Markdown(view(), config('mail.markdown'));
+
+    return $markdown->render('mails.onboarding');
+});
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('category/{category:slug}', [HomeController::class, 'category'])->name('category');
 Route::get('video/{video:slug}', [ActivityController::class, 'video'])->name('get.video');

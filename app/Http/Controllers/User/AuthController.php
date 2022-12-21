@@ -7,7 +7,8 @@ use App\Enums\UserStatusEnum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
-use App\Jobs\ProcessOnboardingMail;
+use App\Mail\OnboardingMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -30,7 +31,7 @@ class AuthController extends Controller
         $user = $this->user->createUser($data);
 
         if ($user) {
-            ProcessOnboardingMail::dispatch($user);
+            Mail::to($user->email)->queue(new OnboardingMail($user));
             return redirect()->route('login.page')->with('success', 'Sign up successful, Login!');
             // return redirect()->back()->withInput()->with('error', 'unable to signup user, try again!');
         }

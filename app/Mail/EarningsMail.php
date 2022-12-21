@@ -45,7 +45,7 @@ class EarningsMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.earnings',
+            markdown: 'mails.earnings',
         );
     }
 
