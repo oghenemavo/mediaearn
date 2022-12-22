@@ -26,9 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('verify:payout')->hourly();
 
-        if (app()->environment(['production'])) {
-            $schedule->command('queue:work --tries=3')->cron('* * * * * *')->withoutOverlapping();
-        }
+        $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
 
     }
 
