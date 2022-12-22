@@ -25,6 +25,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('verify:payout')->hourly();
+
+        if (app()->environment(['production'])) {
+            $schedule->command('queue:work --tries=3')->cron('* * * * * *')->withoutOverlapping();
+        }
+
     }
 
     /**
