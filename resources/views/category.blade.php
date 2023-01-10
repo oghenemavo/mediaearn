@@ -32,7 +32,10 @@
 			</div>
 			<!-- end section title -->
 
-			<x-part-ads limit="4"></x-part-ads>
+			<div class="owl-carousel owl-theme">
+				<x-part-ads limit="10"></x-part-ads>
+			</div>
+			
 		</div>
 	</div>
 
@@ -63,7 +66,7 @@
                                 <h3 class="card__title"><a href="{{ route('get.video', $posts[$i]->slug) }}">{{ $posts[$i]->title }}</a></h3>
                                 <span class="card__category">
                                     <a href="{{ route('category', $posts[$i]->category->slug) }}">{{ $posts[$i]->category->category }}</a>
-                                    <a href="#">Triler</a>
+                                    <a href="#">Triller</a>
                                 </span>
                                 <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
                             </div>
@@ -106,7 +109,9 @@
 				</div>
 				<!-- end section title -->
 
-				<x-part-ads limit="4"></x-part-ads>
+				<div class="owl-carousel owl-theme">
+                    <x-part-ads limit="10"></x-part-ads>
+                </div>
 
 			</div>
 		</div>
@@ -118,4 +123,23 @@
 
 @push('scripts')
     <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
+	<script>
+        $('.owl-carousel').owlCarousel({
+            autoplay: true,
+            autoplayHoverPause: true,
+            loop:true,
+            margin:10,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:3
+                },
+                1000:{
+                    items:5
+                }
+            }
+        })
+    </script>
 @endpush
