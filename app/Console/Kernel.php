@@ -26,6 +26,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('verify:payout')->hourly();
 
+        // $schedule->command('queue:restart')
+        //     ->everyFiveMinutes();
+
         $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
 
     }

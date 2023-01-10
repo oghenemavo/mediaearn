@@ -102,31 +102,13 @@
                                 <h3 class="card__title"><a href="{{ route('get.video', $posts[$i]->slug) }}">{{ $posts[$i]->title }}</a></h3>
                                 <span class="card__category">
                                     <a href="{{ route('category', $posts[$i]->category->slug) }}">{{ $posts[$i]->category->category }}</a>
-                                    <a href="#">Triler</a>
+                                    <a href="#">Triller</a>
                                 </span>
                                 <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
                             </div>
                         </div>
                     </div>
 
-                    @if($i % 2 == 0)
-                        @if(isset($promotions[$j]))
-                            <div class="col-lg-3 col-md-3 col-sm-2">
-                                <div class="card">
-                                    <div class="card__cover">
-                                        <span class="ads-label">ADS</span>
-                                        @if($promotions[$j]->ads_type == 'video')
-                                            <video src="{{ $promotions[$j]->material }}" id="player" autoplay></video>
-                                        @else
-                                            <img class="image-post-cover" src="{{ $promotions[$j]->material }}" alt="{{ $promotions[$j]->title }}">
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        @php $j++; @endphp
-                    @endif
                 @endfor
                 <!-- end card -->
 

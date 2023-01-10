@@ -20,15 +20,15 @@
         <link rel="stylesheet" href="{{ asset('app/css/main.css') }}">
 
         <!-- Favicons -->
-        <link rel="icon" type="image/png" href="icon/favicon-32x32.png" sizes="32x32">
-        <link rel="apple-touch-icon" href="icon/favicon-32x32.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-touch-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-touch-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-touch-icon-144x144.png">
+        <link rel="icon" type="image/png" href="{{ asset('assets/images/earners-logo.png') }}" sizes="32x32">
+        <link rel="apple-touch-icon" href="{{ asset('assets/images/earners-logo.png') }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/images/earners-logo.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('assets/images/earners-logo.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('assets/images/earners-logo.png') }}">
 
         <meta name="description" content="">
         <meta name="keywords" content="">
-        <meta name="author" content="Dmitry Volkov">
+        <meta name="author" content="Earnerview">
         <title>{{ $page_title ?? 'Earners view | Earn Money Watch Videos' }}</title>
 
     </head>

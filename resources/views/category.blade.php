@@ -70,24 +70,6 @@
                         </div>
                     </div>
 
-                    @if($i > 3 && $i % 4 == 0)
-                        @if(isset($promotions[$j]))
-                            <div class="col-lg-3 col-md-3 col-sm-2">
-                                <div class="card">
-                                    <div class="card__cover">
-                                        <span class="ads-label">ADS</span>
-                                        @if($promotions[$j]->ads_type == 'video')
-                                            <video src="{{ $promotions[$j]->material }}" id="player" autoplay></video>
-                                        @else
-                                            <img class="image-post-cover" src="{{ $promotions[$j]->material }}" alt="{{ $promotions[$j]->title }}">
-                                        @endif
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        @php $j++; @endphp
-                    @endif
                 @endfor
                 <!-- end card -->
 
