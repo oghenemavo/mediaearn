@@ -22,6 +22,8 @@
                     <div class="title"><em class="icon ni ni-arrow-down-left"></em> Total Videos</div>
                 </div>
             </div>
+
+            @can('manage_site')
             <div class="col-sm-4 col-xxl-12">
                 <div class="nk-order-ovwg-data sell">
                     <div class="amount">{{ $total_users }} <small class="currenct currency-usd">User(s)</small></div>
@@ -29,6 +31,8 @@
                     <div class="title"><em class="icon ni ni-arrow-up-left"></em> Total Users</div>
                 </div>
             </div>
+            @endcan
+
             <div class="col-sm-4 col-xxl-12">
                 <div class="nk-order-ovwg-data sell">
                     <div class="amount">{{ $active_videos }} <small class="currenct currency-usd">Active</small></div>
@@ -36,6 +40,8 @@
                     <div class="title"><em class="icon ni ni-arrow-up-left"></em> Active Videos</div>
                 </div>
             </div>
+
+            @can('manage_site')
             <div class="col-sm-4 col-xxl-12">
                 <div class="nk-order-ovwg-data sell">
                     <div class="amount">{{ $subscriptions }} <small class="currenct currency-usd">Subscriptions</small></div>
@@ -43,6 +49,8 @@
                     <div class="title"><em class="icon ni ni-arrow-up-left"></em> Subscriptions</div>
                 </div>
             </div>
+            @endcan
+            
         </div><!-- .row -->
     </div><!-- .nk-block -->
 <!-- main content -->

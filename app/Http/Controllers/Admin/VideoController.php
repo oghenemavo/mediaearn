@@ -95,7 +95,10 @@ class VideoController extends Controller
 
     public function editVideo(VideoEditRequest $request, Video $video)
     {
+        $this->authorize('update-video', $video);
+
         $data = $request->validated();
+        // dd($data);
         if ($this->videoRepository->edit($data, $video)) {
             if ($request->hasfile('cover')) {
                 $initial_path = public_path('/covers') . $video->cover;
@@ -118,6 +121,7 @@ class VideoController extends Controller
 
     public function unblockVideo(Video $video)
     {
+        $this->authorize('update-video', $video);
         $status = '1';
         if ($this->videoRepository->changeStatus($status, $video)) {
             return response()->json(['success' => true]);
@@ -127,6 +131,7 @@ class VideoController extends Controller
 
     public function blockVideo(Video $video)
     {
+        $this->authorize('update-video', $video);
         $status = '0';
         if ($this->videoRepository->changeStatus($status, $video)) {
             return response()->json(['success' => true]);

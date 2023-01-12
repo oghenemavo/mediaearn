@@ -97,15 +97,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('manage/users', [DashboardController::class, 'showUsers'])->name('users');
-        Route::put('users/{user}/suspend', [DashboardController::class, 'suspendUser'])->name('suspend.user');
-        Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
-        Route::get('settings', [AppController::class, 'index'])->name('app.settings');
-        Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
         Route::put('update/password', [AppController::class, 'updatePassword'])->name('update.password');
         Route::put('update/email', [AppController::class, 'emailPassword'])->name('update.email');
 
-        Route::controller(VideoController::class)->name('media.')->group(function () {
+        Route::middleware('can:manage_site')->group(function () {
+            Route::get('manage/users', [DashboardController::class, 'showUsers'])->name('users');
+            Route::put('users/{user}/suspend', [DashboardController::class, 'suspendUser'])->name('suspend.user');
+            Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
+            Route::get('settings', [AppController::class, 'index'])->name('app.settings');
+            Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
+        });
+        
+        Route::controller(VideoController::class)->name('media.')
+        ->middleware('can:manage_video')->group(function () {
             Route::get('categories', 'categories')->name('categories');
             Route::post('categories', 'createCategory')->name('create.category');
             Route::put('categories/{category}', 'editCategory')->name('edit.category');
@@ -120,7 +124,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // advertisements
-        Route::controller(PromotionController::class)->prefix('promotions')->name('media.')->group(function () {
+        Route::controller(PromotionController::class)->prefix('promotions')
+        ->middleware('can:manage_site')->name('media.')->group(function () {
             Route::get('/', 'index')->name('promotions');
             Route::post('/', 'store')->name('create.promotions');
             Route::get('/{promotion}', 'show')->name('show.promotion');
@@ -129,7 +134,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{promotion}/unblock', 'unblock')->name('unblock.promotion');
         });
 
-        Route::controller(ReportController::class)->prefix('report')->name('report.')->group(function () {
+        Route::controller(ReportController::class)->prefix('report')
+        ->middleware('can:manage_site')->name('report.')->group(function () {
             Route::get('referrals', 'referrals')->name('referrals');
             Route::get('transactions', 'transactions')->name('transactions');
             // Route::post('transactions/{tx_ref}/requery', 'requery')->name('requery');
@@ -137,7 +143,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('videos/logs', 'videosLogs')->name('videos.logs');
         });
 
-        Route::controller(PlanController::class)->prefix('plans')->group(function () {
+        Route::controller(PlanController::class)->prefix('plans')
+        ->middleware('can:manage_site')->group(function () {
             Route::get('/', 'index')->name('plans');
             Route::post('/', 'store')->name('create.plans');
             Route::get('/{plan}', 'show')->name('show.plans');
@@ -146,7 +153,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{plan}/activate', 'activate')->name('activate.plans');
         });
 
-        Route::controller(FAQController::class)->prefix('faqs')->group(function () {
+        Route::controller(FAQController::class)->prefix('faqs')
+        ->middleware('can:manage_site')->group(function () {
             Route::get('/', 'index')->name('faq');
             Route::post('/', 'store')->name('create.faq');
             Route::get('/{faq}', 'show')->name('show.faq');
@@ -154,7 +162,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{faq}', 'delete')->name('delete.faq');
         });
 
-        Route::controller(AdminController::class)->prefix('administration')->group(function () {
+        Route::controller(AdminController::class)->prefix('administration')
+        ->middleware('can:manage_site')->group(function () {
             Route::get('/', 'index')->name('administration');
             Route::post('/create', 'create')->name('create.admin');
             Route::get('/{admin?}', 'show')->name('show.admin');

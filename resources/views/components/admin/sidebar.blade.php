@@ -31,71 +31,75 @@
                                 <span class="nk-menu-text">Media Management</span>
                             </a>
                             <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.media.categories') }}" class="nk-menu-link"><span class="nk-menu-text">Categories</span></a>
-                                </li>
+                                @can('manage_site')
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.media.categories') }}" class="nk-menu-link"><span class="nk-menu-text">Categories</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.media.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
+                                    </li>
+                                @endcan
                                 <li class="nk-menu-item">
                                     <a href="{{ route('admin.media.videos') }}" class="nk-menu-link"><span class="nk-menu-text">Videos</span></a>
                                 </li>
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.media.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
-                                </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admin.users') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-alt"></em></span>
-                                <span class="nk-menu-text">Users</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
-                                <span class="nk-menu-text">Reports</span>
-                            </a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.transactions') }}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.payouts') }}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.referrals') }}" class="nk-menu-link"><span class="nk-menu-text">Referrals</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('admin.report.videos.logs') }}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
-                                </li>
-                            </ul><!-- .nk-menu-sub -->
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admin.app.settings') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-lock-alt"></em></span>
-                                <span class="nk-menu-text">Settings</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
 
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admin.plans') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
-                                <span class="nk-menu-text">Plans</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
+                        @can('manage_site')
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.users') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-user-alt"></em></span>
+                                    <span class="nk-menu-text">Users</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
+                                    <span class="nk-menu-text">Reports</span>
+                                </a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.report.transactions') }}" class="nk-menu-link"><span class="nk-menu-text">Transactions</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.report.payouts') }}" class="nk-menu-link"><span class="nk-menu-text">Payouts</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.report.referrals') }}" class="nk-menu-link"><span class="nk-menu-text">Referrals</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.report.videos.logs') }}" class="nk-menu-link"><span class="nk-menu-text">Video Logs</span></a>
+                                    </li>
+                                </ul><!-- .nk-menu-sub -->
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.app.settings') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-lock-alt"></em></span>
+                                    <span class="nk-menu-text">Settings</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
 
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admin.faq') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-bulb"></em></span>
-                                <span class="nk-menu-text">FAQ</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.plans') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                    <span class="nk-menu-text">Plans</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
 
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admin.administration') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-account-setting-alt"></em></span>
-                                <span class="nk-menu-text">Administration</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.faq') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-bulb"></em></span>
+                                    <span class="nk-menu-text">FAQ</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.administration') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-account-setting-alt"></em></span>
+                                    <span class="nk-menu-text">Administration</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                        @endcan
                         
                     </ul><!-- .nk-menu -->
                 </div><!-- .nk-sidebar-menu -->

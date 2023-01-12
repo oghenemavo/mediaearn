@@ -19,6 +19,7 @@ class VideoRepository implements IVideo
         $url = $this->setVideoUrl($attributes);
         return $this->video->create([
             'category_id' => data_get($attributes, 'category_id'),
+            'admin_id' => request()->user('admin')->id,
             'title' => data_get($attributes, 'title'),
             'slug' => Str::of(data_get($attributes, 'title'))->slug('-') . '-' . uniqid(),
             'description' => clean(data_get($attributes, 'description')),
@@ -38,7 +39,7 @@ class VideoRepository implements IVideo
         $data = [];
         $title = data_get($attributes, 'title', $video->title);
         if ($video->title != $title) {
-            $data['slug'] = Str::of($data['title'])->slug('-') . '-' . uniqid();
+            $data['slug'] = Str::of(data_get($attributes, 'title'))->slug('-') . '-' . uniqid();
         }
 
         if (data_get($attributes, 'video_file')) {
