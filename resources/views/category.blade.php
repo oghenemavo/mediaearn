@@ -123,23 +123,4 @@
 
 @push('scripts')
     <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
-	<script>
-        $('.owl-carousel').owlCarousel({
-            autoplay: true,
-            autoplayHoverPause: true,
-            loop:true,
-            margin:10,
-            responsive:{
-                0:{
-                    items:1
-                },
-                600:{
-                    items:3
-                },
-                1000:{
-                    items:5
-                }
-            }
-        })
-    </script>
 @endpush

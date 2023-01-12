@@ -49,6 +49,25 @@
 		</div>
 	</section>
 	<!-- end content -->
+
+    <!-- expected premiere -->
+	<section class="section section--bg" data-bg="{{ asset('app/img/section/section.jpg') }}">
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-12">
+					<h2 class="section__title">Sponsored Content</h2>
+				</div>
+				<!-- end section title -->
+
+				<div class="owl-carousel owl-theme">
+                    <x-part-ads limit="10"></x-part-ads>
+                </div>
+
+			</div>
+		</div>
+	</section>
+	<!-- end expected premiere -->
 @endsection
 
 @push('scripts')
@@ -62,6 +81,10 @@
         $(document).ready(function() {
 
             $('#transactions_table').DataTable({
+                rowReorder: {
+                    selector: 'td:nth-child(2)'
+                },
+                responsive: true,
                 searching: false,
                 lengthChange: false,
                 ajax: {

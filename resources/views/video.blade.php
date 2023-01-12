@@ -103,10 +103,8 @@
 							<span class="details__share-title">Share with friends:</span>
 
 							<ul class="details__share-list">
-								<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
-								<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
-								<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
-								<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
+                                <li class="instagram"><a href="https://instagram.com/earnerview_tv" target="_blank"><i class="icon ion-logo-instagram"></i></a></li>
+                                <li class="twitter"><a href="https://twitter.com/earnerviewtv" target="_blank"><i class="icon ion-logo-twitter"></i></a></li>
 							</ul>
 						</div>
 						<!-- end share -->
@@ -117,6 +115,25 @@
 		<!-- end details content -->
 	</section>
 	<!-- end details -->
+
+    <!-- expected premiere -->
+	<section class="section section--bg" data-bg="{{ asset('app/img/section/section.jpg') }}">
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-12">
+					<h2 class="section__title">Sponsored Content</h2>
+				</div>
+				<!-- end section title -->
+
+				<div class="owl-carousel owl-theme">
+                    <x-part-ads limit="10"></x-part-ads>
+                </div>
+
+			</div>
+		</div>
+	</section>
+	<!-- end expected premiere -->
 
 @endsection
 

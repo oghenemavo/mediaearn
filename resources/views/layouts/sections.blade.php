@@ -52,6 +52,25 @@
         <script src="{{ asset('app/js/photoswipe-ui-default.min.js') }}"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('app/js/main.js') }}"></script>
+        <script>
+            $('.owl-carousel').owlCarousel({
+                autoplay: true,
+                autoplayHoverPause: true,
+                loop:true,
+                margin:10,
+                responsive:{
+                    0:{
+                        items:1
+                    },
+                    600:{
+                        items:3
+                    },
+                    1000:{
+                        items:5
+                    }
+                }
+            })
+    </script>
 
         @stack('scripts')
     </body>
