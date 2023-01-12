@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AppSettingSeeder::class,
             PlanSeeder::class,
-            FAQSeeder::class
+            FAQSeeder::class,
+            RoleSeeder::class
         ]);
     }
 }

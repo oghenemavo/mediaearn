@@ -35,6 +35,7 @@ Route::controller(CommonController::class)->group(function () {
         Route::get('users/{user}/transactions', 'getUserTransactions')->name('user.transactions');
         Route::get('users/{userId}/earnings', 'getUserEarnings')->name('user.earnings');
         Route::get('faqs', 'getFaqs')->name('faqs');
+        Route::get('admins', 'getAdmins')->name('admins');
     });
     
     Route::get('validate/category', 'validateUniqueCategory')->name('validate.unique.category');

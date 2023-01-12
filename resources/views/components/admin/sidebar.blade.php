@@ -88,6 +88,13 @@
                                 <span class="nk-menu-text">FAQ</span>
                             </a>
                         </li><!-- .nk-menu-item -->
+
+                        <li class="nk-menu-item">
+                            <a href="{{ route('admin.administration') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-account-setting-alt"></em></span>
+                                <span class="nk-menu-text">Administration</span>
+                            </a>
+                        </li><!-- .nk-menu-item -->
                         
                         
                     </ul><!-- .nk-menu -->

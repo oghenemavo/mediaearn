@@ -40,5 +40,15 @@ class Admin extends Authenticatable
         $url = route('admin.password.reset', [$token, 'via' => urlencode($this->get('email'))]);
         $this->notify(new ResetPassword($url));
     }
+
+    public function isNotBanned()
+    {
+        return $this->status == '1';
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
     
 }

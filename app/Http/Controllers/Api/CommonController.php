@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Faq;
 use App\Models\Payout;
@@ -106,6 +107,23 @@ class CommonController extends Controller
             return $data;
         });
         return response()->json(['users' => $mapped_users]);
+    }
+
+    public function getAdmins()
+    {
+        $admins = Admin::query()->get();
+        $mapped_admins = $admins->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->name;
+            $data['email'] = $item->email;
+            $data['status'] = $item->status;
+            $data['role'] = $item->roles()->first()->name;
+            $data['created_at'] = $item->created_at;
+
+            $data['initials'] = strtoupper(substr($data['name'], 0, 2));
+            return $data;
+        });
+        return response()->json(['admins' => $mapped_admins]);
     }
 
     public function getReferrals()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -151,6 +152,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{faq}', 'show')->name('show.faq');
             Route::put('/{faq}', 'edit')->name('edit.faq');
             Route::delete('/{faq}', 'delete')->name('delete.faq');
+        });
+
+        Route::controller(AdminController::class)->prefix('administration')->group(function () {
+            Route::get('/', 'index')->name('administration');
+            Route::post('/create', 'create')->name('create.admin');
+            Route::get('/{admin?}', 'show')->name('show.admin');
+            Route::put('/{admin}', 'edit')->name('edit.admin');
+            Route::put('/{admin}/deactivate', 'deactivate')->name('deactivate.admin');
+            Route::put('/{admin}/activate', 'activate')->name('activate.admin');
         });
     });
 

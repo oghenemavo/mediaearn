@@ -20,7 +20,7 @@
                                     <em class="icon ni ni-user-alt"></em>
                                 </div>
                                 <div class="user-info d-none d-md-block">
-                                    <div class="user-status">Administrator</div>
+                                    <div class="user-status">{{ auth()->guard('admin')->user()->roles()->first()->name }}</div>
                                     <div class="user-name dropdown-indicator">{{ ucfirst(auth()->guard('admin')->user()->name) }}</div>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <span>{{ strtoupper(auth()->guard('admin')->user()->initials) }}</span>
+                                        <span>{{ strtoupper(substr(auth()->guard('admin')->user()->name, 0, 2)) }}</span>
                                     </div>
                                     <div class="user-info">
                                         <span class="lead-text">{{ ucfirst(auth()->guard('admin')->user()->name) }}</span>

@@ -21,7 +21,9 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        if (auth()->guard('admin')->attempt($credentials)) {
+        if (auth()->guard('admin')->attemptWhen($credentials, function ($user) {
+            return $user->isNotBanned();
+        })) {
             return redirect()->route('admin.dashboard');
         }
 
