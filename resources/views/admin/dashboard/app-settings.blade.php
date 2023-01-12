@@ -20,9 +20,11 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#email_tab"><em class="icon ni ni-user"></em><span>Account</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#settings_tab"><em class="icon ni ni-setting"></em><span>Site Settings</span></a>
-                        </li>
+                        @can('manage_site')
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#settings_tab"><em class="icon ni ni-setting"></em><span>Site Settings</span></a>
+                            </li>
+                        @endcan
                     </ul><!-- .nav-tabs -->
 
                     <div class="card-inner">
@@ -107,51 +109,53 @@
                                 </form>
                             </div>
 
-                            <div class="tab-pane" id="settings_tab">
-                                <form id="app_settings">
-                                    @foreach($app_settings as $settings)
-                                        @if($settings->meta->get('type') == 'number') 
-                                            <div class="form-group">
-                                                <div class="form-label-group">
-                                                    <label class="form-label" for="{{ $settings->slug }}">{{ ucwords($settings->name) }}</label>
+                            @can('manage_site')
+                                <div class="tab-pane" id="settings_tab">
+                                    <form id="app_settings">
+                                        @foreach($app_settings as $settings)
+                                            @if($settings->meta->get('type') == 'number') 
+                                                <div class="form-group">
+                                                    <div class="form-label-group">
+                                                        <label class="form-label" for="{{ $settings->slug }}">{{ ucwords($settings->name) }}</label>
+                                                    </div>
+                                                    <div class="form-control-wrap">
+                                                        <input 
+                                                        type="number" min="{{ $settings->meta->get('min') }}" step="{{ $settings->meta->get('step') }}"
+                                                        class="form-control form-control-lg"
+                                                        id="{{ $settings->slug }}" name="settings_value" value="{{trim($settings->value)}}" 
+                                                        data-id="{{ $settings->id }}" require
+                                                        >
+                                                        
+                                                        @error('{{ $settings->slug }}')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-note">{{ $settings->description }}</div>
                                                 </div>
-                                                <div class="form-control-wrap">
-                                                    <input 
-                                                    type="number" min="{{ $settings->meta->get('min') }}" step="{{ $settings->meta->get('step') }}"
-                                                    class="form-control form-control-lg"
-                                                    id="{{ $settings->slug }}" name="settings_value" value="{{trim($settings->value)}}" 
-                                                    data-id="{{ $settings->id }}" require
-                                                    >
-                                                    
-                                                    @error('{{ $settings->slug }}')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
+                                            @elseif($settings->meta->get('type') == 'select') 
+                                                <div class="form-group">
+                                                    <label class="form-label">{{ ucwords($settings->name) }}</label>
+                                                    <div class="form-control-wrap">
+                                                        <select data-ui="lg" name="settings_value" class="form-select" data-id="{{ $settings->id }}" require>
+                                                            @foreach($settings->meta->get('options') as $key => $data)
+                                                                <option value="{{ $key }}" @if($key == $settings->value) selected @endif>
+                                                                    {{ $data }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-note">{{ $settings->description }}</div>
                                                 </div>
-                                                <div class="form-note">{{ $settings->description }}</div>
-                                            </div>
-                                        @elseif($settings->meta->get('type') == 'select') 
-                                            <div class="form-group">
-                                                <label class="form-label">{{ ucwords($settings->name) }}</label>
-                                                <div class="form-control-wrap">
-                                                    <select data-ui="lg" name="settings_value" class="form-select" data-id="{{ $settings->id }}" require>
-                                                        @foreach($settings->meta->get('options') as $key => $data)
-                                                            <option value="{{ $key }}" @if($key == $settings->value) selected @endif>
-                                                                {{ $data }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-note">{{ $settings->description }}</div>
-                                            </div>
-                                        @endif
+                                            @endif
 
-                                    @endforeach
+                                        @endforeach
 
-                                    <!-- <button type="submit" class="btn btn-lg btn-primary"><em class="icon ni ni-setting"></em> Update Site Settings</button> -->
-                                </form>
-                            </div>
+                                        <!-- <button type="submit" class="btn btn-lg btn-primary"><em class="icon ni ni-setting"></em> Update Site Settings</button> -->
+                                    </form>
+                                </div>
+                            @endcan
                         </div>
                     </div>
 

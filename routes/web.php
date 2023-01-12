@@ -100,11 +100,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('update/password', [AppController::class, 'updatePassword'])->name('update.password');
         Route::put('update/email', [AppController::class, 'emailPassword'])->name('update.email');
 
+        Route::get('settings', [AppController::class, 'index'])->name('app.settings');
         Route::middleware('can:manage_site')->group(function () {
             Route::get('manage/users', [DashboardController::class, 'showUsers'])->name('users');
             Route::put('users/{user}/suspend', [DashboardController::class, 'suspendUser'])->name('suspend.user');
             Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
-            Route::get('settings', [AppController::class, 'index'])->name('app.settings');
             Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
         });
         
