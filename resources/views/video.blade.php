@@ -292,4 +292,44 @@
 
         @endif
     @endauth
+
+    @guest('web')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const player = new Plyr('#player', {
+                    title: 'Example Title',
+                    // enabled: false, // disable video
+                    // debug: true,
+                    controls: [
+                        'play-large', 
+                        'play', 
+                        // 'progress', 
+                        'current-time', 
+                        'mute', 
+                        'volume', 
+                        'captions', 
+                        // 'settings', 
+                        'pip', 
+                        'airplay', 
+                        'fullscreen'
+                    ],
+                    previewThumbnails: { enabled: false, src: '' }
+                });
+
+                player.on('play', (event) => {
+                    const instance = event.detail.plyr;
+                    instance.stop();
+                    
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Alert!',
+                        text: 'You can\'t earn after watching if you don\'t register',
+                        footer: `<a href="{{ route('signup.page') }}">Sign Up Now!</a>`
+                    })
+                });
+
+
+            });
+        </script>
+    @endguest
 @endpush
