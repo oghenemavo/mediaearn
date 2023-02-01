@@ -31,7 +31,7 @@
 
 							<!-- card content -->
 							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9">
-								<div class="card__content">
+								<div class="card__content" style="padding: 10px;">
 									<div class="card__wrap">
 										<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
 
@@ -74,11 +74,28 @@
 
 				<!-- player -->
 				<div class="col-12 col-xl-6">
-                    @if($video->video_type->value == 'youtube')
-                        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
-                    @else
-                        <video src="{{ $video_link }}" id="player"></video>
-                    @endif
+                    @auth('web')
+                        @if(
+                            $is_watched ||
+                            (!$is_watched && $is_subscribed && ($watched_count < $max_videos)) ||  
+                            (!$is_watched && !$is_subscribed && ($watched_count < $max_videos))
+                        )
+                            @if($video->video_type->value == 'youtube')
+                                <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
+                            @else
+                                <video src="{{ $video_link }}" id="player"></video>
+                            @endif
+                        @else
+                            <div id="player" data-plyr-provider="youtube"></div>
+                        @endif
+                    @else 
+                        @if($video->video_type->value == 'youtube')
+                            <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
+                        @else
+                            <video src="{{ $video_link }}" id="player"></video>
+                        @endif
+                    @endauth                    
+
 				</div>
 				<!-- end player -->
 
