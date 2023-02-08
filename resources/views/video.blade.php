@@ -71,9 +71,11 @@
                 <input type="hidden" id="video_id" value="{{ $video->id }}">
                 <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
                 <!-- end vars -->
-
+                
 				<!-- player -->
 				<div class="col-12 col-xl-6">
+                    <input type="hidden" id="is_subscribed" value="{{ $is_subscribed }}">
+
                     @auth('web')
                         @if(
                             $is_watched ||
@@ -166,23 +168,31 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
+                    const isSubscribed = $('#is_subscribed').val();
+
+                    let controls = [
+                        'play-large', 
+                        'play', 
+                        // 'progress', 
+                        'current-time', 
+                        'mute', 
+                        'volume', 
+                        'captions', 
+                        // 'settings', 
+                        'pip', 
+                        'airplay', 
+                        'fullscreen'
+                    ];
+
+                    if (isSubscribed == 1) {
+                        controls.push('settings');
+                    }
+
                     const player = new Plyr('#player', {
                         title: 'Example Title',
                         // enabled: false, // disable video
                         // debug: true,
-                        controls: [
-                            'play-large', 
-                            'play', 
-                            // 'progress', 
-                            'current-time', 
-                            'mute', 
-                            'volume', 
-                            'captions', 
-                            // 'settings', 
-                            'pip', 
-                            'airplay', 
-                            'fullscreen'
-                        ],
+                        controls,
                         previewThumbnails: { enabled: false, src: '' }
                     });
 
@@ -263,18 +273,21 @@
                             }
                         });
         
-                        player.on('ratechange', (event) => {
-                            const instance = event.detail.plyr;
-                            console.log("return player back to 0 secs");
-                            
-                            const rateTime = instance.currentTime;
-                            
-                            if ((currentTime < rewardTime) && (rateTime > currentTime)) {
-                                instance.stop();
-                                instance.speed = 1;
-                                console.log("stopped");
-                            }
-                        });
+                        // should not affect subscribed users
+                        if (isSubscribed == 0) {
+                            player.on('ratechange', (event) => {
+                                const instance = event.detail.plyr;
+                                console.log("return player back to 0 secs");
+                                
+                                const rateTime = instance.currentTime;
+                                
+                                if ((currentTime < rewardTime) && (rateTime > currentTime)) {
+                                    instance.stop();
+                                    instance.speed = 1;
+                                    console.log("stopped");
+                                }
+                            });
+                        }
                         
                     }
 
