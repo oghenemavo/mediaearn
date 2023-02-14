@@ -107,4 +107,16 @@ class HomeController extends Controller
         
         return view('faq', $data);
     }
+
+    public function terms()
+    {
+        $data['page_title'] = 'Terms of use';
+        return view('terms', $data);
+    }
+
+    public function about()
+    {
+        $data['page_title'] = 'About us';
+        return view('about', $data);
+    }
 }

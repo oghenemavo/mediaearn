@@ -44,10 +44,15 @@ Primary use:	FlixGo Template
   --font-family-body: 'Inter', sans-serif;
   --font-family-head: 'Rubik', sans-serif;
   --theme-background-color: #FF55A5;
+  --theme-text-color: rgba(255,255,255,0.7);
 }
 
 .primary {
   color: var(--theme-background-color);
+}
+
+.primary-text {
+  color: var(--theme-text-color);
 }
 
 html {

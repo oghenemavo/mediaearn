@@ -24,6 +24,10 @@
                                     <a href="{{ route('home') }}" class="header__nav-link {{ request()->routeIs('home') ? 'header__nav-link--active' : '' }}">Home</a>
                                 </li>
 
+                                <li class="header__nav-item">
+                                    <a href="{{ route('about') }}" class="header__nav-link {{ request()->routeIs('about') ? 'header__nav-link--active' : '' }}">About</a>
+                                </li>
+
                                 <!--  -->
 
                                 <!-- dropdown -->
@@ -119,7 +123,7 @@
                 <div class="col-6 col-sm-4 col-md-3">
                     <h6 class="footer__title">Resources</h6>
                     <ul class="footer__list">
-                        <li><a href="#">About Us</a></li>
+                        <li><a href="{{ route('about') }}">About Us</a></li>
                         @auth('web')
                             <li><a href="{{ route('pricing') }}">Pricing Plan</a></li>
                         @endauth
@@ -132,9 +136,9 @@
                 <div class="col-6 col-sm-4 col-md-3">
                     <h6 class="footer__title">Legal</h6>
                     <ul class="footer__list">
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Security</a></li>
+                        <li><a href="{{ route('terms') }}">Terms of Use</a></li>
+                        <!-- <li><a href="#">Privacy Policy</a></li> -->
+                        <!-- <li><a href="#">Security</a></li> -->
                     </ul>
                 </div>
                 <!-- end footer list -->
@@ -161,8 +165,8 @@
                         <small><a target="_blank" href="{{ route('home') }}">Earners view</a></small>
 
                         <ul>
-                            <li><a href="#">Terms of Use</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="{{ route('terms') }}">Terms of Use</a></li>
+                            <!-- <li><a href="#">Privacy Policy</a></li> -->
                         </ul>
                     </div>
                 </div>
