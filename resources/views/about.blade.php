@@ -38,7 +38,7 @@
                         We get funding from a community of business and product owners who wants a high review on their business products.
                         We also increased earning quotients by setting up a referral system that can increase your daily earnings, when your referral watches a video, you get a cut.
                         It's really simple: just sign up, watch some videos, and start earning rewards. 
-                        You can cash out your earnings via PayPal, or use them to buy gift cards for popular retailers like Amazon, Target, and Walmart.
+                        You can cash out your earnings instantly, or utilize it for a plan upgrade to multiply your earnings on views.
                         We started Earner view because we wanted to give everyone a fair chance to earn some extra money. 
                         Whether you're a stay-at-home mom looking to make a little extra cash, a college student trying to offset the cost of tuition, or someone who just loves watching videos, we want to help you out. 
                         So what are you waiting for? Sign up today and start earning!
