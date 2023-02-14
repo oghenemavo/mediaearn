@@ -50,7 +50,7 @@ class FAQController extends Controller
         
         $response = $faq->update([
             'title' => $data['title'],
-            'description' => clean($data['description']),
+            'description' => htmlentities($data['description']),
         ]);
 
         if ($response) {

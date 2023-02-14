@@ -52,7 +52,7 @@ Primary use:	FlixGo Template
 }
 
 .primary-text {
-  color: var(--theme-text-color);
+  color: var(--theme-text-color) !important;
 }
 
 html {
