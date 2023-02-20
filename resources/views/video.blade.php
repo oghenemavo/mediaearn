@@ -70,11 +70,11 @@
                 <input type="hidden" id="earn_after" value="{{ $video->earned_after }}">
                 <input type="hidden" id="video_id" value="{{ $video->id }}">
                 <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
+                <input type="hidden" id="is_subscribed" value="{{ $is_subscribed }}">
                 <!-- end vars -->
                 
 				<!-- player -->
 				<div class="col-12 col-xl-6">
-                    <input type="hidden" id="is_subscribed" value="{{ $is_subscribed }}">
 
                     @auth('web')
                         @if(

@@ -35,6 +35,7 @@ class ActivityController extends Controller
         $data['is_viewed'] = (bool) VideoViewLog::where('video_id', $video->id)->where('user_id', $user?->id)?->count() ?? false;
         $data['user'] = $user;
         $data['video_link'] = $video->video_type == VideoTypeEnum::YOUTUBE ? $video->url : $video->video_url;
+        $data['is_subscribed'] = 0;
         if ($user) {
             $membership = $this->userRepository->getMembership($user->id);
             $data['is_subscribed'] = $membership?->count() ?? 0;
