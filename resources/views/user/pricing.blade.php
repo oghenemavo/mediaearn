@@ -55,10 +55,11 @@
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="price">
                             <div class="price__item price__item--first"><span>Basic</span> <span>Free</span></div>
-                            <div class="price__item"><span>7 days</span></div>
+                            <div class="price__item"><span>2 Views per days</span></div>
                             <div class="price__item"><span>720p Resolution</span></div>
+                            <div class="price__item"><span>Low Earning Rewards</span></div>
                             <div class="price__item"><span>Limited Availability</span></div>
-                            <div class="price__item"><span>Desktop Only</span></div>
+                            <!-- <div class="price__item"><span>Desktop Only</span></div> -->
                             <div class="price__item"><span>Limited Support</span></div>
                             <button class="price__btn" disabled>Selected</button>
                         </div>
