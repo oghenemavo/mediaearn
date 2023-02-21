@@ -217,6 +217,12 @@
                         if (response.hasOwnProperty('status') && response.status == 'success') {
                             window.location.replace(response.data.link);
                             // Swal.fire('Activated!', 'Video has been activated.', 'success');
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: 'Unable to Setup Payment gateway, try later!',
+                            });
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
