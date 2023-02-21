@@ -24,7 +24,7 @@ class FlutterWaveService
             'tx_ref' => $data['tx_ref'],
             'amount' => $data['amount'],
             'currency' => 'NGN',
-            'redirect_url' => 'http://127.0.0.1:8000/api/payment-callback',
+            'redirect_url' => config('app.url') . '/api/payment-callback',
             'meta' => [
                 'consumer_id' => $data['user_id'],
                 'payment_type' => 'Gateway',
