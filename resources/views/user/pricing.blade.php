@@ -85,7 +85,9 @@
                             </div>
                             @foreach($item->decoded_description as $description)
                                 @if(!empty($description))
-                                    <div class="price__item"><span>{{ $description }}</span></div>
+                                    <div class="price__item">
+                                        <span>{!! html_entity_decode($description) !!}</span>
+                                    </div>
                                 @endif
                             @endforeach
                             
