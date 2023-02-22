@@ -78,9 +78,9 @@
                                 @if($item->meta->get('set_discount'))
                                     <!-- <span><strike>&#8358;{{-- $item->price --}}</strike></span> -->
 
-                                    <span>&#8358;{{ $item->meta->get('discount') }}</span>
+                                    <span>&#8358;{{ number_format($item->meta->get('discount'), 2) }}</span>
                                 @else
-                                    <span>&#8358;{{ $item->price }}</span>
+                                    <span>&#8358;{{ number_format($item->price, 2) }}</span>
                                 @endif
                             </div>
                             @foreach($item->decoded_description as $description)
