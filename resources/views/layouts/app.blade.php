@@ -148,7 +148,7 @@
                     <h6 class="footer__title">Contact</h6>
                     <ul class="footer__list">
                         <!-- <li><a href="tel:+18002345678">+1 (800) 234-5678</a></li> -->
-                        <li><a href="mailto:support@earnersview.com">support@earnersview.com</a></li>
+                        <li><a href="mailto:support@earnerview.com.ng">support@earnerview.com.ng</a></li>
                     </ul>
                     <ul class="footer__social">
                         <!-- <li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li> -->

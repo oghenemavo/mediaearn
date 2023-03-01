@@ -36,7 +36,7 @@ class FlutterWaveService
                 'name' => $data['name']
             ],
             'customizations' => [
-                'title' => 'Earners view',
+                'title' => 'Earnerview',
                 'logo' => asset('assets/images/earners-logo.png')
             ]
         ];
@@ -77,7 +77,7 @@ class FlutterWaveService
             'account_bank' => $data['bank_code'],
             'account_number' => $data['account_number'],
             'amount' => $data['amount'],
-            'narration' => 'Earnersview - Payout ' . uniqid(),
+            'narration' => 'Earnerview - Payout ' . uniqid(),
             'currency' => 'NGN',
             'reference' => $data['reference'],
             // 'reference' => $data['reference'],

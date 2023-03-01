@@ -137,7 +137,7 @@
                             </li>
                             <li>
                                 <span class="s1"><strong>Website:</strong> <a>Earner view</a>’s site, which can be accessed via
-                                    this URL: <a>https://earnersview.com.ng.</a><br>
+                                    this URL: <a>https://earnerview.com.ng.</a><br>
                                 </span>
                             </li>
                             <li>
@@ -615,7 +615,7 @@
                     <div class="section__list">
                         <ul class="primary-text">
                             <li>
-                                <span class="s3">Via Email: <a>hello@earnersview.com.ng</a></span>
+                                <span class="s3">Via Email: <a href="mailto:support@earnerview.com">support@earnerview.com.ng</a></span>
                             </li>
                         </ul>
                     </div>

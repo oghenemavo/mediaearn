@@ -29,7 +29,7 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="author" content="Earnerview">
-        <title>{{ $page_title ?? 'Earners view | Earn Money Watch Videos' }}</title>
+        <title>{{ $page_title ?? 'Earnerview | Earn Money Watch Videos' }}</title>
 
     </head>
     <body class="body">

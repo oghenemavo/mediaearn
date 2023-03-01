@@ -7,7 +7,7 @@
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Admin Dashboard</h3>
                 <div class="nk-block-des text-soft">
-                    <p>Welcome to Earners View Dashboard.</p>
+                    <p>Welcome to Earnerview Dashboard.</p>
                 </div>
             </div><!-- .nk-block-head-content -->
             

@@ -7,7 +7,7 @@
         <div class="nk-block-head-content">
             <h4 class="nk-block-title">Sign-In</h4>
             <div class="nk-block-des">
-                <p>Access the Earners view panel using your email and passcode.</p>
+                <p>Access the Earner view panel using your email and passcode.</p>
             </div>
         </div>
     </div>

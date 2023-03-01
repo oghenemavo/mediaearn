@@ -33,7 +33,7 @@ class EarningsMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Earnersview Earnings Alert',
+            subject: 'Earnerview Earnings Alert',
         );
     }
 
