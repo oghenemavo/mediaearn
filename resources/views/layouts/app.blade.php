@@ -162,7 +162,7 @@
                 <!-- footer copyright -->
                 <div class="col-12">
                     <div class="footer__copyright">
-                        <small><a target="_blank" href="{{ route('home') }}">Earners view</a></small>
+                        <small><a target="_blank" href="{{ route('home') }}">Earnerview</a></small>
 
                         <ul>
                             <li><a href="{{ route('terms') }}">Terms of Use</a></li>

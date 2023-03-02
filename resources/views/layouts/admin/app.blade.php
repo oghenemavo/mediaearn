@@ -56,7 +56,7 @@
                     <div class="nk-footer">
                         <div class="container-fluid">
                             <div class="nk-footer-wrap">
-                                <div class="nk-footer-copyright"> &copy; 2020 Earners View.
+                                <div class="nk-footer-copyright"> &copy; 2020 EarnerView.
                                 </div>
                                 <div class="nk-footer-links">
                                     <ul class="nav nav-sm">

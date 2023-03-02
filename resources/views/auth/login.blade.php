@@ -16,7 +16,7 @@
 
         @csrf
         <a href="{{ route('home') }}" class="sign__logo">
-            <img src="{{ asset('assets/images/earners-logo.png') }}" width="100" height="100" alt="earners view logo">
+            <img src="{{ asset('assets/images/earners-logo.png') }}" width="100" height="100" alt="earnerview logo">
         </a>
 
         <div class="sign__group">
