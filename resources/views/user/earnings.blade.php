@@ -90,7 +90,10 @@
             let bank = $('#bank').val();
             let accountNumber = $('#account_number').val();
             
-            $('#payout').click(function () { 
+            $('#payout').click(function () {
+                // console.log(this);
+                $(this).html('processing...').attr('disabled', true);
+
                 let balance = parseFloat(`{{ $balance }}`);
                 let min = parseFloat(`{{ $min }}`);
 
@@ -104,6 +107,7 @@
                     })
                 } else {
                     if (balance >= min) {
+
                         $.post("{{ route('request.payout') }}",
                             {
                                 "_token": `{{ csrf_token() }}`,
@@ -155,6 +159,8 @@
                     }
                     
                 }
+
+                $(this).html('Payout').attr('disabled', false);
             });
 
             $('#earnings_table').DataTable({

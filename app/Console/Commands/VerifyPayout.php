@@ -30,29 +30,34 @@ class VerifyPayout extends Command
      */
     public function handle(FlutterWaveService $flwService)
     {
-        $payouts = Payout::where('status', 'NEW')->get();
+        // Get Payout where status is NEW => 
+        // Flutterwave sends "NEW" for a successful initiated transfer
+        $payouts = Payout::where('status', 'NEW')->orWhere('status', 'PENDING')->get();
+
         // 1. Get Data
         $responses = $flwService->getTransfer($payouts);
 
-        // var_dump(count($responses));
-        // exit;
+        // echo '<pre>' . var_export($responses[0]['data'], true) . '</pre>';
+        // die;
 
         if (is_array($responses) && count($responses) > 0) {
             foreach($responses as $response) {
+                // first layer status
                 if (strtolower($response['status']) == 'success' && $response['data']) {
                     $responseData = $response['data'];
-                    $message = $responseData['complete_message'];
+                    $message = $responseData['complete_message'] ?? null;
                     $payout = Payout::where('transfer_id', $responseData['id'])->first();
                     
+                    // second layer status
                     if (strtolower($responseData['status']) == 'successful') {
                         $payout->update([
-                            'status' => 'SUCCESS', 
+                            'status' => 'successful', 
                             'is_notified' => '1', 
                             'message' => $message
                         ]);
                     } elseif (strtolower($responseData['status']) == 'failed') { // failed // pending // etc
                         $payout->update([
-                            'status' => 'FAILED',
+                            'status' => 'failed',
                             'message' => $message,
                         ]);
         
@@ -64,7 +69,7 @@ class VerifyPayout extends Command
                         }
                     }  else { // pending // etc
                         $payout->update([
-                            'status' => $responseData['status'],
+                            'status' => strtolower($responseData['status']),
                             'message' => $message
                         ]);
                     } 

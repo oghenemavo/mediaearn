@@ -172,18 +172,19 @@ class ActivityController extends Controller
                         'user_id' => $user->id,
                         'amount' => $balance,
                         'reference' => str::uuid(),
-                        // 'reference' => bin2hex(openssl_random_pseudo_bytes(10)),
-                        'status' => 'REQUESTED',
+                        'status' => 'pending',
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
-                    Payout::create($data);
-                    unset($data['user_id'], $data['created_at'], $data['updated_at']);
-                    $data['bank_code'] = $user->bank_code;
-                    $data['account_number'] = $user->account_number;
-        
-                    ProcessPayout::dispatch($data);
-                    return response()->json(['success' => true]);
+                    
+                    if (Payout::create($data)) {
+                        unset($data['user_id'], $data['created_at'], $data['updated_at']);
+                        $data['bank_code'] = $user->bank_code;
+                        $data['account_number'] = $user->account_number;
+            
+                        ProcessPayout::dispatch($data);
+                        return response()->json(['success' => true]);
+                    }
                 }
             }
             return response()->json(['success' => false, 'message' => $response['message']]);
