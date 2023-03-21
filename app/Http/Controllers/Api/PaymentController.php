@@ -41,10 +41,10 @@ class PaymentController extends Controller
 
     public function paymentCallback(Request $request)
     {
-        if ($request->query('status') === 'successful') {
+        if ($request->query('status') === 'successful' || $request->query('status') === 'completed') {
             $transaction = Transaction::query()->where('tx_ref', $request->query('tx_ref'))->first();
             $response = (object) $this->flwService->verifyPayment($request->query('transaction_id'));
-            
+
             if (
                 $response->data['status'] === "successful"
                 && $response->data['amount'] == $transaction->amount 
