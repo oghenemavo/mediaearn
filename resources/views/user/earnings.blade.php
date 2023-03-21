@@ -90,7 +90,8 @@
             let bank = $('#bank').val();
             let accountNumber = $('#account_number').val();
             
-            $('#payout').click(function () {
+            $('#payout').click(function (e) {
+                e.preventDefault();
                 // console.log(this);
                 $('#payout').html('processing...').attr('disabled', true);
 
