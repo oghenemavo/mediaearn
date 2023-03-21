@@ -172,7 +172,7 @@ class ActivityController extends Controller
                         'user_id' => $user->id,
                         'amount' => $balance,
                         'reference' => str::uuid(),
-                        'status' => 'pending',
+                        'status' => 'Requested',
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
