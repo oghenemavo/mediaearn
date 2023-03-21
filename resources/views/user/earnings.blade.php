@@ -92,7 +92,7 @@
             
             $('#payout').click(function () {
                 // console.log(this);
-                $(this).html('processing...').attr('disabled', true);
+                $('#payout').html('processing...').attr('disabled', true);
 
                 let balance = parseFloat(`{{ $balance }}`);
                 let min = parseFloat(`{{ $min }}`);
@@ -160,7 +160,7 @@
                     
                 }
 
-                $(this).html('Payout').attr('disabled', false);
+                $('#payout').html('Payout').attr('disabled', false);
             });
 
             $('#earnings_table').DataTable({
