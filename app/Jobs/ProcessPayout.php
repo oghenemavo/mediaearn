@@ -44,7 +44,7 @@ class ProcessPayout implements ShouldQueue
         // initiate transfer 
         $response = $processor->transfer($this->data);
 
-        Log::info('IP: ' . request()->ip() . ' payout response => ' , $response);
+        Log::info(' payout response => ' , $response);
 
         // check transfer fails
         if (strtolower($response['status']) == 'error') {
@@ -58,6 +58,7 @@ class ProcessPayout implements ShouldQueue
             // update payout info
             $payout->message = $response['message'] ?? null;
             $payout->status = 'FAILED'; // NEW, ERROR, FAILED
+            $payout->save();
         } else { // otherwise
             $meta = $response['data'] ?? null;
             if ($meta) {
