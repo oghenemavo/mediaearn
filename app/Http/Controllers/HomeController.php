@@ -23,7 +23,8 @@ class HomeController extends Controller
     {
         $data['page_title'] = "Earner's view | Welcome";
         $carousel = Video::query()->where('status', '1')->orderby('id', 'desc')->limit(5)->get();
-        $videos = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
+        // $videos = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
+        $videos = Video::simplePaginate(12);
         $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
 
         $data['carousel'] = $carousel;
