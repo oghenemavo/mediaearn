@@ -92,8 +92,12 @@
             
             $('#payout').click(function (e) {
                 e.preventDefault();
-                // console.log(this);
-                $('#payout').html('processing...').attr('disabled', true);
+
+                // console.log('clicked');
+
+                $(this).prop("disabled", true);
+                $(this).html('processing...');
+                $(this).css({ 'background': '#f58634'});
 
                 let balance = parseFloat(`{{ $balance }}`);
                 let min = parseFloat(`{{ $min }}`);
@@ -161,7 +165,8 @@
                     
                 }
 
-                $('#payout').html('Payout').attr('disabled', false);
+                $(this).html('Payout');
+                $(this).prop('disabled', false);
             });
 
             $('#earnings_table').DataTable({
