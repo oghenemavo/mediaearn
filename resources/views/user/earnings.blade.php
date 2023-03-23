@@ -112,7 +112,7 @@
                         timer: 4500,
                     })
 
-                    $(this).css({ 'background': '#ff55a5 '});
+                    $(this).css({ 'background': '#ff55a5'});
                     $(this).prop('disabled', false);
                     $(this).show();
                 } else {
@@ -146,7 +146,7 @@
                                         })
                                     }
 
-                                    $(this).css({ 'background': '#ff55a5 '});
+                                    $(this).css({ 'background': '#ff55a5'});
                                     $(this).prop('disabled', false);
                                     $(this).show();
                                 }
@@ -159,7 +159,7 @@
                                         timer: 3500,
                                     })
 
-                                    $(this).css({ 'background': '#ff55a5 '});
+                                    $(this).css({ 'background': '#ff55a5'});
                                     $(this).prop('disabled', false);
                                     $(this).show();
                                 }

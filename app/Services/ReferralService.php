@@ -80,7 +80,7 @@ class ReferralService
             ];
     
             $user = User::find($referrerUserId);
-            $user->wallet->balance = $amount;
+            $user->wallet->balance += $amount;
             $user->wallet->save();
         }
 

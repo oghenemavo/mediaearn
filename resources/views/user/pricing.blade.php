@@ -202,6 +202,10 @@
 
             $('#pricing_list').on('click', 'button.make-payment', function (e) { // activate user
                 e.preventDefault();
+
+                $(this).prop("disabled", true);
+                $(this).html('processing...');
+                $(this).css({ 'background': '#f58634'});
     
                 const btn = $(e.target);
                 const id = btn.attr('data-id');
@@ -226,6 +230,10 @@
                                 title: 'Oops...',
                                 text: 'Unable to Setup Payment gateway, try later!',
                             });
+
+                            $(this).prop("disabled", false);
+                            $(this).html('Choose Plan');
+                            $(this).css({ 'background': '#ff55a5'});
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
