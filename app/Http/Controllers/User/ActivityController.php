@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class ActivityController extends Controller
 {
@@ -159,8 +160,11 @@ class ActivityController extends Controller
         $balance = $user->wallet->balance;
         $minPayout = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
 
+        // delay the process a bit
+        sleep(2);
+
         if ($balance >= $minPayout) {
-            $user->wallet->balance = '0.00';
+            $user->wallet->balance -= $balance;
             $user->wallet->ledger_balance += $balance;
 
             // verify account details
@@ -181,8 +185,10 @@ class ActivityController extends Controller
                         unset($data['user_id'], $data['created_at'], $data['updated_at']);
                         $data['bank_code'] = $user->bank_code;
                         $data['account_number'] = $user->account_number;
-            
+
+                        // Job
                         ProcessPayout::dispatch($data);
+                        
                         return response()->json(['success' => true]);
                     }
                 }

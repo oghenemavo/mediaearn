@@ -98,6 +98,7 @@
                 $(this).prop("disabled", true);
                 $(this).html('processing...');
                 $(this).css({ 'background': '#f58634'});
+                $(this).hide();
 
                 let balance = parseFloat(`{{ $balance }}`);
                 let min = parseFloat(`{{ $min }}`);
@@ -110,6 +111,10 @@
                         showConfirmButton: false,
                         timer: 4500,
                     })
+
+                    $(this).css({ 'background': '#ff55a5 '});
+                    $(this).prop('disabled', false);
+                    $(this).show();
                 } else {
                     if (balance >= min) {
 
@@ -140,6 +145,10 @@
                                             timer: 3500,
                                         })
                                     }
+
+                                    $(this).css({ 'background': '#ff55a5 '});
+                                    $(this).prop('disabled', false);
+                                    $(this).show();
                                 }
                                 if (data.error) {
                                     Swal.fire({
@@ -149,6 +158,10 @@
                                         showConfirmButton: false,
                                         timer: 3500,
                                     })
+
+                                    $(this).css({ 'background': '#ff55a5 '});
+                                    $(this).prop('disabled', false);
+                                    $(this).show();
                                 }
                             },
                             "json"
@@ -166,7 +179,6 @@
                 }
 
                 $(this).html('Payout');
-                $(this).prop('disabled', false);
             });
 
             $('#earnings_table').DataTable({

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Payout;
+use App\Models\Wallet;
 use App\Services\FlutterWaveService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -46,32 +47,25 @@ class ProcessPayout implements ShouldQueue
 
         Log::info(' payout response => ' , $response);
 
-        // check transfer fails
-        if (strtolower($response['status']) == 'error') {
+        if (strtolower($response['status']) == 'error' || (isset($response['data']['status']) && $response['data']['status'] == 'failed')) {
             $payout = Payout::where('reference', $this->data['reference'])->first();
 
-            // revert amount
-            $payout->user->wallet->balance += $this->data['amount'];
-            $payout->user->wallet->ledger_balance -= $this->data['amount'];
-            $payout->user->wallet->save();
+            // refund user
+            $wallet = Wallet::where('user_id', $payout->user->id)->first();
+            
+            $wallet->balance += $this->data['amount'];
+            $wallet->ledger_balance -= $this->data['amount'];
+            $wallet->save();
 
-            // update payout info
-            $payout->message = $response['message'] ?? null;
-            $payout->status = 'FAILED'; // NEW, ERROR, FAILED
+            // set payout status
+            $payout->message = $response['message'];
+            $payout->status = 'FAILED';
             $payout->save();
-        } else { // otherwise
+        } else {
             $meta = $response['data'] ?? null;
             if ($meta) {
                 // get requested payout
                 $payout = Payout::where('reference', $meta['reference'])->first();
-                
-                // if transfer fails
-                if (strtolower($meta['status']) == 'failed') {
-                    // revert amount
-                    $payout->user->wallet->balance += $meta['amount'];
-                    $payout->user->wallet->ledger_balance -= $meta['amount'];
-                    $payout->user->wallet->save();
-                }
     
                 if ($payout) {
                     // set transfer id
@@ -87,7 +81,6 @@ class ProcessPayout implements ShouldQueue
                 }
             }
         }
-        
         return false;
     }
 }
