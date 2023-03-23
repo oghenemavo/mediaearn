@@ -46,7 +46,7 @@
                                             <a href="{{ route('category', $carousel[$i]->category->slug) }}">{{ $carousel[$i]->category->category }}</a>
                                             <!-- <a href="#">Triler</a> -->
                                         </span>
-                                        <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
+                                        <!-- <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span> -->
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -102,9 +102,9 @@
                                 <h3 class="card__title"><a href="{{ route('get.video', $post->slug) }}">{{ $post->title }}</a></h3>
                                 <span class="card__category">
                                     <a href="{{ route('category', $post->category->slug) }}">{{ $post->category->category }}</a>
-                                    <a href="#">Triller</a>
+                                    <!-- <a href="#">Triller</a> -->
                                 </span>
-                                <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
+                                <!-- <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span> -->
                             </div>
                         </div>
                     </div>

@@ -33,7 +33,7 @@
 							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9">
 								<div class="card__content" style="padding: 10px;">
 									<div class="card__wrap">
-										<span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
+										<!-- <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span> -->
 
 										<ul class="card__list">
 											<li>HD</li>
@@ -168,7 +168,7 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    const isSubscribed = $('#is_subscribed').val();
+                    const isSubscribed = parseInt($('#is_subscribed').val());
 
                     let controls = [
                         'play-large', 
@@ -183,11 +183,11 @@
                         'airplay', 
                         'fullscreen'
                     ];
-
-                    if (isSubscribed == 1) {
+                    
+                    if (isSubscribed > 0) {
                         controls.push('settings');
                     }
-
+                    
                     const player = new Plyr('#player', {
                         title: 'Example Title',
                         // enabled: false, // disable video

@@ -87,7 +87,7 @@ class ActivityController extends Controller
             ];
 
             $membership = $this->userRepository->getMembership($user->id);
-            $subscribed = $membership?->count() ?? false;
+            $subscribed = $membership?->count() ?? 0;
 
             if ($subscribed) {
                 $data['earned_amount'] = $video->earnable;
