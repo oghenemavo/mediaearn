@@ -1,3 +1,4 @@
+@stack('headers')
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -70,7 +71,7 @@
                     }
                 }
             })
-    </script>
+        </script>
 
         @stack('scripts')
     </body>

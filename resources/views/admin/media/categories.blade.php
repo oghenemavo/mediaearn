@@ -93,6 +93,7 @@
     <script>
         $(function() {
             NioApp.DataTable($('#category_table'), {
+                'order': [],
                 ajax: {
                     url: `{{ route('get.categories') }}`,
                     dataSrc: 'categories'

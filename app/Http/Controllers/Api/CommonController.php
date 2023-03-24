@@ -28,7 +28,7 @@ class CommonController extends Controller
 
     public function getCategories()
     {
-        $category_collection = Category::query()->get();
+        $category_collection = Category::query()->orderBy('id', 'desc')->get();
         return response()->json(['categories' => $category_collection]);
     }
 
@@ -44,7 +44,7 @@ class CommonController extends Controller
 
     public function getVideos()
     {
-        $video_collection = Video::query()->get();
+        $video_collection = Video::query()->orderBy('id', 'desc')->get();
         $mapped_videos = $video_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['title'] = $item->title;
@@ -69,7 +69,7 @@ class CommonController extends Controller
 
     public function getPromotions()
     {
-        $promotion_collection = Promotion::query()->get();
+        $promotion_collection = Promotion::query()->orderBy('id', 'desc')->get();
         $mapped_promotions = $promotion_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['title'] = $item->title;
@@ -86,7 +86,7 @@ class CommonController extends Controller
 
     public function getUsers()
     {
-        $users = User::query()->get();
+        $users = User::query()->orderBy('id', 'desc')->get();
         $mapped_users = $users->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['name'] = $item->first_name . ' ' . $item->last_name;
@@ -128,7 +128,7 @@ class CommonController extends Controller
 
     public function getReferrals()
     {
-        $referral_collection = Referral::query()->where('referral_type', ReferralTypeEnum::SIGNUP)->get();
+        $referral_collection = Referral::query()->where('referral_type', ReferralTypeEnum::SIGNUP)->orderBy('id', 'desc')->get();
         $mapped_referrals = $referral_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['referrer'] = $item->referrer->email;
@@ -175,7 +175,7 @@ class CommonController extends Controller
 
     public function getUserReferrals($userId, $referralType = 'signup')
     {
-        $referral_collection = Referral::where('referrer_user_id', $userId)->where('referral_type', $referralType)->get();
+        $referral_collection = Referral::where('referrer_user_id', $userId)->where('referral_type', $referralType)->orderBy('id', 'desc')->get();
         $mapped_referrals = $referral_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['referred'] = $item->referred->last_name . ' ' . $item->referred->first_name;
@@ -192,8 +192,8 @@ class CommonController extends Controller
 
     public function getUserTransactions(User $user)
     {
-        $transaction_collection = $user->transactions()->where('status', PaymentStatusEnum::SUCCESS)->orWhere('status', PaymentStatusEnum::FAILED)->get();
-        $payout_collection = $user->payouts()->get();
+        $transaction_collection = $user->transactions()->where('status', PaymentStatusEnum::SUCCESS)->orWhere('status', PaymentStatusEnum::FAILED)->orderBy('id', 'desc')->get();
+        $payout_collection = $user->payouts()->orderBy('id', 'desc')->get();
         $mapped_payouts = $payout_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['type'] = 'Payout';
@@ -221,7 +221,7 @@ class CommonController extends Controller
     
     public function getUserEarnings($userId)
     {
-        $videoLog_collection = VideoViewLog::where('user_id', $userId)->get();
+        $videoLog_collection = VideoViewLog::where('user_id', $userId)->orderBy('id', 'desc')->get();
         $mapped_videoLog = $videoLog_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['video'] = $item->video->title;
@@ -238,11 +238,11 @@ class CommonController extends Controller
 
     public function getTransactions()
     {
-        $transaction_collection = Transaction::query()->get();
+        $transaction_collection = Transaction::query()->orderBy('id', 'desc')->get();
         $mapped_transactions = $transaction_collection->map(function($item, $key) {
             $data['id'] = $item->id;
-            $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;
-            $data['email'] = $item->user->email;
+            $data['name'] = $item->user?->first_name . ' ' . $item->user?->last_name;
+            $data['email'] = $item->user?->email;
             $data['amount'] = $item->amount;
             $data['reference'] = $item->tx_ref;
             $data['status'] = $item->status;
@@ -256,7 +256,7 @@ class CommonController extends Controller
 
     public function getPayouts()
     {
-        $payout_collection = Payout::query()->get();
+        $payout_collection = Payout::query()->orderBy('id', 'desc')->get();
         $mapped_payouts = $payout_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;
@@ -276,7 +276,7 @@ class CommonController extends Controller
     
     public function getVideoLogs()
     {
-        $videoLog_collection = VideoViewLog::query()->get();
+        $videoLog_collection = VideoViewLog::query()->orderBy('id', 'desc')->get();
         $mapped_videoLog = $videoLog_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['name'] = $item->user->first_name . ' ' . $item->user->last_name;

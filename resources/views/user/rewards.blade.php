@@ -82,6 +82,7 @@
             let url = `{{ route('get.user.referrals', [auth('web')->user()->id, 'video']) }}`;
 
             $('#referrals_table').DataTable({
+                'order': [],
                 rowReorder: {
                     selector: 'td:nth-child(2)'
                 },

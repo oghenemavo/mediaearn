@@ -367,6 +367,7 @@
             }
 
             NioApp.DataTable($('#video_table'), {
+                'order': [],
                 ajax: {
                     url: `{{ route('get.videos') }}`,
                     dataSrc: 'videos'

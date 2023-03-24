@@ -43,6 +43,7 @@
 
         $(function() {
             NioApp.DataTable($('#users_table'), {
+                'order': [],
                 ajax: {
                     url: `{{ route('get.users') }}`,
                     dataSrc: 'users'

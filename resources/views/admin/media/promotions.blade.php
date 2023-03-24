@@ -138,6 +138,7 @@
 <script>
     $(function() {
         NioApp.DataTable($('#promotion_table'), {
+            'order': [],
             ajax: {
                 url: `{{ route('get.promotions') }}`,
                 dataSrc: 'promotions'

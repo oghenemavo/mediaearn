@@ -182,6 +182,7 @@
             });
 
             $('#earnings_table').DataTable({
+                'order': [],
                 rowReorder: {
                     selector: 'td:nth-child(2)'
                 },

@@ -81,6 +81,7 @@
         $(document).ready(function() {
 
             $('#transactions_table').DataTable({
+                'order': [ 4, 'desc' ],
                 rowReorder: {
                     selector: 'td:nth-child(2)'
                 },

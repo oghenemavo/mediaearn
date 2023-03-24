@@ -24,7 +24,7 @@ class HomeController extends Controller
         $data['page_title'] = "Earner's view | Welcome";
         $carousel = Video::query()->where('status', '1')->orderby('id', 'desc')->limit(5)->get();
         // $videos = Video::query()->where('status', '1')->orderby('id', 'desc')->get();
-        $videos = Video::simplePaginate(12);
+        $videos = Video::query()->where('status', '1')->orderBy('id', 'desc')->simplePaginate(12);
         $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
 
         $data['carousel'] = $carousel;
@@ -66,7 +66,7 @@ class HomeController extends Controller
         $data['page_title'] = $category->category;
         $data['category'] = $category;
 
-        $videos = $category->videos()->where('status', '1')->get();
+        $videos = $category->videos()->where('status', '1')->orderBy('id', 'desc')->get();
         $promotions = Promotion::query()->where('status', '1')->inRandomOrder()->get();
         $mapped_videos = $videos->map(function($item, $key) {
             $post['id'] = $item->id;

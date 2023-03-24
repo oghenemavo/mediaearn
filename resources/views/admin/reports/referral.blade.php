@@ -48,6 +48,7 @@
     <script>
         $(function() {
             NioApp.DataTable($('#referral_table'), {
+                'order': [],
                 ajax: {
                     url: `{{ route('get.referrals') }}`,
                     dataSrc: 'referrals'

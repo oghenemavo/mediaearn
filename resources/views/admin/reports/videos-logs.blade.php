@@ -48,6 +48,7 @@
 <script>
     $(function() {
         NioApp.DataTable($('#video_logs_table'), {
+            'order': [],
             ajax: {
                 url: `{{ route('get.videos.logs') }}`,
                 dataSrc: 'video_logs'

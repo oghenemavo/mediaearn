@@ -46,6 +46,7 @@
     <script>
         $(function() {
             NioApp.DataTable($('#transaction_table'), {
+                'order': [],
                 ajax: {
                     url: `{{ route('get.transactions') }}`,
                     dataSrc: 'transactions'
