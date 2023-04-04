@@ -361,7 +361,7 @@
 
                 player.on('play', (event) => {
                     const instance = event.detail.plyr;
-                    instance.stop();
+                    // instance.stop();
                     
                     Swal.fire({
                         icon: 'info',
