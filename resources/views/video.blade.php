@@ -31,11 +31,11 @@
 					<div class="card card--details card--series">
 						<div class="row">
 							<!-- card cover -->
-							<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+							<!-- <div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
 								<div class="card__cover">
-									<img src="{{ $video->cover }}" alt="{{ $video->title }}">
+									<img src="{{-- $video->cover --}}" alt="{{ $video->title }}">
 								</div>
-							</div>
+							</div> -->
 							<!-- end card cover -->
 
 							<!-- card content -->
@@ -110,7 +110,11 @@
 				</div>
 				<!-- end player -->
 
-                <x-part-ads limit="2"></x-part-ads>
+                <div class="col-12" style="margin-top: 16px;">
+                    <div style="display: flex;">
+                        <x-part-ads limit="2"></x-part-ads>
+                    </div>
+                </div>
 
 				<div class="col-12">
 					<div class="details__wrap">

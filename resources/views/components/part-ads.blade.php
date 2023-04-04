@@ -9,7 +9,7 @@
     @endif
 
     <!-- item -->
-    <div class="item">
+    <div class="item" style="margin-right: 8px;">
         <img src="{{ $post->material }}" width="160" height="237" style="object-fit: cover;" alt="{{ $post->material }}">
     </div>
     <!-- end item -->
