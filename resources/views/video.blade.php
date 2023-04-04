@@ -14,7 +14,7 @@
     <!-- details -->
 	<section class="section details">
 		<!-- details background -->
-		<div class="details__bg" data-bg="img/home/home__bg.jpg"></div>
+		<div class="details__bg" data-bg="/app/img/home/home__bg.jpg"></div>
 		<!-- end details background -->
 
 		<!-- details content -->
@@ -31,11 +31,11 @@
 					<div class="card card--details card--series">
 						<div class="row">
 							<!-- card cover -->
-							<!-- <div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+							<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
 								<div class="card__cover">
-									<img src="{{-- $video->cover --}}" alt="{{ $video->title }}">
+									<!-- <img src="{{-- $video->cover --}}" alt="{{ $video->title }}"> -->
 								</div>
-							</div> -->
+							</div>
 							<!-- end card cover -->
 
 							<!-- card content -->

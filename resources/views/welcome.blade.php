@@ -15,10 +15,10 @@
     <section class="home">
         <!-- home bg -->
         <div class="owl-carousel home__bg">
-            <div class="item home__cover" data-bg="{{ asset('img/home/home__bg.jpg') }}"></div>
-            <div class="item home__cover" data-bg="{{ asset('img/home/home__bg2.jpg') }}"></div>
-            <div class="item home__cover" data-bg="{{ asset('img/home/home__bg3.jpg') }}"></div>
-            <div class="item home__cover" data-bg="{{ asset('img/home/home__bg4.jpg') }}"></div>
+            <div class="item home__cover" data-bg="{{ asset('app/img/home/home__bg.jpg') }}"></div>
+            <div class="item home__cover" data-bg="{{ asset('app/img/home/home__bg2.jpg') }}"></div>
+            <div class="item home__cover" data-bg="{{ asset('app/img/home/home__bg3.jpg') }}"></div>
+            <div class="item home__cover" data-bg="{{ asset('app/img/home/home__bg4.jpg') }}"></div>
         </div>
         <!-- end home bg -->
 
@@ -86,7 +86,7 @@
     <!-- end home -->
 
     <!-- expected premiere -->
-    <section class="section section--bg" data-bg="img/section/section.jpg">
+    <section class="section section--bg" data-bg="/app/img/section/section.jpg">
         <div class="container">
             <div class="row">
                 <!-- section title -->
