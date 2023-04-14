@@ -36,7 +36,7 @@ class FlutterWaveService
                 'name' => $data['name']
             ],
             'customizations' => [
-                'title' => 'Earnerview',
+                'title' => 'CatnetInclusive-Earnerview',
                 'logo' => asset('assets/images/earners-logo.png')
             ]
         ];
