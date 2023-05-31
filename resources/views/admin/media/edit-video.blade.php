@@ -33,7 +33,7 @@
                     <div class="form-control-wrap">
                         <input type="text" class="form-control form-control-lg  @error('title') is-invalid @enderror"
                         id="title" name="title" value="{{ $video->title }}">
-                        
+
                         @error('title')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -95,7 +95,7 @@
                             </div>
                             <input type="text" class="form-control form-control-lg  @error('video_id') is-invalid @enderror"
                             id="video_id" name="video_id" value="{{ $video->url }}" placeholder="e.g. l7fXRnM121Q">
-                            
+
                             @error('video_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -125,14 +125,14 @@
                         <div class="form-note" data-note="length"></div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <div class="form-label-group">
                         <label class="form-label" for="description">Video Description</label>
                     </div>
                     <div class="form-control-wrap">
                         <textarea class="form-control form-control-lg summernote-minimal @error('description') is-invalid @enderror" id="description" name="description" rows="3">{!! $video->description !!}</textarea>
-                        
+
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -152,7 +152,7 @@
                             </div>
                             <input type="number" class="form-control form-control-lg  @error('charges') is-invalid @enderror"
                             id="charges" name="charges" value="{{ $video->charges }}" min="1" step="0.01">
-                        
+
                             @error('charges')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -173,7 +173,7 @@
                                 </div>
                                 <input type="number" class="form-control form-control-lg  @error('earnable') is-invalid @enderror"
                                 id="earnable" name="earnable" value="{{ $video->earnable }}" min="1" step="0.01">
-                                
+
                                 @error('earnable')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -195,7 +195,7 @@
                                 </div>
                                 <input type="number" class="form-control form-control-lg  @error('earnable_ns') is-invalid @enderror"
                                 id="earnable_ns" name="earnable_ns" value="{{ $video->earnable_ns }}" min="1" step="0.01">
-                                
+
                                 @error('earnable_ns')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -213,7 +213,7 @@
                     <div class="form-control-wrap">
                         <div class="input-group">
                             <input type="number" class="form-control form-control-lg @error('earned_after') is-invalid @enderror"
-                            id="earned_after" name="earned_after" value="{{ $video->earned_after }}" max="{{ $video->earned_after }}">
+                            id="earned_after" name="earned_after" value="{{ $video->earned_after }}" max="{{ $video->length }}">
                             <div class="input-group-append">
                                 <span class="input-group-text">seconds</span>
                             </div>
@@ -242,7 +242,7 @@
                         </div>
                     </div>
                 </div>
-                    
+
                 <input type="hidden" id="youtube_key" value="{{ $youtube_key }}">
 
                 <button type="submit" class="btn btn-lg btn-primary">Edit Video</button>
@@ -385,7 +385,7 @@
             $('#video_type').change(function() {
                 //Use $option (with the "$") to see that the variable is a jQuery object
                 var $option = $(this).find('option:selected');
-                
+
                 var type = $option.val();//to get content of "value" attrib
                 if (type == 'upload') {
                     $('#upload_video_div').show();
@@ -420,7 +420,10 @@
                     },
                     video_file: {
                         required: function() {
-                            if ($('#video_type').find('option:selected').val() == "upload")
+                            let isUpload = `{{ $video->video_type }}` == "upload";
+                            if (isUpload)
+                                return false;
+                            else if ($('#video_type').find('option:selected').val() == "upload")
                                 return true;
                             else
                                 return false;

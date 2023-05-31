@@ -54,7 +54,7 @@ class VideoController extends Controller
             ],
         ];
         $request->validate($rules);
-        
+
         $category->category = $request->category;
         $category->slug = Str::of($request->category)->slug('-');
 
@@ -106,7 +106,7 @@ class VideoController extends Controller
                     FacadesFile::delete($initial_path);
                 }
             }
-    
+
             if ($request->hasfile('video_file')) {
                 $initial_path = public_path('/videos') . $video->url;
                 if (FacadesFile::exists($initial_path)) {
