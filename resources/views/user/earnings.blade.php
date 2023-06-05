@@ -47,7 +47,7 @@
                         </div>
                         <!-- end comments -->
                     </div>
-                    
+
 				</div>
 
 				<!-- sidebar -->
@@ -89,7 +89,7 @@
         $(document).ready(function() {
             let bank = $('#bank').val();
             let accountNumber = $('#account_number').val();
-            
+
             $('#payout').click(function (e) {
                 e.preventDefault();
 
@@ -117,55 +117,74 @@
                     $(this).show();
                 } else {
                     if (balance >= min) {
+                        Swal.fire({
+                            title: 'Subscribe to Youtube Channel',
+                            text: "You will be redirected to our youtube channel page",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, take me there!'
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.open('https://www.youtube.com/channel/UC7WjX23URCa-3uyqvYJ8icQ', '_blank').focus();
 
-                        $.post("{{ route('request.payout') }}",
-                            {
-                                "_token": `{{ csrf_token() }}`,
-                                balance: `{{ $balance }}`,
-                            },
-                            function (data, textStatus, jqXHR) {
-                                if (data.success) {
-                                    Swal.fire({
-                                        position: 'top-end',
-                                        icon: 'success',
-                                        title: `&#8358;{{ $balance }} has been approved for payout`,
-                                        showConfirmButton: false,
-                                        timer: 3500,
-                                    })
-                                    setTimeout(function() {
-                                        window.location.reload();
-                                    }, 4000);
-                                } else {
-                                    if (data.hasOwnProperty('message')) {
-                                        Swal.fire({
-                                            position: 'top-end',
-                                            icon: 'info',
-                                            title: data.message,
-                                            showConfirmButton: false,
-                                            timer: 3500,
-                                        })
-                                    }
+                                setTimeout(function() {
+                                    $.post("{{ route('request.payout') }}",
+                                        {
+                                            "_token": `{{ csrf_token() }}`,
+                                            balance: `{{ $balance }}`,
+                                        },
+                                        function (data, textStatus, jqXHR) {
+                                            if (data.success) {
+                                                Swal.fire({
+                                                    position: 'top-end',
+                                                    icon: 'success',
+                                                    title: `&#8358;{{ $balance }} has been approved for payout`,
+                                                    showConfirmButton: false,
+                                                    timer: 3500,
+                                                })
+                                                setTimeout(function() {
+                                                    window.location.reload();
+                                                }, 4000);
+                                            } else {
+                                                if (data.hasOwnProperty('message')) {
+                                                    Swal.fire({
+                                                        position: 'top-end',
+                                                        icon: 'info',
+                                                        title: data.message,
+                                                        showConfirmButton: false,
+                                                        timer: 3500,
+                                                    })
+                                                }
 
-                                    $(this).css({ 'background': '#ff55a5'});
-                                    $(this).prop('disabled', false);
-                                    $(this).show();
-                                }
-                                if (data.error) {
-                                    Swal.fire({
-                                        position: 'top-end',
-                                        icon: 'danger',
-                                        title: `Unable to process payout`,
-                                        showConfirmButton: false,
-                                        timer: 3500,
-                                    })
+                                                $(this).css({ 'background': '#ff55a5'});
+                                                $(this).prop('disabled', false);
+                                                $(this).show();
+                                            }
+                                            if (data.error) {
+                                                Swal.fire({
+                                                    position: 'top-end',
+                                                    icon: 'danger',
+                                                    title: `Unable to process payout`,
+                                                    showConfirmButton: false,
+                                                    timer: 3500,
+                                                })
 
-                                    $(this).css({ 'background': '#ff55a5'});
-                                    $(this).prop('disabled', false);
-                                    $(this).show();
-                                }
-                            },
-                            "json"
-                        );
+                                                $(this).css({ 'background': '#ff55a5'});
+                                                $(this).prop('disabled', false);
+                                                $(this).show();
+                                            }
+                                        },
+                                        "json"
+                                    );
+
+                                }, 5000);
+
+
+                            }
+                        })
+
                     } else {
                         Swal.fire({
                             position: 'top-end',
@@ -175,7 +194,7 @@
                             timer: 3500,
                         })
                     }
-                    
+
                 }
 
                 $(this).html('Payout');

@@ -59,6 +59,8 @@
 										<!-- <li><span>Country:</span> <a href="#">USA</a> </li> -->
 									</ul>
 
+                                    <div class="g-ytsubscribe" data-channelid="UC7WjX23URCa-3uyqvYJ8icQ" data-layout="full" data-count="hidden"></div>
+
 									<div class="card__description card__description--details">
                                         {!! html_entity_decode($video->description) !!}
 									</div>
@@ -69,8 +71,8 @@
 					</div>
 				</div>
 				<!-- end content -->
-                
-                
+
+
 				<!-- start vars -->
                 <input type="hidden" id="title" value="{{ $video->title }}">
                 <input type="hidden" id="type" value="{{ $video->video_type }}">
@@ -81,14 +83,14 @@
                 <input type="hidden" id="is_viewed" value="{{ $is_viewed }}">
                 <input type="hidden" id="is_subscribed" value="{{ $is_subscribed }}">
                 <!-- end vars -->
-                
+
 				<!-- player -->
 				<div class="col-12 col-xl-6">
 
                     @auth('web')
                         @if(
                             $is_watched ||
-                            (!$is_watched && $is_subscribed && ($watched_count < $max_videos)) ||  
+                            (!$is_watched && $is_subscribed && ($watched_count < $max_videos)) ||
                             (!$is_watched && !$is_subscribed && ($watched_count < $max_videos))
                         )
                             @if($video->video_type->value == 'youtube')
@@ -99,13 +101,13 @@
                         @else
                             <div id="player" data-plyr-provider="youtube"></div>
                         @endif
-                    @else 
+                    @else
                         @if($video->video_type->value == 'youtube')
                             <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ $video->url }}"></div>
                         @else
                             <video src="{{ $video_link }}" id="player"></video>
                         @endif
-                    @endauth                    
+                    @endauth
 
 				</div>
 				<!-- end player -->
@@ -172,10 +174,11 @@
 @push('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.plyr.io/3.7.3/plyr.js"></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
 
     @auth('web')
         @if(
-            ($is_subscribed && ($watched_count < $max_videos) ) || 
+            ($is_subscribed && ($watched_count < $max_videos) ) ||
             ( !$is_subscribed && ($watched_count < $max_videos) )
         )
 
@@ -184,23 +187,23 @@
                     const isSubscribed = parseInt($('#is_subscribed').val());
 
                     let controls = [
-                        'play-large', 
-                        'play', 
-                        // 'progress', 
-                        'current-time', 
-                        'mute', 
-                        'volume', 
-                        'captions', 
-                        // 'settings', 
-                        'pip', 
-                        'airplay', 
+                        'play-large',
+                        'play',
+                        // 'progress',
+                        'current-time',
+                        'mute',
+                        'volume',
+                        'captions',
+                        // 'settings',
+                        'pip',
+                        'airplay',
                         'fullscreen'
                     ];
-                    
+
                     if (isSubscribed > 0) {
                         controls.push('settings');
                     }
-                    
+
                     const player = new Plyr('#player', {
                         title: 'Example Title',
                         // enabled: false, // disable video
@@ -211,8 +214,8 @@
 
                     const src = $('#video_link').val()
                     const cover = $('#cover').val()
-                    
-                    
+
+
                     const rewardTime = $('#earn_after').val(); //secs
                     var isDone = false;
                     var currentTime = 0;
@@ -220,16 +223,16 @@
                     if (!$('#is_viewed').val()) {
                         player.on('timeupdate', (event) => {
                             const instance = event.detail.plyr;
-                            
+
                             if (instance.currentTime > rewardTime && !isDone) {
                                 currentTime = instance.currentTime;
                                 isDone = true;
                                 console.log("done...");
                                 console.log('reward user');
-        
+
                                 let url = `{{ route('get.user.reward', ':id') }}`;
                                 url = url.replace(':id', $('#video_id').val());
-        
+
                                 fetch(url, {
                                     method: 'POST',
                                     headers: {
@@ -264,36 +267,36 @@
                                             timer: 3500,
                                         })
                                     }
-                                    
+
                                     console.log(update);
                                 }).catch(e => {
                                     console.log(e);
                                 });
                             }
                         });
-        
+
                         player.on('seeking', (event) => {
                             const instance = event.detail.plyr;
                             console.log(currentTime);
                             console.log(instance.currentTime);
                             console.log("return player back to 0 secs");
-                            
+
                             const seekedTime = instance.currentTime;
-                            
+
                             if ((currentTime < rewardTime) && (seekedTime > currentTime)) {
                                 instance.stop();
                                 console.log("stopped");
                             }
                         });
-        
+
                         // should not affect subscribed users
                         if (isSubscribed == 0) {
                             player.on('ratechange', (event) => {
                                 const instance = event.detail.plyr;
                                 console.log("return player back to 0 secs");
-                                
+
                                 const rateTime = instance.currentTime;
-                                
+
                                 if ((currentTime < rewardTime) && (rateTime > currentTime)) {
                                     instance.stop();
                                     instance.speed = 1;
@@ -301,15 +304,15 @@
                                 }
                             });
                         }
-                        
+
                     }
 
                     // player.on('controlsshown', (event) => {
                     //     const instance = event.detail.plyr;
                     //     console.log("return player back to 0 secs");
-                        
+
                     //     const controlTime = instance.currentTime;
-                        
+
                     //     if ((currentTime < rewardTime) && (controlTime > currentTime)) {
                     //         instance.stop();
                     //         console.log("stopped");
@@ -344,16 +347,16 @@
                     // enabled: false, // disable video
                     // debug: true,
                     controls: [
-                        'play-large', 
-                        'play', 
-                        // 'progress', 
-                        'current-time', 
-                        'mute', 
-                        'volume', 
-                        'captions', 
-                        // 'settings', 
-                        'pip', 
-                        'airplay', 
+                        'play-large',
+                        'play',
+                        // 'progress',
+                        'current-time',
+                        'mute',
+                        'volume',
+                        'captions',
+                        // 'settings',
+                        'pip',
+                        'airplay',
                         'fullscreen'
                     ],
                     previewThumbnails: { enabled: false, src: '' }
@@ -362,7 +365,7 @@
                 player.on('play', (event) => {
                     const instance = event.detail.plyr;
                     // instance.stop();
-                    
+
                     Swal.fire({
                         icon: 'info',
                         title: 'Alert!',

@@ -60,7 +60,7 @@
                                 </div>
                                 <!-- end card -->
                             </div>
-                            
+
                             @if($i > 3 && $i % 3 == 0)
                                 @if(isset($promotions[$j]) && $promotions[$j]->ads_type == 'image')
                                     <div class="item">
@@ -95,7 +95,7 @@
                 </div>
                 <!-- end section title -->
 
-                
+
 
                 <!-- card -->
                 @foreach($posts as $post)
@@ -121,9 +121,9 @@
                 @endforeach
                 <!-- end card -->
 
-                
+
                 {{ $posts->links() }}
-                
+
                 <!-- section btn -->
                 <!-- <div class="col-12">
                     <a href="#" class="section__btn">Show more</a>
@@ -144,7 +144,7 @@
 				</div>
 				<!-- end section title -->
 
-                
+
                 <div class="owl-carousel owl-theme">
                     <x-part-ads limit="10"></x-part-ads>
                 </div>
