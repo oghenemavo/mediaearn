@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\IUser;
+use App\Models\AppSetting;
 use App\Models\Category;
 use App\Models\Faq;
 use App\Models\Plan;
@@ -30,6 +31,10 @@ class HomeController extends Controller
         $data['carousel'] = $carousel;
         $data['posts'] = $videos;
         $data['promotions'] = $promotions;
+
+        $data['referral_bonus_type'] = AppSetting::where('slug', 'referral_bonus_type')->first()->value;
+        $data['referral_bonus'] = AppSetting::where('slug', 'referral_bonus')->first()->value;
+        $data['downline_bonus'] = AppSetting::where('slug', 'downline_bonus')->first()->value;
         return view('welcome', $data);
     }
 
@@ -40,13 +45,13 @@ class HomeController extends Controller
         $data['subscription'] = false;
         $user = auth('web')->user();
         $data['balance'] = $user->wallet->balance;
-        
+
         $membership = $this->userRepository->getMembership($user->id);
         $data['subscription'] = $membership?->count() ?? false;
         if ($data['subscription']) {
             $data['membership'] = $membership;
         }
-        
+
         $data['preferences'] = base64_encode(json_encode([
             'user_id' => $user->id,
             'email' => $user->email,
@@ -79,7 +84,7 @@ class HomeController extends Controller
             return $post;
         });
         $mapped_promotions = $promotions->map(function($item, $key) {
-            
+
             $post['type'] = 'ads';
             $ext = Str::substr($item->material, -3);
             $imageExtensions = ['jpeg','png','jpg','gif','svg',];
@@ -94,7 +99,7 @@ class HomeController extends Controller
         $data['posts'] = $videos;
         $data['promotions'] = $promotions;
         $data['sponsored'] = $mapped_promotions->slice(0, 6);
-        
+
         return view('category', $data);
     }
 
@@ -105,7 +110,7 @@ class HomeController extends Controller
         $count = ceil($faqs->count()/2);
         $data['faq1'] = $faqs->slice(0, $count);
         $data['faq2']= $faqs->slice($count);
-        
+
         return view('faq', $data);
     }
 

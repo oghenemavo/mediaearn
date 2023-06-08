@@ -89,6 +89,27 @@
     <section class="section section--bg" data-bg="/app/img/section/section.jpg">
         <div class="container">
             <div class="row">
+
+                <div class="col-12">
+                    <div class="card" style="border: 1px solid #fff; padding: 10px;max-width: 28rem;border-radius: 6px;">
+                        <div class="card-body" style="color: #fff;">
+                            <h3>Invite & earn even more!</h3>
+                            <p class="card-text">
+                                Referral Program: Refer your friend and get
+                                @if(strtolower($referral_bonus_type) == 'fixed')
+                                    &#8358;{{ $referral_bonus }} instantly
+                                @else
+                                    {{ $referral_bonus }}% of their deposit
+                                @endif
+                                 and get {{ $downline_bonus }}% of their earnings
+                            </p>
+                            @auth('web')
+                                <p>Referral link: {{ route('signup.page', auth('web')->user()->referral_code) }}</p>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+
                 <!-- section title -->
                 <div class="col-12">
                     <h2 class="section__title">Latest Videos</h2>
