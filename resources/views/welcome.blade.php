@@ -104,7 +104,7 @@
                                  and get {{ $downline_bonus }}% of their earnings
                             </p>
                             @auth('web')
-                                <a href="#" style="display: inline-block;padding: 8px; color:#fff;text-align: center; background-color: #f15a22; border-radius: 4px;">Referral Link</a>
+                                <a href="{{ route('profile') }}" style="display: inline-block;padding: 8px; color:#fff;text-align: center; background-color: #f15a22; border-radius: 4px;">Referral Link</a>
                             @endauth
                         </div>
                     </div>
