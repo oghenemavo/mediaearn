@@ -92,8 +92,8 @@
 
                 <div class="col-12">
                     <div class="card" style="border: 1px solid #fff; padding: 10px;max-width: 28rem;border-radius: 6px;">
-                        <div class="card-body" style="color: #fff;">
-                            <h3>Invite & earn even more!</h3>
+                        <div class="card-body" style="color: #fff; width: 100%;">
+                            <h3 style="color: #f15a22;">Invite & earn even more!</h3>
                             <p class="card-text">
                                 Referral Program: Refer your friend and get
                                 @if(strtolower($referral_bonus_type) == 'fixed')
@@ -104,7 +104,7 @@
                                  and get {{ $downline_bonus }}% of their earnings
                             </p>
                             @auth('web')
-                                <p>Referral link: {{ route('signup.page', auth('web')->user()->referral_code) }}</p>
+                                <a href="#" style="display: inline-block;padding: 8px; color:#fff;text-align: center; background-color: #f15a22; border-radius: 4px;">Referral Link</a>
                             @endauth
                         </div>
                     </div>
