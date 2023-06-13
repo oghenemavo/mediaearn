@@ -90,8 +90,8 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-12">
-                    <div class="card" style="border: 1px solid #fff; padding: 10px;max-width: 28rem;border-radius: 6px;">
+                <div class="col-md-6">
+                    <div class="card" style="border: 1px solid #fff; padding: 16px;max-width: 28rem;border-radius: 6px;">
                         <div class="card-body" style="color: #fff; width: 100%;">
                             <h3 style="color: #f15a22;">Invite & earn even more!</h3>
                             <p class="card-text">
@@ -108,6 +108,10 @@
                             @endauth
                         </div>
                     </div>
+                </div>
+
+                <div class="col-md-6">
+                    <img src="{{ $home_ads }}" class="card-img-top" alt="Home Ads" style="object-fit: cover; height: 140px; width: 100%;">
                 </div>
 
                 <!-- section title -->

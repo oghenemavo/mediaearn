@@ -38,6 +38,9 @@
                                     <li class="nk-menu-item">
                                         <a href="{{ route('admin.media.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Promotions</span></a>
                                     </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('admin.media.home.promotions') }}" class="nk-menu-link"><span class="nk-menu-text">Home Ad</span></a>
+                                    </li>
                                 @endcan
                                 <li class="nk-menu-item">
                                     <a href="{{ route('admin.media.videos') }}" class="nk-menu-link"><span class="nk-menu-text">Videos</span></a>
@@ -100,7 +103,7 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                         @endcan
-                        
+
                     </ul><!-- .nk-menu -->
                 </div><!-- .nk-sidebar-menu -->
                 <div class="nk-sidebar-footer">

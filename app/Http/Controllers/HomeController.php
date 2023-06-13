@@ -31,6 +31,8 @@ class HomeController extends Controller
         $data['carousel'] = $carousel;
         $data['posts'] = $videos;
         $data['promotions'] = $promotions;
+        $default = asset('/covers/default_bg.png');
+        $data['home_ads'] = Promotion::where('title', 'home_ad')->where('status', '0')->get()->first()->material ?? $default;
 
         $data['referral_bonus_type'] = AppSetting::where('slug', 'referral_bonus_type')->first()->value;
         $data['referral_bonus'] = AppSetting::where('slug', 'referral_bonus')->first()->value;

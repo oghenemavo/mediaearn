@@ -69,10 +69,10 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('change-email', [ProfileController::class, 'email'])->name('change.email');
     Route::post('change-password', [ProfileController::class, 'password'])->name('change.password');
     Route::post('change-account-info', [ProfileController::class, 'accountInfo'])->name('change.account.info');
-    
+
     Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
     Route::post('request-payout', [ActivityController::class, 'requestPayout'])->name('request.payout');
-    
+
     Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 });
 
@@ -81,13 +81,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', function() {
             return redirect()->action([AdminAuthController::class, 'index']);
         });
-        
+
         Route::controller(AdminResetPasswordController::class)->group(function () {
             Route::get('/login', [AdminAuthController::class, 'index'])->name('login');
             Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('authenticate');
-            
+
         });
-    
+
         Route::controller(AdminResetPasswordController::class)->group(function () {
             Route::get('forgot-password', 'index')->name('forgot.password');
             Route::post('forgot-password', 'forgot')->name('request.reset');
@@ -109,7 +109,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('users/{user}/activate', [DashboardController::class, 'activateUser'])->name('activate.user');
             Route::put('settings/{settings}', [AppController::class, 'edit'])->name('edit.app.settings');
         });
-        
+
         Route::controller(VideoController::class)->name('media.')
         ->middleware('can:manage_video')->group(function () {
             Route::get('categories', 'categories')->name('categories');
@@ -124,11 +124,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('videos/{video}/block', 'blockVideo')->name('block.video');
             Route::put('videos/{video}/unblock', 'unblockVideo')->name('unblock.video');
         });
-        
+
         // advertisements
         Route::controller(PromotionController::class)->prefix('promotions')
         ->middleware('can:manage_site')->name('media.')->group(function () {
             Route::get('/', 'index')->name('promotions');
+            Route::get('/home-ad', 'homeAd')->name('home.promotions');
+            Route::post('/home-ad', 'createHomeAd')->name('create.home-ad');
             Route::post('/', 'store')->name('create.promotions');
             Route::get('/{promotion}', 'show')->name('show.promotion');
             Route::put('/{promotion}', 'edit')->name('edit.promotion');
