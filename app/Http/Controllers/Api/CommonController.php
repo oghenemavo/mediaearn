@@ -230,7 +230,10 @@ class CommonController extends Controller
 
             return $data;
         });
-        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts, ...$mapped_charges]]);
+
+        $mappedArray = [...$mapped_transactions, ...$mapped_payouts, ...$mapped_charges];
+        usort($mappedArray, fn($a, $b) => $b['created_at'] <=> $a['created_at']);
+        return response()->json(['transactions' => $mappedArray]);
     }
 
     public function getUserEarnings($userId)
@@ -281,7 +284,10 @@ class CommonController extends Controller
 
             return $data;
         });
-        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_charges]]);
+        
+        $mappedArray = [...$mapped_transactions, ...$mapped_charges];
+        usort($mappedArray, fn($a, $b) => $b['created_at'] <=> $a['created_at']);
+        return response()->json(['transactions' => $mappedArray]);
     }
 
     public function getPayouts()
