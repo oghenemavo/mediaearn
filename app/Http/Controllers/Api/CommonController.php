@@ -7,6 +7,7 @@ use App\Enums\ReferralTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\Charge;
 use App\Models\Faq;
 use App\Models\Payout;
 use App\Models\Plan;
@@ -36,7 +37,7 @@ class CommonController extends Controller
     {
         $inp_category = $request->get('category');
         $ignore_id = $request->get('ignore_id') ?? null;
-        
+
         $category = new Category();
         $is_valid = ! $category->categoryExists($inp_category, $ignore_id);
         echo json_encode($is_valid);
@@ -100,7 +101,7 @@ class CommonController extends Controller
             $data['created_at'] = $item->created_at;
 
             $split = explode(' ', $data['name']);
-            $data['initials'] =  isset($split[1]) 
+            $data['initials'] =  isset($split[1])
             ? strtoupper($split[0][0]) . strtoupper($split[1][0])
             : strtoupper($split[0][0]) . strtoupper($split[0][1]);
 
@@ -194,6 +195,19 @@ class CommonController extends Controller
     {
         $transaction_collection = $user->transactions()->where('status', PaymentStatusEnum::SUCCESS)->orWhere('status', PaymentStatusEnum::FAILED)->orderBy('id', 'desc')->get();
         $payout_collection = $user->payouts()->orderBy('id', 'desc')->get();
+        $charges_collection = $user->charges()->where('status', '1')->orderBy('id', 'desc')->get();
+
+        $mapped_charges = $charges_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['type'] = 'Payout Charges';
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->payout->reference;
+            $data['status'] = 'success';
+            $data['confirmed_at'] = $item->updated_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
         $mapped_payouts = $payout_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['type'] = 'Payout';
@@ -216,9 +230,9 @@ class CommonController extends Controller
 
             return $data;
         });
-        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts]]);
+        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_payouts, ...$mapped_charges]]);
     }
-    
+
     public function getUserEarnings($userId)
     {
         $videoLog_collection = VideoViewLog::where('user_id', $userId)->orderBy('id', 'desc')->get();
@@ -239,10 +253,13 @@ class CommonController extends Controller
     public function getTransactions()
     {
         $transaction_collection = Transaction::query()->orderBy('id', 'desc')->get();
+        $charges_collection = Charge::query()->where('status', '1')->orderBy('id', 'desc')->get();
+
         $mapped_transactions = $transaction_collection->map(function($item, $key) {
             $data['id'] = $item->id;
             $data['name'] = $item->user?->first_name . ' ' . $item->user?->last_name;
             $data['email'] = $item->user?->email;
+            $data['type'] = 'Membership';
             $data['amount'] = $item->amount;
             $data['reference'] = $item->tx_ref;
             $data['status'] = $item->status;
@@ -251,7 +268,20 @@ class CommonController extends Controller
 
             return $data;
         });
-        return response()->json(['transactions' => $mapped_transactions]);
+        $mapped_charges = $charges_collection->map(function($item, $key) {
+            $data['id'] = $item->id;
+            $data['name'] = $item->user?->first_name . ' ' . $item->user?->last_name;
+            $data['email'] = $item->user?->email;
+            $data['type'] = 'Payout Charges';
+            $data['amount'] = $item->amount;
+            $data['reference'] = $item->payout?->reference;
+            $data['status'] = 'success';
+            $data['confirmed_at'] = $item->confirmed_at;
+            $data['created_at'] = $item->created_at;
+
+            return $data;
+        });
+        return response()->json(['transactions' => [...$mapped_transactions, ...$mapped_charges]]);
     }
 
     public function getPayouts()
@@ -273,7 +303,7 @@ class CommonController extends Controller
         });
         return response()->json(['payouts' => $mapped_payouts]);
     }
-    
+
     public function getVideoLogs()
     {
         $videoLog_collection = VideoViewLog::query()->orderBy('id', 'desc')->get();

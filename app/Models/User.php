@@ -74,14 +74,20 @@ class User extends Authenticatable implements CanResetPassword
     {
         return $this->hasOne(Referral::class, 'referred_user_id');
     }
-    
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
-    
+
     public function payouts()
     {
         return $this->hasMany(Payout::class);
     }
+
+    public function charges()
+    {
+        return $this->hasMany(Charge::class);
+    }
+    
 }

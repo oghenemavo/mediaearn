@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Charge;
 use App\Models\Payout;
 use App\Models\Wallet;
 use App\Services\FlutterWaveService;
@@ -30,7 +31,7 @@ class VerifyPayout extends Command
      */
     public function handle(FlutterWaveService $flwService)
     {
-        // Get Payout where status is NEW => 
+        // Get Payout where status is NEW =>
         // Flutterwave sends "NEW" for a successful initiated transfer
         $payouts = Payout::where('status', 'NEW')->orWhere('status', 'PENDING')->get();
 
@@ -47,24 +48,31 @@ class VerifyPayout extends Command
                     $responseData = $response['data'];
                     $message = $responseData['complete_message'] ?? null;
                     $payout = Payout::where('transfer_id', $responseData['id'])->first();
-                    
+
+                    $charges = Charge::where('payout_id', $payout->id)->first();
+
                     // second layer status
                     if (strtolower($responseData['status']) == 'successful') {
                         $payout->update([
-                            'status' => 'successful', 
-                            'is_notified' => '1', 
+                            'status' => 'successful',
+                            'is_notified' => '1',
                             'message' => $message
                         ]);
+
+                        $charges->status = 1;
+                        $charges->save();
                     } elseif (strtolower($responseData['status']) == 'failed') { // failed // pending // etc
                         $payout->update([
                             'status' => 'failed',
                             'message' => $message,
                         ]);
-        
+
                         $user_wallet = Wallet::where('user_id', $payout->user_id)->first();
                         if ($user_wallet) {
-                            $user_wallet->ledger_balance -= $payout->amount;
-                            $user_wallet->balance += $payout->amount;
+                            $totalPayoutAmount = $payout->amount + $charges->amount;
+                            
+                            $user_wallet->ledger_balance -= $totalPayoutAmount;
+                            $user_wallet->balance += $totalPayoutAmount;
                             $user_wallet->save();
                         }
                     }  else { // pending // etc
@@ -72,8 +80,8 @@ class VerifyPayout extends Command
                             'status' => strtolower($responseData['status']),
                             'message' => $message
                         ]);
-                    } 
-        
+                    }
+
                 }
             }
         }

@@ -21,6 +21,7 @@
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Name</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Email</span></th>
+                            <th class="nk-tb-col tb-col-md"><span class="sub-text">Type</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Amount</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Reference</span></th>
                             <th class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></th>
@@ -28,7 +29,7 @@
                             <th class="nk-tb-col nk-tb-col-tools text-right"></th>
                         </tr>
                     </thead>
-                    <tbody>                        
+                    <tbody>
                     </tbody>
                 </table>
             </div>
@@ -66,9 +67,10 @@
                 columns: [
                     { data: 'name', className: 'nk-tb-col tb-col-md' },
                     { data : 'email', className : 'nk-tb-col tb-col-md' },
+                    { data : 'type', className : 'nk-tb-col tb-col-md' },
                     { data : 'amount', className : 'nk-tb-col tb-col-md' },
                     { data : 'reference', className : 'nk-tb-col tb-col-md' },
-                    { 
+                    {
                         data : 'status', className : 'nk-tb-col tb-col-md',
                         render: function(data) {
                             var activity = '';
@@ -82,13 +84,13 @@
                                 </span>`;
                             }
                             return activity;
-                        } 
+                        }
                     },
-                    { 
+                    {
                         data        : 'created_at', className   : 'nk-tb-col tb-col-lg',
                         render      : function (data) {
                             return `<span>${moment(data).format('DD-MM-YYYY')}</span>`;
-                        } 
+                        }
                     },
                 ],
                 columnDefs: [
@@ -124,11 +126,11 @@
 
             $('#transaction_table tbody').on('click', 'a.requery-transaction', function (e) { // activate user
                 e.preventDefault();
-    
+
                 const dt = $.fn.DataTable.Api( $('#transaction_table') );
                 let dtr = dt.row( $(this).parents('tr') ); // table row
                 let data = dtr.data(); // row data
-    
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "This action would validate user transaction!",
@@ -141,7 +143,7 @@
                             type: 'PUT',
                             url: "{{-- route('admin.media.unblock.video') --}}",
                             data: {
-                                "_token": `{{ csrf_token() }}`, 
+                                "_token": `{{ csrf_token() }}`,
                                 transaction_id: data.id,
                             },
                             success: function(response) {
@@ -155,7 +157,7 @@
                                 console.log(XMLHttpRequest.status)
                                 console.log(XMLHttpRequest.statusText)
                                 console.log(errorThrown)
-                        
+
                                 // display toast alert
                                 toastr.clear();
                                 toastr.options = {
@@ -164,7 +166,7 @@
                                 NioApp.Toast('Unable to process request now.', 'error', {position: 'top-right'});
                             }
                         });
-                        
+
                     }
                 });
             });

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\ProcessPayout;
 use App\Mail\EarningsMail;
 use App\Models\AppSetting;
+use App\Models\Charge;
 use App\Models\Payout;
 use App\Models\Video;
 use App\Models\VideoViewLog;
@@ -48,7 +49,7 @@ class ActivityController extends Controller
                 $data['earnable'] = $video->earnable_ns;
                 $data['max_videos'] = AppSetting::where('slug', 'max_videos_non_sub')->first()->value;
             }
-            
+
             // total videos watched today for any variant of user
             $data['watched_count'] = VideoViewLog::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->count();
             $data['is_watched'] = VideoViewLog::where('user_id', $user->id)->where('video_id', $video->id)->count();
@@ -60,7 +61,7 @@ class ActivityController extends Controller
             }
             return 1;
         };
-        
+
         $data['current_time'] = Carbon::now();
 
         return view('video', $data);
@@ -74,7 +75,7 @@ class ActivityController extends Controller
 
         $validPlayedTime = filter_var($playedTime, FILTER_VALIDATE_FLOAT, [
             'options' => [
-                'min_range' => $video->earned_after, 
+                'min_range' => $video->earned_after,
                 'max_range' => $playedTime + 1,
             ]
         ]);
@@ -95,7 +96,7 @@ class ActivityController extends Controller
             } else {
                 $data['earned_amount'] = $video->earnable_ns;
             }
-            
+
             $reward = VideoViewLog::firstOrCreate(
                 ['user_id' => $user->id, 'video_id' => $video->id],
                 $data
@@ -103,7 +104,7 @@ class ActivityController extends Controller
 
             // referral bonus for video watched
             $this->userRepository->referralVideoReward($user, $video->id, $data['earned_amount']);
-            
+
             if ($reward->wasRecentlyCreated) {
                 $user->wallet->balance += $data['earned_amount'];
                 $user->wallet->save();
@@ -159,11 +160,12 @@ class ActivityController extends Controller
         $user = auth()->guard('web')->user();
         $balance = $user->wallet->balance;
         $minPayout = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
+        $charges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
 
         // delay the process a bit
         sleep(2);
 
-        if ($balance >= $minPayout) {
+        if ($balance >= ($minPayout + $charges)) {
             $user->wallet->balance -= $balance;
             $user->wallet->ledger_balance += $balance;
 
@@ -171,24 +173,34 @@ class ActivityController extends Controller
             $response = $this->flwService->resolveAccount($user->bank_code, $user->account_number);
 
             if ($response['status'] == 'success') {
+                // transfer charges
+                $payoutAmount = $balance - $charges;
+
                 if ($user->wallet->save()) {
                     $data = [
                         'user_id' => $user->id,
-                        'amount' => $balance,
+                        'amount' => $payoutAmount,
                         'reference' => str::uuid(),
                         'status' => 'Requested',
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
-                    
-                    if (Payout::create($data)) {
+
+                    $payout = Payout::create($data);
+                    if ($payout) {
                         unset($data['user_id'], $data['created_at'], $data['updated_at']);
                         $data['bank_code'] = $user->bank_code;
                         $data['account_number'] = $user->account_number;
 
+                        Charge::create([
+                            'payout_id' => $payout,
+                            'user_id' => $user->id,
+                            'amount' => $charges,
+                        ]);
+
                         // Job
                         ProcessPayout::dispatch($data);
-                        
+
                         return response()->json(['success' => true]);
                     }
                 }

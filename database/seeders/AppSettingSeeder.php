@@ -136,6 +136,19 @@ class AppSettingSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Transfer Charges',
+                'slug' => 'transfer_charges',
+                'description' => 'Payout charges',
+                'meta' => json_encode([
+                    'type' => 'number',
+                    'min' => '0.01',
+                    'step' => '0.01'
+                ]),
+                'value' => '35',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
         AppSetting::upsert($data, 'slug');
     }
