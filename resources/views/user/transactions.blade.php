@@ -38,13 +38,13 @@
                         </div>
                         <!-- end comments -->
                     </div>
-                    
+
 				</div>
 
 				<!-- sidebar -->
 				<x-ads></x-ads>
 				<!-- end sidebar -->
-				
+
 			</div>
 		</div>
 	</section>
@@ -81,7 +81,7 @@
         $(document).ready(function() {
 
             $('#transactions_table').DataTable({
-                'order': [ 4, 'desc' ],
+                'order': [],
                 rowReorder: {
                     selector: 'td:nth-child(2)'
                 },
@@ -105,7 +105,7 @@
                     { data: 'reference', className: 'nk-tb-col tb-col-md' },
                     { data: 'type', className: 'nk-tb-col tb-col-md' },
                     { data : 'amount', className : 'nk-tb-col tb-col-md' },
-                    { data : 'status', className : 'nk-tb-col tb-col-md', 
+                    { data : 'status', className : 'nk-tb-col tb-col-md',
                         render: (data) => {
                             if (data.toLowerCase() == 'pending') {
                                 return `<span class="badge badge-warning">pending</span>`;
@@ -115,14 +115,14 @@
                                 return `<span class="badge badge-danger">failed</span>`;
                             } else {
                                 return `<span class="badge badge-info">${data}</span>`;
-                            } 
-                        } 
+                            }
+                        }
                     },
-                    { 
+                    {
                         data        : 'created_at', className   : 'nk-tb-col tb-col-lg',
                         render      : function (data) {
                             return `<span>${moment(data).format('DD-MM-YYYY')}</span>`;
-                        } 
+                        }
                     },
                 ]
             });
