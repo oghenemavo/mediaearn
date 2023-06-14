@@ -71,6 +71,11 @@ class VerifyPayout extends Command
                         if ($user_wallet) {
                             $totalPayoutAmount = $payout->amount + ($charges?->amount ?? 0);
 
+                            // update transfer amount to original
+                            $payout->amount = $totalPayoutAmount;
+                            $payout->save();
+
+                            // update wallet 
                             $user_wallet->ledger_balance -= $totalPayoutAmount;
                             $user_wallet->balance += $totalPayoutAmount;
                             $user_wallet->save();

@@ -16,7 +16,7 @@ class FlutterWaveService
         $this->url = config('app.flw.base_url');
         $this->token = config('app.flw.secret_key');
     }
-    
+
     public function setGateway(array $data)
     {
         $url = $this->url . '/payments';
@@ -80,12 +80,9 @@ class FlutterWaveService
             'narration' => 'Earnerview - Payout ' . uniqid(),
             'currency' => 'NGN',
             'reference' => $data['reference'],
-            // 'reference' => $data['reference'],
             // 'callback_url' => 'https://www.flutterwave.com/ng/',
             'debit_currency' => 'NGN'
         ];
-        // $response = Http::withToken($this->token)->post($url, $payload);
-        // return $response->json();
 
         $responses = Http::pool(fn (Pool $pool) => [
             $pool->withToken($this->token)->post($url, $payload),
@@ -94,7 +91,7 @@ class FlutterWaveService
     }
 
     public function getTransfer($collection)
-    {   
+    {
         $responses = Http::pool(function (Pool $pool) use ($collection) {
             $url = $this->url . '/transfers/';
 

@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\AppSetting;
+use App\Models\Charge;
 use App\Models\Payout;
 use App\Models\Wallet;
 use App\Services\FlutterWaveService;
@@ -42,7 +44,27 @@ class ProcessPayout implements ShouldQueue
      */
     public function handle(FlutterWaveService $processor)
     {
-        // initiate transfer 
+        $transferCharges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
+        $xPayout = Payout::find($this->data['payout_id']);
+
+        // check if charges exists
+        if (empty($xPayout->charge?->amount) && ($xPayout->amount - $transferCharges >= 0)) {
+            // set transfer charge
+            Charge::create([
+                'payout_id' => $xPayout->id,
+                'user_id' => $xPayout->user_id,
+                'amount' => $transferCharges,
+            ]);
+
+            // update transfer amount
+            $xPayout->amount -= $transferCharges;
+            $xPayout->save();
+
+            // update payload amount
+            $this->data['amount'] = $xPayout->amount;
+        }
+
+        // initiate transfer
         $response = $processor->transfer($this->data);
 
         Log::info(' payout response => ' , $response);
@@ -52,7 +74,18 @@ class ProcessPayout implements ShouldQueue
 
             // refund user
             $wallet = Wallet::where('user_id', $payout->user->id)->first();
-            
+
+            // check if charges exists
+            if (!empty($payout->charge?->amount)) {
+
+                // update transfer amount to original
+                $payout->amount += ($payout->charge?->amount ?? 0);
+                $payout->save();
+
+                // update payload amount
+                $this->data['amount'] = $payout->amount;
+            }
+
             $wallet->balance += $this->data['amount'];
             $wallet->ledger_balance -= $this->data['amount'];
             $wallet->save();
@@ -66,13 +99,13 @@ class ProcessPayout implements ShouldQueue
             if ($meta) {
                 // get requested payout
                 $payout = Payout::where('reference', $meta['reference'])->first();
-    
+
                 if ($payout) {
                     // set transfer id
                     if (strtolower($meta['status']) == 'new') {
                         $payout->transfer_id = $meta['id'] ?? null;
                     }
-    
+
                     // update payout info
                     $payout->meta = $meta;
                     $payout->message = $meta['complete_message'];

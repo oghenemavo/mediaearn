@@ -32,30 +32,15 @@ class RequeryRequestedPayout extends Command
      */
     public function handle()
     {
-        $payouts = Payout::where('status', 'Requested')->where('created_at', '<=', Carbon::now()->subHours(10)->toDateTimeString())->get();
+        $payouts = Payout::where('status', 'Requested')->where('created_at', '<=', Carbon::now()->subMinutes(10)->toDateTimeString())->get();
 
         if (count($payouts) > 0) {
             foreach ($payouts as $key => $payout) {
-                $newPayoutAmount = $payout->amount;
-
-                $transferCharges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
-                // check if charges exists
-                if (empty($payout->charge?->amount) && ($newPayoutAmount - $transferCharges > 0)) {
-
-                    Charge::create([
-                        'payout_id' => $payout->id,
-                        'user_id' => $payout->user_id,
-                        'amount' => $transferCharges,
-                    ]);
-
-                    $newPayoutAmount -= $transferCharges;
-                    $payout->amount = $newPayoutAmount;
-                    $payout->save();
-                }
 
                 $data = [
                     'user_id' => $payout->user_id,
-                    'amount' => $newPayoutAmount,
+                    'payout_id' => $payout->id,
+                    'amount' => $payout->amount,
                     'reference' => $payout->reference,
                     'bank_code' => $payout->user->bank_code,
                     'account_number' => $payout->user->account_number,

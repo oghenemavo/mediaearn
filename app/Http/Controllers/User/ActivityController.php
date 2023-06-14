@@ -160,12 +160,12 @@ class ActivityController extends Controller
         $user = auth()->guard('web')->user();
         $balance = $user->wallet->balance;
         $minPayout = AppSetting::where('slug', 'min_payout')->first()->value ?? 100;
-        $charges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
+        $charges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30; // transfer charges
 
         // delay the process a bit
         sleep(2);
 
-        if ($balance >= ($minPayout + $charges)) {
+        if ($balance >= $minPayout && ($balance - $charges >= 0)) {
             $user->wallet->balance -= $balance;
             $user->wallet->ledger_balance += $balance;
 
@@ -175,28 +175,22 @@ class ActivityController extends Controller
             Log::info(' account number validation response  => ' , $response);
 
             if ($response['status'] == 'success') {
-                // transfer charges
-                $payoutAmount = $balance - $charges;
 
                 if ($user->wallet->save()) {
                     $data = [
                         'user_id' => $user->id,
-                        'amount' => $payoutAmount,
+                        'amount' => $balance,
                         'reference' => str::uuid(),
                         'status' => 'Requested'
                     ];
 
                     $payout = Payout::create($data);
                     if ($payout) {
-                        unset($data['user_id'], $data['created_at'], $data['updated_at']);
+                        unset($data['user_id']);
+
                         $data['bank_code'] = $user->bank_code;
                         $data['account_number'] = $user->account_number;
-
-                        Charge::create([
-                            'payout_id' => $payout->id,
-                            'user_id' => $user->id,
-                            'amount' => $charges,
-                        ]);
+                        $data['payout_id'] = $payout->id;
 
                         // Job
                         ProcessPayout::dispatch($data);
