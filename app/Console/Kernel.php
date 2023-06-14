@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('verify:payout')->everyThirtyMinutes();
+        $schedule->command('requery:requested_payout')->everyThirtyMinutes();
 
         // $schedule->command('queue:restart')
         //     ->everyFiveMinutes();

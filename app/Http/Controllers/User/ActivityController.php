@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 
 class ActivityController extends Controller
 {
-    public function __construct(protected IUser $userRepository, FlutterWaveService $flwService)
+    public function __construct(protected IUser $userRepository, protected FlutterWaveService $flwService)
     {
         $this->userRepository = $userRepository;
         $this->flwService = $flwService;
@@ -172,6 +172,8 @@ class ActivityController extends Controller
             // verify account details
             $response = $this->flwService->resolveAccount($user->bank_code, $user->account_number);
 
+            Log::info(' account number validation response  => ' , $response);
+
             if ($response['status'] == 'success') {
                 // transfer charges
                 $payoutAmount = $balance - $charges;
@@ -181,9 +183,7 @@ class ActivityController extends Controller
                         'user_id' => $user->id,
                         'amount' => $payoutAmount,
                         'reference' => str::uuid(),
-                        'status' => 'Requested',
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'status' => 'Requested'
                     ];
 
                     $payout = Payout::create($data);
@@ -193,7 +193,7 @@ class ActivityController extends Controller
                         $data['account_number'] = $user->account_number;
 
                         Charge::create([
-                            'payout_id' => $payout,
+                            'payout_id' => $payout->id,
                             'user_id' => $user->id,
                             'amount' => $charges,
                         ]);
