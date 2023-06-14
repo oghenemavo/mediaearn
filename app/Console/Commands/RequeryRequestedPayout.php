@@ -32,7 +32,7 @@ class RequeryRequestedPayout extends Command
      */
     public function handle()
     {
-        $payouts = Payout::where('status', 'Requested')->where('created_at', '<=', Carbon::now()->subMinutes(10)->toDateTimeString())->get();
+        $payouts = Payout::where('status', 'Requested')->where('created_at', '<=', Carbon::now()->subHours(10)->toDateTimeString())->get();
 
         if (count($payouts) > 0) {
             foreach ($payouts as $key => $payout) {
