@@ -51,6 +51,7 @@ class VerifyPayout extends Command
 
                     $charges = Charge::where('payout_id', $payout->id)->first();
 
+                    $user_wallet = Wallet::where('user_id', $payout->user_id)->first();
                     // second layer status
                     if (strtolower($responseData['status']) == 'successful') {
                         $payout->update([
@@ -58,6 +59,14 @@ class VerifyPayout extends Command
                             'is_notified' => '1',
                             'message' => $message
                         ]);
+
+                        if ($user_wallet) {
+                            $totalPayoutAmount = $payout->amount + ($charges?->amount ?? 0);
+
+                            // update wallet
+                            $user_wallet->ledger_balance -= $totalPayoutAmount;
+                            $user_wallet->save();
+                        }
 
                         $charges->status = 1;
                         $charges->save();
@@ -67,7 +76,6 @@ class VerifyPayout extends Command
                             'message' => $message,
                         ]);
 
-                        $user_wallet = Wallet::where('user_id', $payout->user_id)->first();
                         if ($user_wallet) {
                             $totalPayoutAmount = $payout->amount + ($charges?->amount ?? 0);
 
@@ -75,7 +83,7 @@ class VerifyPayout extends Command
                             $payout->amount = $totalPayoutAmount;
                             $payout->save();
 
-                            // update wallet 
+                            // update wallet
                             $user_wallet->ledger_balance -= $totalPayoutAmount;
                             $user_wallet->balance += $totalPayoutAmount;
                             $user_wallet->save();
