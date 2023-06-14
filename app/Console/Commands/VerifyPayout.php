@@ -68,8 +68,10 @@ class VerifyPayout extends Command
                             $user_wallet->save();
                         }
 
-                        $charges->status = 1;
-                        $charges->save();
+                        if ($charges) {
+                            $charges->status = 1;
+                            $charges->save();
+                        }
                     } elseif (strtolower($responseData['status']) == 'failed') { // failed // pending // etc
                         $payout->update([
                             'status' => 'failed',
