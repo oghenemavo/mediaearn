@@ -89,19 +89,18 @@
     <section class="section section--bg" data-bg="/app/img/section/section.jpg">
         <div class="container">
             <div class="row">
-
                 <div class="col-md-6">
-                    <div class="card" style="border: 1px solid #fff; padding: 16px;max-width: 28rem;border-radius: 6px;">
+                    <div class="card" style="border: 1px solid #fff; padding: 24px 16px;max-width: 28rem;border-radius: 6px;">
                         <div class="card-body" style="color: #fff; width: 100%;">
                             <h3 style="color: #f15a22;">Invite & earn even more!</h3>
                             <p class="card-text">
-                                Referral Program: Refer your friend and get
+                                Refer your friends to get
                                 @if(strtolower($referral_bonus_type) == 'fixed')
-                                    &#8358;{{ $referral_bonus }} instantly
+                                    {{ $referral_bonus }} naira instantly
                                 @else
                                     {{ $referral_bonus }}% of their deposit
                                 @endif
-                                 and get {{ $downline_bonus }}% of their earnings
+                                 plus {{ $downline_bonus }}% of all their earnings
                             </p>
                             @auth('web')
                                 <a href="{{ route('profile') }}" style="display: inline-block;padding: 8px; color:#fff;text-align: center; background-color: #f15a22; border-radius: 4px;">Referral Link</a>
@@ -111,9 +110,11 @@
                 </div>
 
                 <div class="col-md-6">
-                    <img src="{{ $home_ads }}" class="card-img-top" alt="Home Ads" style="object-fit: cover; height: 140px; width: 100%;">
+                    <img src="{{ $home_ads }}" class="card-img-top" alt="Home Ads" style="object-fit: cover; height: 220px; width: 100%;">
                 </div>
+            </div>
 
+            <div class="row">
                 <!-- section title -->
                 <div class="col-12">
                     <h2 class="section__title">Latest Videos</h2>
