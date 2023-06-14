@@ -69,8 +69,8 @@ class VerifyPayout extends Command
 
                         $user_wallet = Wallet::where('user_id', $payout->user_id)->first();
                         if ($user_wallet) {
-                            $totalPayoutAmount = $payout->amount + $charges->amount;
-                            
+                            $totalPayoutAmount = $payout->amount + ($charges?->amount ?? 0);
+
                             $user_wallet->ledger_balance -= $totalPayoutAmount;
                             $user_wallet->balance += $totalPayoutAmount;
                             $user_wallet->save();

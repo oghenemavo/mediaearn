@@ -38,9 +38,9 @@ class RequeryRequestedPayout extends Command
             foreach ($payouts as $key => $payout) {
                 $newPayoutAmount = $payout->amount;
 
+                $transferCharges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
                 // check if charges exists
-                if (empty($payout->charge->amount)) {
-                    $transferCharges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
+                if (empty($payout->charge?->amount) && ($newPayoutAmount - $transferCharges > 0)) {
 
                     Charge::create([
                         'payout_id' => $payout->id,
