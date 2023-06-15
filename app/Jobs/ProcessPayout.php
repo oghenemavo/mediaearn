@@ -47,8 +47,8 @@ class ProcessPayout implements ShouldQueue
         $transferCharges = AppSetting::where('slug', 'transfer_charges')->first()->value ?? 30;
         $xPayout = Payout::find($this->data['payout_id']);
 
-        Log::info('is there a charge already => ' , [!empty($xPayout->charge?->amount)]);
-        Log::info('is it valid for charges => ' , [($xPayout->amount - $transferCharges >= 0)]);
+        Log::info('is there a charge already => ' , [json_encode(!empty($xPayout->charge?->amount))]);
+        Log::info('is it valid for charges => ' , [json_encode(($xPayout->amount - $transferCharges >= 0))]);
 
         // check if charges exists
         if (empty($xPayout->charge?->amount) && ($xPayout->amount - $transferCharges >= 0)) {
