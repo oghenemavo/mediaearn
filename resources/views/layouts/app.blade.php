@@ -154,6 +154,7 @@
                         <!-- <li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li> -->
                         <li class="instagram"><a href="https://instagram.com/earnerview_tv" target="_blank"><i class="icon ion-logo-instagram"></i></a></li>
                         <li class="twitter"><a href="https://twitter.com/earnerviewtv" target="_blank"><i class="icon ion-logo-twitter"></i></a></li>
+                        <li class="whatsapp"><a href="https://wa.me/2347066500476" target="_blank"><i class="icon ion-logo-whatsapp"></i></a></li>
                         <!-- <li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li> -->
                     </ul>
                 </div>

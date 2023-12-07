@@ -132,15 +132,21 @@
                                                   @endisset
                                                 </select>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <label for="account_number" style="color: #fff;">Account Number</label>
                                                 <input type="text" id="account_number" name="account_number" minlength="10" maxlength="10" class="form__input" value="{{ $user->account_number }}" placeholder="Account Number">
+
+                                                @error('account_number')
+                                                    <span class="invalid-feedback" role="alert" style="color: red;">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                             </div>
-        
+
                                             <div class="form-text"></div>
-        
-                                            <button type="submit" id="submit-btn" class="form__btn">Setup</button>
+
+                                            <button type="submit" id="submit-btn" class="form__btn" disabled>Setup</button>
                                         </form>
                                     </div>
                                 </div>
@@ -154,7 +160,7 @@
 				<!-- sidebar -->
 				<x-ads></x-ads>
 				<!-- end sidebar -->
-				
+
 			</div>
 		</div>
 	</section>
@@ -192,7 +198,7 @@
 
         // var response;
         // $.validator.addMethod(
-        //     "validateAccountNumber", 
+        //     "validateAccountNumber",
         //     function(value, element, params) {
         //         $('.form-text').val('');
         //         $.ajax({
@@ -226,6 +232,7 @@
         bankForm.on('blur keyup change', 'input', 'change', () => {
             $('.form-text').text('');
             if (bankForm.valid()) {
+                submitButton.text('validating....');
                 fetch(`{{ route('validate.account.number') }}`, {
                     method: 'POST', // or 'PUT'
                     headers: {
@@ -241,10 +248,12 @@
                     if (data.status == 'success') {
                         console.log(data.data.account_name);
                         $('.form-text').text(data.data.account_name).css('color', 'white');
+                        submitButton.text('Update');
                         submitButton.removeAttr("disabled");
                     } else {
                         console.log('dd')
                         $('.form-text').text('No Account Found').css('color', 'red');
+                        submitButton.text('Setup');
                         submitButton.attr("disabled", "disabled");
                     }
                 })

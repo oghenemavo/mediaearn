@@ -5,7 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\FlutterWaveService;
+// use Illuminate\Database\Eloquent\Builder;
+// use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
@@ -20,7 +24,7 @@ class ProfileController extends Controller
         $data['page_title'] = 'Profile';
         $data['user'] = $user = auth()->guard('web')->user();
         $data['banks'] = $this->flwService->fetchBanks();
-        // $data['banks'] = [ 
+        // $data['banks'] = [
         //     'data' => [
         //         0 => [
         //             "id" => 044,
@@ -39,7 +43,7 @@ class ProfileController extends Controller
         //         ]
         //     ],
         // ];
-        
+
         $bank = function($array, $user) {
             return array_filter($array, function($arr) use($user) {
                 if ($arr['code'] == $user->bank_code) {
@@ -98,9 +102,12 @@ class ProfileController extends Controller
     {
         $request->validate([
             'bank' => 'required',
-            'account_number' => 'required',
+            'account_number' => [
+                'required',
+                Rule::unique('users', 'account_number')->where(fn (Builder $query) => $query->where('bank_code', $request->get('bank')))
+            ],
         ]);
-        
+
         $user = auth()->guard('web')->user();
         $user->bank_code = $request->bank;
         $user->account_number = $request->account_number;
