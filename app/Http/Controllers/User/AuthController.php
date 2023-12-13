@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Mail\OnboardingMail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -32,6 +33,11 @@ class AuthController extends Controller
 
         if ($user) {
             Mail::to($user->email)->queue(new OnboardingMail($user));
+
+            event(new Registered($user));
+
+            // auth()->login($user);
+
             return redirect()->route('login.page')->with('success', 'Sign up successful, Login!');
             // return redirect()->back()->withInput()->with('error', 'unable to signup user, try again!');
         }
@@ -73,11 +79,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         auth()->logout();
-    
+
         $request->session()->invalidate();
-    
+
         $request->session()->regenerateToken();
-    
+
         return redirect('/');
     }
 

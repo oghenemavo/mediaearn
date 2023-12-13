@@ -15,6 +15,7 @@ use App\Http\Controllers\User\ActivityController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ResetPasswordController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,12 @@ Route::get('mail', function () {
     $markdown = new Markdown(view(), config('mail.markdown'));
 
     return $markdown->render('mails.onboarding');
+});
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+    Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 });
 
 
@@ -60,20 +67,24 @@ Route::middleware(['guest:web'])->group(function () {
 
 Route::middleware(['auth:web'])->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('user.logout');
-    Route::get('profile', [ProfileController::class, 'index'])->name('profile');
-    Route::get('referrals', [ActivityController::class, 'referrals'])->name('user.referrals');
-    Route::get('rewards', [ActivityController::class, 'rewards'])->name('user.rewards');
-    Route::get('transactions', [ActivityController::class, 'transactions'])->name('user.transactions');
-    Route::get('earnings', [ActivityController::class, 'earnings'])->name('user.earnings');
 
-    Route::post('change-email', [ProfileController::class, 'email'])->name('change.email');
-    Route::post('change-password', [ProfileController::class, 'password'])->name('change.password');
-    Route::post('change-account-info', [ProfileController::class, 'accountInfo'])->name('change.account.info');
+    Route::group(['middleware' => ['verified']], function() {
 
-    Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
-    Route::post('request-payout', [ActivityController::class, 'requestPayout'])->name('request.payout');
+        Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+        Route::get('referrals', [ActivityController::class, 'referrals'])->name('user.referrals');
+        Route::get('rewards', [ActivityController::class, 'rewards'])->name('user.rewards');
+        Route::get('transactions', [ActivityController::class, 'transactions'])->name('user.transactions');
+        Route::get('earnings', [ActivityController::class, 'earnings'])->name('user.earnings');
 
-    Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
+        Route::post('change-email', [ProfileController::class, 'email'])->name('change.email');
+        Route::post('change-password', [ProfileController::class, 'password'])->name('change.password');
+        Route::post('change-account-info', [ProfileController::class, 'accountInfo'])->name('change.account.info');
+
+        Route::post('videos/{video}/reward', [ActivityController::class, 'getReward'])->name('get.user.reward');
+        Route::post('request-payout', [ActivityController::class, 'requestPayout'])->name('request.payout');
+
+        Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
+    });
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
