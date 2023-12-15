@@ -60,7 +60,7 @@ class AuthController extends Controller
         $credentials = $request->except(['_token', 'remember']);
         $credentials['status'] = UserStatusEnum::ACTIVE;
 
-        if (auth()->attempt($credentials)) {
+        if (auth()->attempt($credentials, true)) {
             $request->session()->regenerate();
             return redirect()->intended();
         } else {
